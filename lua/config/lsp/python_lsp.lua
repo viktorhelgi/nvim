@@ -56,10 +56,12 @@ local lsp_signature_configs = {
 -- local function unmap(mode, bind)
 	-- vim.api.nvim_del_keymap(mode, bind)
 -- end
--- 
+
+
 local opts = { noremap=true, silent=false }
 local on_attach = function(client, bufnr)
 
+    -- local fd_exe = ""
     require'lsp_signature'.on_attach(lsp_signature_configs, bufnr) -- no need to specify bufnr if you don't use toggle_key
     -- require("aerial").on_attach(client, bufnr)
 	vim.o.wrap=false
@@ -71,7 +73,6 @@ local on_attach = function(client, bufnr)
 
 	-- vim.g.CondaEnv = os.getenv("CONDA_DEFAULT_ENV")
 	-- vim.g.python3_host_prog = 'C:/Users/Lenovo/miniconda3/envs/' .. vim.g.CondaEnv .. '/python'
-	vim.g.python3_host_prog = 'C:/Users/Lenovo/miniconda3/envs/LSPenv/python'
     require("aerial").on_attach(client, bufnr)
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>[', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
@@ -118,11 +119,27 @@ local on_attach = function(client, bufnr)
 
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ra', ':lua require("harpoon.term").sendCommand(1, "pytest --no-header -v -rP \\r") <CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rt', ':lua require("harpoon.term").sendCommand(1, "pytest --no-header -v -rP " .. vim.fn.expand(\'%\') .. "\\r") <CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rp', ':lua require("harpoon.term").sendCommand(1, "python " .. vim.fn.expand(\'%\') .. "\\r")<CR>', opts)
 
 
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tt', ':lua require(\'telescope.builtin\').find_files({find_command={"C:/Users/Lenovo/scoop/shims/fd.exe", "test_",     "--type", "f",  "--extension", "py"                         }})<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tn', ':lua require(\'telescope.builtin\').find_files({find_command={"C:/Users/Lenovo/scoop/shims/fd.exe",             "--type", "f",  "--extension", "py",    "--exclude", "tests"}})<CR>', opts)
+    if vim.loop.os_uname().sysname=="Linux" then
+        local python_exe = '/usr/bin/python3.8'
+	    vim.g.python3_host_prog = python_exe
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rp', ':lua require("harpoon.term").sendCommand(1, "'..python_exe..' " .. vim.fn.expand(\'%\') .. "\\r")<CR>', opts)
+
+        local fd_exe = '/usr/bin/fdfind'
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tt', ':lua require(\'telescope.builtin\').find_files({find_command={"' .. fd_exe .. '", "test_",     "--type", "f",  "--extension", "py"                         }})<CR>', opts)
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tn', ':lua require(\'telescope.builtin\').find_files({find_command={"' .. fd_exe .. '",             "--type", "f",  "--extension", "py",    "--exclude", "tests"}})<CR>', opts)
+    else
+
+        local python_exe = 'C:/Users/Lenovo/miniconda3/envs/LSPenv/python'
+	    vim.g.python3_host_prog = python_exe
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rp', ':lua require("harpoon.term").sendCommand(1, "'..python_exe..' " .. vim.fn.expand(\'%\') .. "\\r")<CR>', opts)
+
+        local fd_exe = "C:/Users/Lenovo/scoop/shims/fd.exe"
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tt', ':lua require(\'telescope.builtin\').find_files({find_command={"' .. fd_exe .. '", "test_",     "--type", "f",  "--extension", "py"                         }})<CR>', opts)
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tn', ':lua require(\'telescope.builtin\').find_files({find_command={"' .. fd_exe .. '",             "--type", "f",  "--extension", "py",    "--exclude", "tests"}})<CR>', opts)
+    end
+    
 end
 
 

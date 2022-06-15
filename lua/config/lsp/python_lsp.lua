@@ -129,6 +129,12 @@ local on_attach = function(client, bufnr)
         local fd_exe = '/usr/bin/fdfind'
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tt', ':lua require(\'telescope.builtin\').find_files({find_command={"' .. fd_exe .. '", "test_",     "--type", "f",  "--extension", "py"                         }})<CR>', opts)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tn', ':lua require(\'telescope.builtin\').find_files({find_command={"' .. fd_exe .. '",             "--type", "f",  "--extension", "py",    "--exclude", "tests"}})<CR>', opts)
+
+        vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rfn', ':e tests/fixtures/', opts)
+        vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rfc', ':e tests/conftest.py<CR>', opts)
+        vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rfg', ':Telescope file_browser path=' .. vim.loop.cwd().. "/tests/fixtures<CR>", opts)
+        vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>ru', ':Telescope file_browser path=' .. vim.loop.cwd().. "/tests/fixtures<CR>", opts)
+        vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rff', ':Telescope lsp_dynamic_workspace_symbols path=' .. vim.loop.cwd().. "/tests/fixtures<CR>", { noremap = true })
     else
 
         local python_exe = 'C:/Users/Lenovo/miniconda3/envs/LSPenv/python'
@@ -138,6 +144,12 @@ local on_attach = function(client, bufnr)
         local fd_exe = "C:/Users/Lenovo/scoop/shims/fd.exe"
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tt', ':lua require(\'telescope.builtin\').find_files({find_command={"' .. fd_exe .. '", "test_",     "--type", "f",  "--extension", "py"                         }})<CR>', opts)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tn', ':lua require(\'telescope.builtin\').find_files({find_command={"' .. fd_exe .. '",             "--type", "f",  "--extension", "py",    "--exclude", "tests"}})<CR>', opts)
+
+        vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rfn', ':e tests/fixtures/', opts)
+        vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rfc', ':e tests/conftest.py<CR>', opts)
+        vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rfg', ':Telescope file_browser path=' .. vim.loop.cwd().. "\\tests\\fixtures<CR>", opts)
+        vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>ru', ':Telescope file_browser path=' .. vim.loop.cwd().. "\\tests\\fixtures<CR>", opts)
+        vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rff', ':Telescope lsp_dynamic_workspace_symbols path=' .. vim.loop.cwd().. "\\tests\\fixtures<CR>", { noremap = true })
     end
     
 end

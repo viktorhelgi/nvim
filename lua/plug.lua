@@ -62,7 +62,7 @@ require('packer').startup({
         -- nvim-treesitter-textobjects{{{
 		use({'nvim-treesitter/nvim-treesitter-textobjects'})--}}}
         -- dashboard {{{
-		use({ 'glepnir/dashboard-nvim', disable = false})--}}}
+		use({ 'glepnir/dashboard-nvim'})--}}}
         -- nvim-colorizer.lua{{{
 		use({'norcalli/nvim-colorizer.lua', commit = '36c610a'})--}}}
 

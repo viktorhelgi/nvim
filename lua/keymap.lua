@@ -284,11 +284,6 @@ map('n', '<leader>q', ':q<CR>', opt_sn)
 -- map('n', '<leader>rA', fterm_run('"pytest -v -rP \\r"'), opt_sn)
 
 -- map('n', '<leader>rfl', fterm_run('"pytest --fixtures \\r"'), opt_sn)
-map('n', '<leader>rfn', ':e tests/fixtures/', opt_sn)
-map('n', '<leader>rfc', ':e tests/conftest.py<CR>', opt_sn)
-map('n', '<leader>rfg', ':Telescope file_browser path=' .. vim.loop.cwd().. "\\tests\\fixtures<CR>", opt_sn)
-map('n', '<leader>ru', ':Telescope file_browser path=' .. vim.loop.cwd().. "\\tests\\fixtures<CR>", opt_sn)
-map('n', '<leader>rff', ':Telescope lsp_dynamic_workspace_symbols path=' .. vim.loop.cwd().. "\\tests\\fixtures<CR>", { noremap = true })
 
 map('n', '<leader>rF', '<cmd>TestFile --no-header -v -rP <CR>' .. send_r, opt_sn)
 map('n', '<leader>rl', '<cmd>TestLast<CR>' .. send_r, opt_sn)

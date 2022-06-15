@@ -120,6 +120,12 @@ local on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ra', ':lua require("harpoon.term").sendCommand(1, "pytest --no-header -v -rP \\r") <CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rt', ':lua require("harpoon.term").sendCommand(1, "pytest --no-header -v -rP " .. vim.fn.expand(\'%\') .. "\\r") <CR>', opts)
 
+    vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rF', '<cmd>TestFile --no-header -v -rP <CR>' .. send_r, opts)
+    vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rl', '<cmd>TestLast<CR>' .. send_r, opts)
+    vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rn', '<cmd>TestNearest --no-header -v -rP <CR>' .. send_r, opts)
+    vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rN', '<cmd>TestNearest --plot<CR>' .. send_r, opts)
+    vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rS', '<cmd>TestSuit<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rV', '<cmd>TestVisit<CR>', opts)
 
     if vim.loop.os_uname().sysname=="Linux" then
         local python_exe = '/usr/bin/python3.8'

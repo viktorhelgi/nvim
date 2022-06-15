@@ -285,12 +285,6 @@ map('n', '<leader>q', ':q<CR>', opt_sn)
 
 -- map('n', '<leader>rfl', fterm_run('"pytest --fixtures \\r"'), opt_sn)
 
-map('n', '<leader>rF', '<cmd>TestFile --no-header -v -rP <CR>' .. send_r, opt_sn)
-map('n', '<leader>rl', '<cmd>TestLast<CR>' .. send_r, opt_sn)
-map('n', '<leader>rn', '<cmd>TestNearest --no-header -v -rP <CR>' .. send_r, opt_sn)
-map('n', '<leader>rN', '<cmd>TestNearest --plot<CR>' .. send_r, opt_sn)
-map('n', '<leader>rS', '<cmd>TestSuit<CR>', opt_sn)
-map('n', '<leader>rV', '<cmd>TestVisit<CR>', opt_sn)
 -- }}}
 -- {{{ [s] - Alternate Buffers
 map('n', '<leader>s', ':b#<CR>', opt_sn)

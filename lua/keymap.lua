@@ -88,7 +88,7 @@ M.cmp_mappings = {
 	['<C-y>'] = cmp.mapping.scroll_docs(-4),
 	['<C-e>'] = cmp.mapping.scroll_docs(4),
 	-- ['<C-e>'] = cmp.mapping.close(),
-	['<C-\\>'] = cmp.mapping.confirm({
+	['<C-k>'] = cmp.mapping.confirm({
 		behavior = cmp.ConfirmBehavior.Insert,
 		select = true,
 	}),

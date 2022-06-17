@@ -105,37 +105,38 @@ require('packer').startup({
         -- vim-fugitive{{{
 		use({'tpope/vim-fugitive'})--}}}
 
-		-- use({"rust-lang/rust-analyzer", ft="rs"})
+		use({"rust-lang/rust-analyzer"})
         -- rust-tools.nvim{{{
-		use({
-			"simrat39/rust-tools.nvim", ft="rs",
-			config = function()
-				-- local lsp_installer_servers = require("nvim-lsp-installer.servers")
-				-- local _, requested_server = lsp_installer_servers.get_server("rust_analyzer")
-				require("rust-tools").setup({
-					tools = {
-						autoSetHints = false,
-						hover_with_actions = true,
-						inlay_hints = {
-							highlight = "DiagnosticInfo",
-						},
-						runnables = {
-							use_telescope = true,
-						},
-					},
-					server = {
-						standalone = false
-						-- cmd = requested_server._default_options.cmd,
-						-- on_attach = require("lvim.lsp").common_on_attach,
-						-- on_init = require("lvim.lsp").common_on_init,
-					},
-					on_attach = on_attach_rust,
-					checkOnSave = {
-						enable = true,
-					},
-				})
-				end
-		})
+        use({"simrat39/rust-tools.nvim"})
+		-- use({
+		-- 	"simrat39/rust-tools.nvim",
+		-- 	config = function()
+		-- 		-- local lsp_installer_servers = require("nvim-lsp-installer.servers")
+		-- 		-- local _, requested_server = lsp_installer_servers.get_server("rust_analyzer")
+		-- 		require("rust-tools").setup({
+		-- 			tools = {
+		-- 				autoSetHints = false,
+		-- 				hover_with_actions = true,
+		-- 				inlay_hints = {
+		-- 					highlight = "DiagnosticInfo",
+		-- 				},
+		-- 				runnables = {
+		-- 					use_telescope = true,
+		-- 				},
+		-- 			},
+		-- 			server = {
+		-- 				standalone = false
+		-- 				-- cmd = requested_server._default_options.cmd,
+		-- 				-- on_attach = require("lvim.lsp").common_on_attach,
+		-- 				-- on_init = require("lvim.lsp").common_on_init,
+		-- 			},
+		-- 			on_attach = on_attach_rust,
+		-- 			checkOnSave = {
+		-- 				enable = true,
+		-- 			},
+		-- 		})
+		-- 		end
+		-- })
 --}}}
         -- vim-rust-syntax-ext{{{
     	use({ "arzg/vim-rust-syntax-ext", ft="rs" })--}}}
@@ -174,19 +175,20 @@ require('packer').startup({
         -- Debuggor: [one-small-step-for-vimkind] - [nvim-dap]
         -- use({'jbyuki/one-small-step-for-vimkind'})
         -- use({'mfussenegger/nvim-dap'})
-        use {
-            'chipsenkbeil/distant.nvim',
-            config = function()
-            require('distant').setup {
-                -- Applies Chip's personal settings to every machine you connect to
-                --
-                -- 1. Ensures that distant servers terminate with no connections
-                -- 2. Provides navigation bindings for remote directories
-                -- 3. Provides keybinding to jump into a remote file's parent directory
-                ['*'] = require('distant.settings').chip_default()
-            }
-            end
-        }
+        -- use {
+        --     'chipsenkbeil/distant.nvim',
+        --     config = function()
+        --     require('distant').setup {
+        --         -- Applies Chip's personal settings to every machine you connect to
+        --         --
+        --         -- 1. Ensures that distant servers terminate with no connections
+        --         -- 2. Provides navigation bindings for remote directories
+        --         -- 3. Provides keybinding to jump into a remote file's parent directory
+        --         ['*'] = require('distant.settings').chip_default()
+        --     }
+        --     end
+        -- }
+        use({'kevinhwang91/nvim-bqf'})
 
 	end,
 

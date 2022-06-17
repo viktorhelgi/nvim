@@ -56,9 +56,11 @@ local lsp_signature_configs = {
 
 local opts = { noremap=true, silent=false }
 local opts_silent = { noremap=true, silent=true }
+
 local my_on_attach = function(client, bufnr)
     require'lsp_signature'.on_attach(lsp_signature_configs, bufnr) -- no need to specify bufnr if you don't use toggle_key
     require("aerial").on_attach(client, bufnr)
+
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
     -- vim.api.nvim_buf_set_option(bufnr, 'nowrap', 'true')
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>[', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
@@ -119,6 +121,36 @@ local my_on_attach = function(client, bufnr)
 
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', ':lua require("harpoon.term").sendCommand(1, "cargo run \\r") <CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rp', ':lua require("harpoon.term").sendCommand(1, "cargo run \\r") <CR>', opts)
+
+    -- Rust
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rc', ':RustCodeAction<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rd', ':RustDebuggables<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rD', ':RustDisableInlayHints<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>re', ':RustEmitAsm<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rei', ':RustEmitIr<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ree', ':RustExpand<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>reE', ':RustExpandMacro<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rf',  ':RustFmt<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rF',  ':RustFmtRange<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rHs', ':RustSetInlayHints<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rHt', ':RustToggleInlayHints<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rha', ':RustHoverActions<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rhr', ':RustHoverRange<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rj', ':RustJoinLines<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rmu', ':RustMoveItemUp<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rmd', ':RustMoveItemDown<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>roc', ':RustOpenCargo<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>roe', ':RustOpenExternalDocs<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rP', ':RustParentModule<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rp', ':RustPlay<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rrr', ':RustRun<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rrR', ':RustRunnables<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rrw', ':RustReloadWorkspace<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rs', ':RustSSR<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rS', ':RustStartStandaloneServerForBuffer<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rC', ':RustViewCrateGraph<CR>', opts)
+
+
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rt', ':lua require("harpoon.term").sendCommand(1, "pytest --no-header -v -rP " .. vim.fn.expand(\'%\') .. "\\r") <CR>', opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rp', ':lua require("harpoon.term").sendCommand(1, "python " .. vim.fn.expand(\'%\') .. "\\r")<CR>', opts)
 
@@ -143,24 +175,111 @@ local my_on_attach = function(client, bufnr)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tt', ':lua require(\'telescope.builtin\').find_files({find_command={"' .. fd_exe .. '", "test_",     "--type", "f",  "--extension", "rs"                         }})<CR>', opts)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tn', ':lua require(\'telescope.builtin\').find_files({find_command={"' .. fd_exe .. '",             "--type", "f",  "--extension", "rs",    "--exclude", "tests"}})<CR>', opts)
     end
+
+    require('which-key').register({
+            r = {
+                name = 'Rust',
+                c = "RustCodeAction",
+                d = "Debuggables",
+                D = "DisableInlayHints",
+                e = {
+                    name = "E",
+                    a = "EmitAsm",
+                    i = "EmitIr",
+                    e = "Expand",
+                    E = "ExpandMacro"
+                },
+                f = "Fmt",
+                F = "FmtRange",
+                H = {
+                    name = "Hints",
+                    s = "RustSetInlayHints",
+                    t = "RustToggleInlayHints"
+                },
+                h = {
+                    name = "Hover",
+                    a = "HoverActions",
+                    r = "HoverRange"
+                },
+                j = "JoinLines",
+                m = {
+                    name = "MoveItem",
+                    u = "MoveItemUp",
+                    d = "MoveItemDown",
+                },
+                o = {
+                    name = "Open",
+                    c = "OpenCargo",
+                    e = "OpenExternalDocs",
+                },
+                P = "ParentModule",
+                p = "RustPlay",
+                r = {
+                    name = "R",
+                    r = "RustRun",
+                    R = "RustRunnables",
+                    w = "RustReloadWorkspace"
+                },
+                s = "RustSSR",
+                S = "StartServer",
+                C = "RustViewCrateGraph"
+            },
+        },{
+        prefix = '<leader>',
+    })
 end
 
 
+local lspconfig = require('lspconfig')
 
 
 -- local capabilities = vim.lsp.protocol.make_client_capabilities()
 -- capabilities.textDocument.completion.completionItem.snippetSupport = true
-require("lspconfig").rust_analyzer.setup {
-    -- capabilities=capabilities,
-    on_attach = my_on_attach,
-	filetype = {'rs'}, 
-    checkOnSave = {
-        enable = true,
+-- lspconfig.rust_analyzer.setup({
+--     -- capabilities=capabilities,
+--     on_attach = my_on_attach,
+-- 	filetypes = {'rust', 'rs'},
+--     checkOnSave = {
+--         enable = true,
+--     },
+--     -- server = {
+--     --     path = "C:/Users/Lenovo/AppData/Roaming/nvim-data/lsp_servers/rust/rust-analyzer.exe"
+--     -- }
+-- })
+--
+
+
+local rust_tools_opts = {
+    filetypes = {"rs"},
+    tools = { -- rust-tools options
+        autoSetHints = true,
+        hover_with_actions = true,
+        inlay_hints = {
+            show_parameter_hints = true,
+            parameter_hints_prefix = "",
+            other_hints_prefix = "",
+        },
     },
-    -- server = {
-    --     path = "C:/Users/Lenovo/AppData/Roaming/nvim-data/lsp_servers/rust/rust-analyzer.exe"
-    -- }
+
+    -- all the opts to send to nvim-lspconfig
+    -- these override the defaults set by rust-tools.nvim
+    -- see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#rust_analyzer
+    server = {
+        -- on_attach is a callback called when the language server attachs to the buffer
+        on_attach = my_on_attach,
+        settings = {
+            -- to enable rust-analyzer settings visit:
+            -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
+            ["rust-analyzer"] = {
+                -- enable clippy on save
+                checkOnSave = {
+                    command = "clippy"
+                },
+            }
+        }
+    },
 }
+require("rust-tools").setup(rust_tools_opts)
 
 
 
@@ -168,4 +287,26 @@ require("lspconfig").rust_analyzer.setup {
 vim.cmd("setlocal indentexpr=")
 -- vim.cmd("setlocal nowrap")
 
--- require('rust-tools').setup({})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

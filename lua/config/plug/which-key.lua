@@ -146,24 +146,6 @@ local keymap = {
     },
     -- }}}
     -- {{{ [r]: Test 
-    r = {
-        name = 'Test',
-        F = 'TestFile',
-        L = 'TestLast',
-        N = 'TestNearest',
-        S = 'TestSuit',
-        v = 'TestVisit',
-        t = 'pytest %',
-        a = 'pytest all',
-        p = 'python %',
-        f = {
-            name = 'Fixtures',
-            l = 'list fixtures',
-            n = 'create new file',
-            g = 'goto tests/fixtures/',
-            c = 'goto tests/conftest.py',
-        },
-    },
     -- }}}
     -- {{{ [t]: Telescope
     t = {

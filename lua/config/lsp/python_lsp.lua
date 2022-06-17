@@ -123,7 +123,7 @@ local on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rF', '<cmd>TestFile --no-header -v -rP <CR>' .. send_r, opts)
     vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rl', '<cmd>TestLast<CR>' .. send_r, opts)
     vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rn', '<cmd>TestNearest --no-header -v -rP <CR>' .. send_r, opts)
-    vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rN', '<cmd>TestNearest --plot<CR>' .. send_r, opts)
+    vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rN', '<cmd>TestNearest -m plot<CR>' .. send_r, opts)
     vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rS', '<cmd>TestSuit<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rV', '<cmd>TestVisit<CR>', opts)
 
@@ -157,7 +157,30 @@ local on_attach = function(client, bufnr)
         vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>ru', ':Telescope file_browser path=' .. vim.loop.cwd().. "\\tests\\fixtures<CR>", opts)
         vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rff', ':Telescope lsp_dynamic_workspace_symbols path=' .. vim.loop.cwd().. "\\tests\\fixtures<CR>", { noremap = true })
     end
-    
+
+    require('which-key').register({
+        r = {
+            name = 'Test',
+            F = 'TestFile',
+            L = 'TestLast',
+            N = 'TestNearest',
+            S = 'TestSuit',
+            v = 'TestVisit',
+            t = 'pytest %',
+            a = 'pytest all',
+            p = 'python %',
+            f = {
+                name = 'Fixtures',
+                l = 'list fixtures',
+                n = 'create new file',
+                g = 'goto tests/fixtures/',
+                c = 'goto tests/conftest.py',
+            },
+        },
+
+    }, {
+        prefix = '<leader>',
+    })
 end
 
 

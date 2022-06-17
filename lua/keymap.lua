@@ -202,6 +202,9 @@ map('n', '<leader>gs', '<cmd>Telescope git_status<CR>', opt_sn)
 -- }}}
 -- {{{ [H] - Harpoon
 
+local send_r = ':lua require("harpoon.term").sendCommand(1, "\\r")<CR>'
+map('n', '<leader>rl', '<cmd>TestLast<CR>' .. send_r, opt_sn)
+
 map('n', '<leader>h\'', ':lua require("harpoon.mark").add_file()<CR>', opt_sn)
 map('n', '<leader>ht', ':lua require("harpoon.ui").toggle_quick_menu()<CR>', opt_sn)
 map('n', '<leader>hn', ':lua require("harpoon.ui").nav_next()<CR>', opt_sn)

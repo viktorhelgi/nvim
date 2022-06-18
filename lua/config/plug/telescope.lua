@@ -1,6 +1,27 @@
+
+-- ignore files that are larger than a certain size
+local previewers = require('telescope.previewers')
+local new_maker = function(filepath, bufnr, opts)
+	opts = opts or {}
+
+	filepath = vim.fn.expand(filepath)
+	vim.loop.fs_stat(filepath, function(_, stat)
+		if not stat then
+			return
+		end
+		if stat.size > 100000 then
+			return
+		else
+			previewers.buffer_previewer_maker(filepath, bufnr, opts)
+		end
+	end)
+end
+
+
 local actions = require('telescope.actions')
 require('telescope').setup({
 	defaults = {
+        buffer_previewer_maker = new_maker,
 		prompt_prefix = '=> ',
 		selection_caret = ' > ',
 		entry_prefix = '   ',
@@ -61,35 +82,13 @@ require('telescope').setup({
 	},
 })
 
--- ignore files that are larger than a certain size
-local previewers = require('telescope.previewers')
-local new_maker = function(filepath, bufnr, opts)
-	opts = opts or {}
 
-	filepath = vim.fn.expand(filepath)
-	vim.loop.fs_stat(filepath, function(_, stat)
-		if not stat then
-			return
-		end
-		if stat.size > 100000 then
-			return
-		else
-			previewers.buffer_previewer_maker(filepath, bufnr, opts)
-		end
-	end)
-end
-
-require('telescope').setup({
-	defaults = {
-		buffer_previewer_maker = new_maker,
-	},
-})
 
 require('telescope').load_extension('fzf')
 -- You don't need to set any of these options.
 -- IMPORTANT!: this is only a showcase of how you can set default options!
-require("telescope").setup {
-}
+-- require("telescope").setup {
+-- }
 -- To get telescope-file-browser loaded and working with telescope,
 -- you need to call load_extension, somewhere after setup function:
 require("telescope").load_extension "file_browser"

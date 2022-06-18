@@ -66,7 +66,7 @@ end
 -- {{{ opts
 
 local opt_e = { silent=false } --empty opt for maps with no extra options
-local opt_n = { silent=false } --empty opt for maps with no extra options
+local opt_n = { silent=false, noremap=true } --empty opt for maps with no extra options
 local opt_s = { silent=true } --empty opt for maps with no extra options
 local opt_sn ={ silent=true, noremap=true }
 vim.g.mapleader = ' ' -- Map leader key to space
@@ -245,11 +245,11 @@ map('n', '<leader>i', 'V]M', opt_sn)
 -- }}}
 -- {{{ [L] - Lsp
 
-map('n', '<leader>Li', ':LspInfo<CR>', opt_sn)
-map('n', '<leader>Lr', ':LspRestart<CR>', opt_sn)
-map('n', '<leader>Ls', ':LspStart<CR>', opt_sn)
-map('n', '<leader>LX', ':LspStop<CR>', opt_sn)
-map('n', '<leader>Ll', ':LspLog<CR>', opt_sn)
+map('n', '<leader>Li', ':LspInfo<CR>', opt_n)
+map('n', '<leader>Lr', ':LspRestart<CR>', opt_n)
+map('n', '<leader>Ls', ':LspStart<CR>', opt_n)
+map('n', '<leader>LX', ':LspStop<CR>', opt_n)
+map('n', '<leader>Ll', ':LspLog<CR>', opt_n)
 
 -- }}}
 -- {{{ [M] - ...
@@ -262,20 +262,20 @@ map('n', '<leader>Ll', ':LspLog<CR>', opt_sn)
 -- }}}
 
 -- {{{ [P] - Packer ...
-map('n', '<leader>Pc', ':PackerClean<CR>', opt_sn)
-map('n', '<leader>PC', ':PackerCompile<CR>', opt_sn)
-map('n', '<leader>Pi', ':PackerInstall<CR>', opt_sn)
-map('n', '<leader>Pl', ':PackerLoad<CR>', opt_sn)
-map('n', '<leader>PP', ':PackerProfile<CR>', opt_sn)
-map('n', '<leader>Po', ':PackerStatus<CR>', opt_sn)
-map('n', '<leader>Ps', ':PackerSync<CR>', opt_sn)
-map('n', '<leader>PSi', ':PackerSnapshot<CR>', opt_sn)
-map('n', '<leader>PSd', ':PackerSnapshotDelete<CR>', opt_sn)
-map('n', '<leader>PSr', ':PackerSnapshotRollback<CR>', opt_sn)
-map('n', '<leader>Pu', ':PackerUpdate<CR>', opt_sn)
-map('n', '<leader>Pa', ':packadd ', opt_sn)
-map('n', '<leader>PL', ':packloadall<CR>', opt_sn)
-map('n', '<leader>P\'', ':e C:/Users/Lenovo/AppData/Local/nvim/lua/plug.lua<CR>', opt_sn)
+map('n', '<leader>Pc', ':PackerClean<CR>', opt_n)
+map('n', '<leader>PC', ':PackerCompile<CR>', opt_n)
+map('n', '<leader>Pi', ':PackerInstall<CR>', opt_n)
+map('n', '<leader>Pl', ':PackerLoad<CR>', opt_n)
+map('n', '<leader>PP', ':PackerProfile<CR>', opt_n)
+map('n', '<leader>Po', ':PackerStatus<CR>', opt_n)
+map('n', '<leader>Ps', ':PackerSync<CR>', opt_n)
+map('n', '<leader>PSi', ':PackerSnapshot<CR>', opt_n)
+map('n', '<leader>PSd', ':PackerSnapshotDelete<CR>', opt_n)
+map('n', '<leader>PSr', ':PackerSnapshotRollback<CR>', opt_n)
+map('n', '<leader>Pu', ':PackerUpdate<CR>', opt_n)
+map('n', '<leader>Pa', ':packadd ', opt_n)
+map('n', '<leader>PL', ':packloadall<CR>', opt_n)
+map('n', '<leader>P\'', ':e C:/Users/Lenovo/AppData/Local/nvim/lua/plug.lua<CR>', opt_n)
 -- }}}
 -- {{{ [q] - Quit [:q]
 map('n', '<leader>q', ':q<CR>', opt_sn)

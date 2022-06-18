@@ -323,8 +323,65 @@ map('n', '<leader>td', ':lua require(\'telescope.builtin\').find_files({find_com
 -- {{{ [U] - ...
 -- }}}
 -- {{{ [V] - ...
+map('n', '<leader>vj', ':TSTextobjectGotoNextStart @block.outer<CR>', opt_sn)
+map('n', '<leader>vk', ':TSTextobjectGotoNextStart @block.inner<CR>', opt_sn)
+map('n', '<leader>ve', ':TSTextobjectGotoPreviousEnd @block.outer<CR>', opt_sn)
+map('n', '<leader>vu', ':TSTextobjectGotoPreviousEnd @block.inner<CR>', opt_sn)
+
+-- function
+map('n', '[mi', ':TSTextobjectGotoPreviousStart @function.inner<CR>', opt_sn)
+map('n', '[mo', ':TSTextobjectGotoPreviousStart @function.outer<CR>', opt_sn)
+map('n', ']mi', ':TSTextobjectGotoNextStart @function.inner<CR>', opt_sn)
+map('n', ']mo', ':TSTextobjectGotoNextStart @function.outer<CR>', opt_sn)
+
+-- class
+map('n', '[ci', ':TSTextobjectGotoPreviousStart @class.inner<CR>', opt_sn)
+map('n', '[co', ':TSTextobjectGotoPreviousStart @class.outer<CR>', opt_sn)
+map('n', ']ci', ':TSTextobjectGotoNextStart @class.inner<CR>', opt_sn)
+map('n', ']co', ':TSTextobjectGotoNextStart @class.outer<CR>', opt_sn)
+
+-- loop
+map('n', '[li', ':TSTextobjectGotoPreviousStart @loop.inner<CR>', opt_sn)
+map('n', '[lo', ':TSTextobjectGotoPreviousStart @loop.outer<CR>', opt_sn)
+map('n', ']li', ':TSTextobjectGotoNextStart @loop.inner<CR>', opt_sn)
+map('n', ']lo', ':TSTextobjectGotoNextStart @loop.outer<CR>', opt_sn)
+
+-- [if] conditional
+map('n', '[ii', ':TSTextobjectGotoPreviousStart @loop.inner<CR>', opt_sn)
+map('n', '[io', ':TSTextobjectGotoPreviousStart @loop.outer<CR>', opt_sn)
+map('n', ']ii', ':TSTextobjectGotoNextStart @loop.inner<CR>', opt_sn)
+map('n', ']io', ':TSTextobjectGotoNextStart @loop.outer<CR>', opt_sn)
+
+-- [if] conditional
+map('n', '[ti', ':TSTextobjectGotoPreviousStart @call.inner<CR>', opt_sn)
+map('n', '[to', ':TSTextobjectGotoPreviousStart @call.outer<CR>', opt_sn)
+map('n', ']ti', ':TSTextobjectGotoNextStart @call.inner<CR>', opt_sn)
+map('n', ']to', ':TSTextobjectGotoNextStart @call.outer<CR>', opt_sn)
+
+
+-- statement
+map('n', '[s', ':TSTextobjectGotoPreviousStart @statement.outer<CR>', opt_sn)
+map('n', ']s', ':TSTextobjectGotoNextStart @statement.outer<CR>', opt_sn)
+-- parameter
+map('n', '[p', ':TSTextobjectGotoPreviousStart @parameter.inner<CR>', opt_sn)
+map('n', ']p', ':TSTextobjectGotoNextStart @parameter.inner<CR>', opt_sn)
+
 -- }}}
--- {{{ [W] - ...
+-- {{{ [W] - 
+map('n', '<leader>ws', ':winc s<CR>', opt_sn)
+map('n', '<leader>wv', ':winc v<CR>', opt_sn)
+map('n', '<leader>wq', ':winc q<CR>', opt_sn)
+map('n', '<leader>wc', ':winc c<CR>', opt_sn)
+map('n', '<leader>wo', ':winc o<CR>', opt_sn)
+map('n', '<leader>wK', ':winc K<CR>', opt_sn)
+map('n', '<leader>wJ', ':winc J<CR>', opt_sn)
+map('n', '<leader>wL', ':winc L<CR>', opt_sn)
+map('n', '<leader>wH', ':winc H<CR>', opt_sn)
+map('n', '<leader>wT', ':winc T<CR>', opt_sn)
+map('n', '<leader>w=', ':winc =<CR>', opt_sn)
+map('n', '<leader>wt', ':winc s<CR>:lua require(\'telescope.builtin\').lsp_type_definitions()<CR>', opt_sn)
+
+-- map('n', '<leader>wt', ':lua require(\'telescope.builtin\').lsp_type_definition()<CR>:winc s<CR>:b#<CR>:winc K<CR>', opt_sn)
 -- }}}
 -- {{{ [X] - ...
 -- }}}
@@ -408,6 +465,8 @@ config = {
    -- For explanation see: :help nvim_open_win()
    border = {'', '', '', '', '', '', '', ''},
 }
+
+
 
 
 -- {{{ [Ctrl]

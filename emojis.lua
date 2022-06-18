@@ -21,12 +21,12 @@ local scheme = require('lib.scheme')
 
 -- if you don't  want to specify the theme for each component,
 -- you can use the following function
--- scheme.load_shared_scheme('everforest')
+scheme.load_shared_scheme('everforest')
 -- scheme.load_scheme('alduin')
 -- scheme.load_scheme('everforest_tp')
 -- vim.cmd('colorscheme alduin')
 -- scheme.load_shared_scheme('alduin')
-scheme.load_shared_scheme('gruvbox-material')
+-- scheme.load_shared_scheme('gruvbox-material')
 -- vim.cmd('colorscheme aurora')
 -- vim.cmd('colorscheme nvcode')
 -- vim.cmd('colorscheme metanoia')
@@ -53,6 +53,7 @@ if vim.g.neovide ~= nil then--{{{
     vim.api.nvim_set_keymap('n', '<F11>', ':let g:neovide_transparency-=0.01<CR>', {})
     vim.api.nvim_set_keymap('n', '<F12>', ':let g:neovide_transparency+=0.01<CR>', {})
 end--}}}
+
 
 
 

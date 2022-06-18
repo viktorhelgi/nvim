@@ -154,10 +154,6 @@ local my_on_attach = function(client, bufnr)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rt', ':lua require("harpoon.term").sendCommand(1, "pytest --no-header -v -rP " .. vim.fn.expand(\'%\') .. "\\r") <CR>', opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rp', ':lua require("harpoon.term").sendCommand(1, "python " .. vim.fn.expand(\'%\') .. "\\r")<CR>', opts)
 
-<<<<<<< HEAD
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tt', ':lua require(\'telescope.builtin\').find_files({find_command={"C:/Users/Lenovo/scoop/shims/fd.exe", "test_",     "--type", "f",  "--extension", "rs"                         }})<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tn', ':lua require(\'telescope.builtin\').find_files({find_command={"C:/Users/Lenovo/scoop/shims/fd.exe",             "--type", "f",  "--extension", "rs",    "--exclude", "tests"}})<CR>', opts)
-=======
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tt', ':lua require(\'telescope.builtin\').find_files({find_command={"C:/Users/Lenovo/scoop/shims/fd.exe", "test_",     "--type", "f",  "--extension", "rs"                         }})<CR>', opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tn', ':lua require(\'telescope.builtin\').find_files({find_command={"C:/Users/Lenovo/scoop/shims/fd.exe",             "--type", "f",  "--extension", "rs",    "--exclude", "tests"}})<CR>', opts)
 
@@ -231,7 +227,30 @@ local my_on_attach = function(client, bufnr)
         },{
         prefix = '<leader>',
     })
->>>>>>> cf4b4eaf4ef478510b244e92c255121c2ab9eed5
+
+    if client.server_capabilities.document_highlight then
+        vim.cmd [[ hi! LspReferenceRead cterm=bold ctermbg=red guibg=LightYellow ]]
+        vim.cmd [[ hi! LspReferenceText cterm=bold ctermbg=red guibg=LightYellow]]
+        vim.cmd [[ hi! LspReferenceWrite cterm=bold ctermbg=red guibg=LightYellow]]
+        vim.api.nvim_create_augroup('lsp_document_highlight', {
+            clear = false
+        })
+        vim.api.nvim_clear_autocmds({
+            buffer = bufnr,
+            group = 'lsp_document_highlight',
+        })
+        vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+            group = 'lsp_document_highlight',
+            buffer = bufnr,
+            callback = vim.lsp.buf.document_highlight,
+        })
+        vim.api.nvim_create_autocmd('CursorMoved', {
+            group = 'lsp_document_highlight',
+            buffer = bufnr,
+            callback = vim.lsp.buf.clear_references,
+        })
+    end
+
 end
 
 
@@ -261,8 +280,11 @@ local rust_tools_opts = {
         hover_with_actions = true,
         inlay_hints = {
             show_parameter_hints = true,
-            parameter_hints_prefix = "",
-            other_hints_prefix = "",
+            parameter_hints_prefix = " ",
+            other_hints_prefix = "  ",
+            highlight = "VirtualTextHint"
+            --📜💡
+            --, , , , , ,  
         },
     },
 

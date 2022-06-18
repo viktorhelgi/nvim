@@ -26,7 +26,12 @@ o.modeline = true   	-- enable modlines for files
 o.modelines = 5			-- number of modelines
 o.signcolumn = 'yes'
 
+vim.diagnostic.config({
+    virtual_text = false,
 
+})
+-- o.updatetime = 250
+-- cmd [[autocmd! CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
 
 o.errorbells = false 	-- auditory stimulation annoying
 

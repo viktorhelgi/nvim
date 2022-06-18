@@ -1,3 +1,8 @@
+
+vim.cmd('hi DiagnosticUnderlineError guifg=#EA6962')
+vim.cmd('hi DiagnosticUnderlineError guifg=#EA6962')
+vim.cmd('hi ErrorText guifg=#EA6962')
+
 vim.g.everforest_background = 'hard'
 vim.o.background = 'dark'
 vim.cmd('colorscheme everforest')
@@ -9,6 +14,9 @@ vim.cmd('hi pythonTSField guifg=#A4948E')
 
 vim.cmd('hi VirtualTextError guifg=#EA6962')
 vim.cmd('hi VirtualTextHint guifg=#89b482')
+
+vim.cmd('hi NormalFloat guifg=#EA6962 guibg=#504945')
+vim.cmd('hi DiagnosticFloatingError guifg=#EA6962 guibg=#504945')
 
 -- vim.cmd('hi FTerm guibg=None')
 vim.cmd('hi normal guibg=None')

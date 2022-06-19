@@ -55,7 +55,7 @@ local lsp_signature_configs = {
 -- -- -- recommended:
 
 local opts = { noremap=true, silent=false }
-local opts_silent = { noremap=true, silent=true }
+local opt_sn = { noremap=true, silent=true }
 
 local my_on_attach = function(client, bufnr)
     ---------------------------------------------------------------------------------
@@ -75,22 +75,24 @@ local my_on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'geq', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd',       '<cmd>lua vim.lsp.buf.definition()<CR>zt', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gk',       '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gI',       '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD',       '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr',       '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gs',       '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-s>',       '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-p>',    '<cmd>winc l<CR><cmd>icargo', opts)
+    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-p>',    '<cmd>winc l<CR><cmd>icargo', opts)
 	vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>p', ':lua require("harpoon.term").sendCommand(1, "cargo run " .. vim.fn.expand(\'%\') .. "\\r") <CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>o', '<cmd>AerialToggle<CR>', opts)
 
 	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-g>',    ':lua require(\'telescope.builtin\').lsp_definitions()<CR>', opts)
 	vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gt',       ':lua require(\'telescope.builtin\').lsp_type_definitions()<CR>', opts)
 	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-t>',    ':lua require(\'telescope.builtin\').lsp_type_definitions()<CR>', opts)
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi',    	':lua require(\'telescope.builtin\').lsp_implementations()<CR>', opts)
+	vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gI',    	':lua require(\'telescope.builtin\').lsp_implementations({ignore_filenames=false, path_display=hidden})<CR>', opts)
 	vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gc',       ':lua require(\'telescope.builtin\').lsp_workspace_symbols({query="def"})<CR>', opts)
 	vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gC',       ':lua require(\'telescope.builtin\').lsp_document_symbols({query="def"})<CR>', opts)
+
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi',       '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD',       '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr',       '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gs',       '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+
 
 
     ---------------------------------------------------------------------------------
@@ -125,13 +127,14 @@ local my_on_attach = function(client, bufnr)
 	local string_mod_use   =  '/\\v^'..prefix..table.concat(array_mod_use   , sep)..suffix..'<CR>'.. ':set nohlsearch<CR>'
 
 
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>na',    string_all    , opts_silent)
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ni',    string_impl   , opts_silent)
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ns',    string_struct , opts_silent)
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>nf',    string_fn     , opts_silent)
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>nt',    string_trait  , opts_silent)
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ne',    string_enum   , opts_silent)
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>nm',    string_mod_use   , opts_silent)
+	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>na',    string_all    , opt_sn)
+	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ni',    string_impl   , opt_sn)
+	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ns',    string_struct , opt_sn)
+	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>nf',    string_fn     , opt_sn)
+	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>nt',    string_trait  , opt_sn)
+	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ne',    string_enum   , opt_sn)
+	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>nm',    string_mod_use   , opt_sn)
+
 
 
     ---------------------------------------------------------------------------------
@@ -203,7 +206,7 @@ local my_on_attach = function(client, bufnr)
     ---------------------------------------------------------------------------------
     ---------------------------------------------------------------------------------
     require('which-key').register({
-        j = {
+        n = {
             name = "Jump",
             a = "All",
             i = "Implementation",
@@ -326,7 +329,7 @@ local lspconfig = require('lspconfig')
 
 
 
-vim.cmd("setlocal indentexpr=")
+-- vim.cmd("setlocal indentexpr=")
 -- vim.cmd("setlocal nowrap")
 
 

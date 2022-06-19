@@ -1,27 +1,27 @@
 
 -- ignore files that are larger than a certain size
 local previewers = require('telescope.previewers')
-local new_maker = function(filepath, bufnr, opts)
-	opts = opts or {}
-
-	filepath = vim.fn.expand(filepath)
-	vim.loop.fs_stat(filepath, function(_, stat)
-		if not stat then
-			return
-		end
-		if stat.size > 100000 then
-			return
-		else
-			previewers.buffer_previewer_maker(filepath, bufnr, opts)
-		end
-	end)
-end
+-- local new_maker = function(filepath, bufnr, opts)
+-- 	opts = opts or {}
+--
+-- 	filepath = vim.fn.expand(filepath)
+-- 	vim.loop.fs_stat(filepath, function(_, stat)
+-- 		if not stat then
+-- 			return
+-- 		end
+-- 		if stat.size > 100000 then
+-- 			return
+-- 		else
+-- 			previewers.buffer_previewer_maker(filepath, bufnr, opts)
+-- 		end
+-- 	end)
+-- end
 
 
 local actions = require('telescope.actions')
 require('telescope').setup({
 	defaults = {
-        buffer_previewer_maker = new_maker,
+        -- buffer_previewer_maker = new_maker,
 		prompt_prefix = '=> ',
 		selection_caret = ' > ',
 		entry_prefix = '   ',
@@ -45,7 +45,7 @@ require('telescope').setup({
             preview_width = 88,
             horizontal = {
                 height = 45,
-                width = 0.65
+                width = 160
             }
 		},
 
@@ -60,12 +60,12 @@ require('telescope').setup({
 		},
 	},
 	extensions = {
-		fzf = {
-			fuzzy = true,
-			override_genearic_sorter = true,
-			override_file_sorter = true,
-			case_mode = 'smart_case',
-		},
+		-- fzf = {
+		-- 	fuzzy = true,
+		-- 	override_genearic_sorter = true,
+		-- 	override_file_sorter = true,
+		-- 	case_mode = 'smart_case',
+		-- },
     	file_browser = {
       		-- disables netrw and use telescope-file-browser in its place
       		hijack_netrw = true,

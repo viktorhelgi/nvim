@@ -47,6 +47,7 @@ return {
     -- {{{ [N] - nvimcolorizer - nvimcomment - *nvimreload
 	require('config.plug.nvimcolorizer'),
 	require('config.plug.nvimcomment'),
+    require('config.plug.nvim-bqf'),
 	-- require('config.plug.nvimreload'),
     -- }}}
     -- {{{ [O] - *one-small-step-for-vimkind

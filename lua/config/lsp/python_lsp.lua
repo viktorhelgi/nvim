@@ -67,7 +67,7 @@ local on_attach = function(client, bufnr)
 	vim.o.wrap=false
 
 	-- vim.cmd('TSBufEnable indent')
-	vim.opt.colorcolumn = '80'
+	vim.opt.colorcolumn = '60'
 	-- unmap('n', ']]')
 	-- unmap('n', '[[')
 

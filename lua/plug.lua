@@ -139,7 +139,7 @@ require('packer').startup({
 		-- })
 --}}}
         -- vim-rust-syntax-ext{{{
-    	use({ "arzg/vim-rust-syntax-ext", ft="rs" })--}}}
+    	use({ "arzg/vim-rust-syntax-ext"})--}}}
         -- pytrize {{{
 		use { 
 		  'AckslD/nvim-pytrize.lua', ft="py",

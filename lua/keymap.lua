@@ -116,7 +116,24 @@ map('n', '<leader>bd', ':bd<CR>', { noremap = true })
 -- }}}
 -- {{{ [c] - CommentToggle
 
-map('', '<leader>c', ':CommentToggle<CR>', opt_sn) -- toggle comment on current line or selection
+
+function _G._assign_n__CMD_cn_and_cp_CR__()
+    -- set new keymaps
+    vim.api.nvim_set_keymap('n', 'N', ':cp<CR>', {})
+    vim.api.nvim_set_keymap('n', 'n', ':cn<CR>', {})
+
+    -- set deactivation keymaps to "/"
+    vim.api.nvim_set_keymap('n', '/',
+        ":lua vim.api.nvim_del_keymap('n', 'N')<CR>"..
+        ":lua vim.api.nvim_del_keymap('n', 'n')<CR>"..
+        ":lua vim.api.nvim_del_keymap('n', '/')<CR>/" , {})
+end
+
+-- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>k',    aa_a()   , opts_silent)
+vim.api.nvim_set_keymap('n', '<leader>cn',    ':lua _G._assign_n__CMD_cn_and_cp_CR__()<CR>'   , opt_sn)
+vim.api.nvim_set_keymap('n', '<leader>co',    ':cope<CR>'   , opt_sn)
+vim.api.nvim_set_keymap('n', '<leader>cq',    ':ccl<CR>'   , opt_sn)
+vim.api.nvim_set_keymap('n', '<leader>cd',    ':lua vim.diagnostic.setqflist()<cr>'   , opt_sn)
 
 -- }}}
 -- {{{ [D] - DiffView
@@ -139,13 +156,14 @@ map('', '<leader>df', ':DiffviewFileHistory<CR>', opt_sn)
 -- {{{ [E] - Extra
 
 map('n', '<leader>ea', ':AerialToggle<CR>', opt_sn)
-map('n', '<leader>ee', ':winc v<CR>:winc h<CR>:80 winc |<CR>:enew<CR>', opt_sn) -- toggle relative line numbers
+map('n', '<leader>ee', ':winc v<CR>:winc h<CR>:50 winc |<CR>:enew<CR>:set nonu<CR>', opt_sn) -- toggle relative line numbers
+map('',  '<leader>ec', ':CommentToggle<CR>', opt_sn) -- toggle comment on current line or selection
+map('n', '<leader>edc',    ':cd %:p:h<CR>', opt_sn)
+map('n', '<leader>ed-',    ':cd ..<CR>', opt_sn)
 map('n', '<leader>ePb', ':profile start profile.log<CR>:profile file *<CR>:profile func *<CR>:echo "profiling has started"<CR>', opt_sn)
 map('n', '<leader>ePe', ':profile pause<CR>:noautocmd qall!<CR>', opt_sn)
 map('n', '<leader>etv', ':vs | terminal<CR>i', opt_sn)
 map('n', '<leader>ets',   ':sp | terminal<CR>i', opt_sn)
-map('n', '<leader>ec',    ':cd %:p:h<CR>', opt_sn)
-map('n', '<leader>e-',    ':cd ..<CR>', opt_sn)
 map('n', '<leader>eh', ':set hlsearch!<CR>:match none<CR>', opt_sn) -- toggle comment on current line or selection
 map('n', '<leader>er', ':set rnu!<CR>', opt_sn) -- toggle relative line numbers
 map('n', '<leader>ep', '"+p', opt_sn) -- toggle relative line numbers
@@ -153,12 +171,12 @@ map('n', '<leader>ep', '"+p', opt_sn) -- toggle relative line numbers
 map('v', '<leader>y', '"+y', opt_sn)
 
 -- debugger
-map('n', '<leader>edl', ':lua require("osv").launch({port = 8086})<CR>', opt_sn)
-map('n', '<leader>edb', ':lua require("dap").toggle_breakpoint()<CR>', opt_sn)
-map('n', '<leader>edc', ':lua require("dap").continue()<CR>', opt_sn)
-map('n', '<leader>edi', ':lua require("dap").step_into()<CR>', opt_sn)
-map('n', '<leader>edo', ':lua require("dap").step_over()<CR>', opt_sn)
-map('n', '<leader>eds', ':lua require("dap").repl.open()<CR>', opt_sn)
+-- map('n', '<leader>edl', ':lua require("osv").launch({port = 8086})<CR>', opt_sn)
+-- map('n', '<leader>edb', ':lua require("dap").toggle_breakpoint()<CR>', opt_sn)
+-- map('n', '<leader>edc', ':lua require("dap").continue()<CR>', opt_sn)
+-- map('n', '<leader>edi', ':lua require("dap").step_into()<CR>', opt_sn)
+-- map('n', '<leader>edo', ':lua require("dap").step_over()<CR>', opt_sn)
+-- map('n', '<leader>eds', ':lua require("dap").repl.open()<CR>', opt_sn)
 
 -- local function m
 map('n', '<leader>edS', ':lua _G.__reload()<CR>', opt_sn)
@@ -250,6 +268,9 @@ map('n', '<leader>Lr', ':LspRestart<CR>', opt_n)
 map('n', '<leader>Ls', ':LspStart<CR>', opt_n)
 map('n', '<leader>LX', ':LspStop<CR>', opt_n)
 map('n', '<leader>Ll', ':LspLog<CR>', opt_n)
+
+map('n', '<leader>lf','<cmd>lua vim.lsp.buf.formatting()<CR>', opt_sn)
+map('n', '<leader>lr','<cmd>lua vim.lsp.buf.rename()<CR>', opt_sn)
 
 -- }}}
 -- {{{ [M] - ...
@@ -386,8 +407,6 @@ map('n', '<leader>wt', ':winc s<CR>:lua require(\'telescope.builtin\').lsp_type_
 -- {{{ [X] - ...
 -- }}}
 -- {{{ [Y] - Copy to Clipboard
-map('n', '<leader>ya', ':%y+<CR>', opt_sn) -- Copy content of entire buffer to system clipboard
-map('n', '<leader>yl', '"+yy', opt_sn) -- yank current line into system clipboard
 -- }}}
 -- {{{ [Z] - ...
 -- local keymap_amend = require('keymap-amend')
@@ -448,6 +467,9 @@ map('n', '\\j', ':bp<CR>', { noremap = true })
 map('t', '<esc>', '<C-\\><C-n>', opt_sn)
 
 -- }}}
+--
+map('c', '<C-j>', '<Down>', opt_e)
+map('c', '<C-k>', '<Up>', opt_e)
 
 -- {{{ [g] - Aerial 
 
@@ -482,6 +504,9 @@ map('v', '<C-y>', '"+y', opt_sn)
 map('v', '<C-p>', '"+p', opt_sn)
 map('i', '<C-a>', '<Esc>Ea', opt_sn)
 map('i', '<C-l>', '<Esc>la', opt_sn)
+map('i', '<C-d>', 'jjj', opt_sn)
+map('i', '<C-u>', 'kkk', opt_sn)
+
 
 -- }}}
 

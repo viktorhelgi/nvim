@@ -188,7 +188,7 @@ require('packer').startup({
         --     }
         --     end
         -- }
-        use({'kevinhwang91/nvim-bqf'})
+        -- use({'kevinhwang91/nvim-bqf'})
         -- use({'ryanoasis/vim-devicons'})
         -- use({
         --     "folke/trouble.nvim",
@@ -201,8 +201,9 @@ require('packer').startup({
         --         }
         --     end
         -- })
+        use({'monkoose/matchparen.nvim'})
 
-        use({"nathom/filetype.nvim"})
+        -- use({"nathom/filetype.nvim"})
 
 	end,
 

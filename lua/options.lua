@@ -9,7 +9,10 @@ local opt = vim.opt
 local g = vim.g
 local o = vim.o
 
-cmd('syntax enable') 	-- syntax highlighting
+-- cmd('syntax enable') 	-- syntax highlighting
+
+g.matchparen_timeout = 2
+g.matchparen_insert_timeout = 2
 cmd('autocmd User TelescopePreviewerLoaded set number relativenumber wrap list')
 cmd('autocmd User TelescopePreviewerLoaded redraw')
 cmd('set autowrite')

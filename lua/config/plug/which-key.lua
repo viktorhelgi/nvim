@@ -43,6 +43,15 @@ local keymap = {
         k = { 'focus next buffer in buflist' },
     },
     -- }}}
+    -- {{{ [c]: quick-fix-window
+    c = {
+        name = 'Quick-Fix',
+        d = { 'diag setqflist' },
+        o = { 'open qfl' },
+        q = { 'close qfl' },
+        n = { 'activate n-jump' },
+    },
+    -- }}}
     -- [d]: Diffview {{{
     d = {
         name = "Diffview",

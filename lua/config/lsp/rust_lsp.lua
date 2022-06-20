@@ -142,6 +142,7 @@ local my_on_attach = function(client, bufnr)
     
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', ':lua require("harpoon.term").sendCommand(1, "cargo run \\r") <CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rp', ':lua require("harpoon.term").sendCommand(1, "cargo run \\r") <CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>r1', ':lua require("harpoon.term").sendCommand(1, "cargo run To poem.txt\\r") <CR>', opts)
 
     -- Rust
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rc', ':RustCodeAction<CR>', opts)

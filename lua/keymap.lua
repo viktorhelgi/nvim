@@ -131,9 +131,9 @@ end
 
 -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>k',    aa_a()   , opts_silent)
 vim.api.nvim_set_keymap('n', '<leader>cn',    ':lua _G._assign_n__CMD_cn_and_cp_CR__()<CR>'   , opt_sn)
-vim.api.nvim_set_keymap('n', '<leader>co',    ':cope<CR>'   , opt_sn)
+vim.api.nvim_set_keymap('n', '<leader>co',    ':cope<CR>:lua _G._assign_n__CMD_cn_and_cp_CR__()<CR>'   , opt_sn)
 vim.api.nvim_set_keymap('n', '<leader>cq',    ':ccl<CR>'   , opt_sn)
-vim.api.nvim_set_keymap('n', '<leader>cd',    ':lua vim.diagnostic.setqflist()<cr>'   , opt_sn)
+vim.api.nvim_set_keymap('n', '<leader>cd',    ':cope<CR>:lua vim.diagnostic.setqflist()<cr>:lua _G._assign_n__CMD_cn_and_cp_CR__()<CR>'   , opt_sn)
 
 -- }}}
 -- {{{ [D] - DiffView
@@ -155,8 +155,8 @@ map('', '<leader>df', ':DiffviewFileHistory<CR>', opt_sn)
 -- }}}
 -- {{{ [E] - Extra
 
-map('n', '<leader>ea', ':AerialToggle<CR>', opt_sn)
-map('n', '<leader>ee', ':winc v<CR>:winc h<CR>:50 winc |<CR>:enew<CR>:set nonu<CR>', opt_sn) -- toggle relative line numbers
+map('n', '<leader>ea', ':AerialToggle<CR>:winc l<CR>', opt_sn)
+map('n', '<leader>ee', ':winc v<CR>:winc h<CR>:60 winc |<CR>:enew<CR>:set nonu<CR>:set nornu<CR>', opt_sn) -- toggle relative line numbers
 map('',  '<leader>ec', ':CommentToggle<CR>', opt_sn) -- toggle comment on current line or selection
 map('n', '<leader>edc',    ':cd %:p:h<CR>', opt_sn)
 map('n', '<leader>ed-',    ':cd ..<CR>', opt_sn)
@@ -470,6 +470,8 @@ map('t', '<esc>', '<C-\\><C-n>', opt_sn)
 --
 map('c', '<C-j>', '<Down>', opt_e)
 map('c', '<C-k>', '<Up>', opt_e)
+map('t', '<C-j>', '<Down>', opt_e)
+map('t', '<C-k>', '<Up>', opt_e)
 
 -- {{{ [g] - Aerial 
 

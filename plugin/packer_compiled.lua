@@ -318,10 +318,8 @@ _G.packer_plugins = {
     url = "https://github.com/Vimjas/vim-python-pep8-indent"
   },
   ["vim-rust-syntax-ext"] = {
-    loaded = false,
-    needs_bufread = false,
-    only_cond = false,
-    path = "C:\\Users\\Lenovo\\AppData\\Local\\nvim-data\\site\\pack\\packer\\opt\\vim-rust-syntax-ext",
+    loaded = true,
+    path = "C:\\Users\\Lenovo\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\vim-rust-syntax-ext",
     url = "https://github.com/arzg/vim-rust-syntax-ext"
   },
   ["vim-test"] = {
@@ -341,7 +339,6 @@ vim.cmd [[augroup packer_load_aucmds]]
 vim.cmd [[au!]]
   -- Filetype lazy-loads
 time([[Defining lazy-load filetype autocommands]], true)
-vim.cmd [[au FileType rs ++once lua require("packer.load")({'vim-rust-syntax-ext'}, { ft = "rs" }, _G.packer_plugins)]]
 vim.cmd [[au FileType py ++once lua require("packer.load")({'nvim-pytrize.lua'}, { ft = "py" }, _G.packer_plugins)]]
 time([[Defining lazy-load filetype autocommands]], false)
 vim.cmd("augroup END")

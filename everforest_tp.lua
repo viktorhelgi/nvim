@@ -1,24 +1,45 @@
 
-vim.cmd('hi DiagnosticUnderlineError guifg=#EA6962')
-vim.cmd('hi DiagnosticUnderlineError guifg=#EA6962')
-vim.cmd('hi ErrorText guifg=#EA6962')
-
-vim.g.everforest_background = 'hard'
-vim.o.background = 'dark'
-vim.cmd('colorscheme everforest')
-
--- vim.cmd('hi ColorColumn guibg=#504945')
--- vim.cmd('hi WhichKeyFloat guibg=#45403D')
--- vim.cmd('hi NormalFloat guibg=#5f534b')
-vim.cmd('hi pythonTSField guifg=#A4948E')
-
-vim.cmd('hi VirtualTextError guifg=#EA6962')
-vim.cmd('hi VirtualTextHint guifg=#89b482')
-
-vim.cmd('hi NormalFloat guifg=#EA6962 guibg=#504945')
-vim.cmd('hi DiagnosticFloatingError guifg=#EA6962 guibg=#504945')
-
--- vim.cmd('hi FTerm guibg=None')
-vim.cmd('hi normal guibg=None')
-vim.cmd('hi EndOfBuffer guibg=None')
-
+--
+-- -- if vim.g.neovide == nil then
+-- vim.cmd('hi DiagnosticUnderlineError gui=underline')
+-- vim.cmd('hi DiagnosticUnderlineError gui=underline')
+-- vim.cmd('hi ErrorText gui=underline guifg=#EA6962')
+-- vim.cmd('hi VirtualTextError gui=underline')
+-- vim.cmd('hi VirtualTextHint gui=underline')
+-- vim.cmd('hi DiagnosticFloatingError gui=underline')
+-- vim.cmd('hi CocErrorHighlight gui=underline')
+-- vim.cmd('hi LspErrorHighlight gui=underline')
+-- vim.cmd('hi DiagnosticError gui=underline')
+-- vim.cmd('hi CocErrorHighlight gui=underline')
+-- vim.cmd('hi CocErrorHighlight gui=underline')
+-- vim.cmd('hi CocErrorHighlight gui=underline')
+-- vim.cmd('hi CocErrorHighlight gui=underline')
+--
+-- -- end
+--
+--
+-- vim.g.everforest_background = 'hard'
+-- vim.o.background = 'dark'
+-- vim.cmd('colorscheme everforest')
+--
+--
+-- vim.cmd('hi DiagnosticUnderlineError guifg=#EA6962')
+-- vim.cmd('hi DiagnosticUnderlineError guifg=#EA6962')
+-- -- vim.cmd('hi ErrorText guifg=#EA6962')
+-- -- vim.cmd('hi ColorColumn guibg=#504945')
+-- -- vim.cmd('hi WhichKeyFloat guibg=#45403D')
+-- -- vim.cmd('hi NormalFloat guibg=#5f534b')
+-- vim.cmd('hi pythonTSField guifg=#A4948E')
+--
+-- vim.cmd('hi VirtualTextError guifg=#EA6962')
+-- vim.cmd('hi VirtualTextHint guifg=#89b482')
+--
+-- -- vim.cmd('hi NormalFloat guifg=#EA6962 guibg=#504945')
+-- -- vim.cmd('hi DiagnosticFloatingError guifg=#EA6962 guibg=#504945')
+-- -- vim.cmd('hi NormalFloat guifg=#EA6962 guibg=#504945')
+-- -- vim.cmd('hi DiagnosticFloatingError guifg=#EA6962 guibg=#504945')
+--
+-- -- vim.cmd('hi FTerm guibg=None')
+-- vim.cmd('hi normal guibg=None')
+-- vim.cmd('hi EndOfBuffer guibg=None')
+--

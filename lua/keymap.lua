@@ -168,6 +168,8 @@ map('n', '<leader>eh', ':set hlsearch!<CR>:match none<CR>', opt_sn) -- toggle co
 map('n', '<leader>er', ':set rnu!<CR>', opt_sn) -- toggle relative line numbers
 map('n', '<leader>ep', '"+p', opt_sn) -- toggle relative line numbers
 
+map('n', '<leader>esb', ':syncbind<CR>:set scrollbind<CR>:set cursorbind<CR>:set scrollopt=ver<CR>', opt_sn)
+
 map('v', '<leader>y', '"+y', opt_sn)
 
 -- debugger
@@ -493,6 +495,8 @@ config = {
 
 
 
+
+
 -- {{{ [Ctrl]
 
 map('n', '<C-h>', ':winc h<CR>', opt_sn)
@@ -500,16 +504,16 @@ map('n', '<C-l>', ':winc l<CR>', opt_sn)
 map('n', '<C-j>', ':winc j<CR>', opt_sn)
 map('n', '<C-k>', ':winc k<CR>', opt_sn)
 map('n', '<C-\\>', ':w<CR>', opt_sn)
-map('i', '<C-o>', '<C-x><C-o>', opt_sn)
-map('i', '<C-f>', '<C-x><C-f>', opt_sn)
-map('v', '<C-y>', '"+y', opt_sn)
-map('v', '<C-p>', '"+p', opt_sn)
+map('n', '<C-d>', 'jjj', opt_sn)
+map('n', '<C-u>', 'kkk', opt_sn)
+
 map('i', '<C-a>', '<Esc>Ea', opt_sn)
 map('i', '<C-l>', '<Esc>la', opt_sn)
-map('i', '<C-d>', 'jjj', opt_sn)
-map('i', '<C-u>', 'kkk', opt_sn)
+map('i', '<C-o>', '<C-x><C-o>', opt_sn)
+map('i', '<C-f>', '<C-x><C-f>', opt_sn)
 
-
+map('v', '<C-y>', '"+y', opt_sn)
+map('v', '<C-p>', '"+p', opt_sn)
 -- }}}
 
 -- {{{ <F-Nr>

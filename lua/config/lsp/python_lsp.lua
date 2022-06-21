@@ -59,6 +59,7 @@ local lsp_signature_configs = {
 
 
 local opts = { noremap=true, silent=false }
+local opts_silent = { noremap=true, silent=true }
 local on_attach = function(client, bufnr)
 
     -- local fd_exe = ""
@@ -67,7 +68,7 @@ local on_attach = function(client, bufnr)
 	vim.o.wrap=false
 
 	-- vim.cmd('TSBufEnable indent')
-	vim.opt.colorcolumn = '60'
+	vim.opt.colorcolumn = '80'
 	-- unmap('n', ']]')
 	-- unmap('n', '[[')
 
@@ -110,11 +111,37 @@ local on_attach = function(client, bufnr)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>p',    '<cmd>RustRun<CR>', opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>o', '<cmd>AerialToggle<CR>', opts)
 	--
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>jn',    '/\\v^\\s*def\\s\\zs\\w*|^\\s*class\\s\\zs\\w*\\ze[:(]<CR>', opts)
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>js',    '/\\v^\\s*\\zsclass\\ze\\s|^\\s*\\zsdef\\ze\\s|^\\s*\\zsif\\ze\\s|^\\s*\\zsfor\\ze\\s|^\\s*\\zselif\\ze\\s|^\\s*\\zselse\\ze:|^\\s*\\zswhile\\ze\\s<CR>', opts)
+	-- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>nn',    '/\\v^\\s*def\\s\\zs\\w*|^\\s*class\\s\\zs\\w*\\ze[:(]<CR>', opts)
+	-- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ns',    '/\\v^\\s*\\zsclass\\ze\\s|^\\s*\\zsdef\\ze\\s|^\\s*\\zsif\\ze\\s|^\\s*\\zsfor\\ze\\s|^\\s*\\zselif\\ze\\s|^\\s*\\zselse\\ze:|^\\s*\\zswhile\\ze\\s<CR>', opts)
 
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>jd',    ':let t=[]<CR>:let t=[] | %s/^\\s*def\\s\\zs\\w*/\\=add(t,submatch(0))[-1]/g ', opts)
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>jt',    ':echo t<CR> ', opts)
+	-- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>nm',    ':let t=[]<CR>:let t=[] | %s/^\\s*def\\s\\zs\\w*/\\=add(t,submatch(0))[-1]/g<CR> ', opts)
+	-- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>nc',    ':let t=[]<CR>:let t=[] | %s/^\\s*class\\s\\zs\\w*/\\=add(t,submatch(0))[-1]/g<CR> ', opts)
+	-- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>nt',    ':echo t<CR> ', opts)
+
+    -------------------------------------
+	local prefix = '\\s*'
+	local suffix = '\\s\\zs\\w*'
+
+	-- local array_all = { 'def', 'class', 'fn', 'trait', 'enum', 'impl<T>' }
+	local array_all = { 'def', 'class' }
+	local array_def = { 'def', 'def<o>'}
+	local array_class = { 'class', 'class<o>'}
+
+	for i = 1,#array_all    do table.insert(array_all,    'pub ' .. array_all[i]) end
+	for i = 1,#array_def   do table.insert(array_def,   'pub ' .. array_def[i]) end
+	for i = 1,#array_class do table.insert(array_class, 'pub ' .. array_class[i]) end
+
+	local sep = suffix .. '|^' .. prefix
+	local string_all    =  '/\\v^'..prefix..table.concat(array_all    , sep)..suffix..'<CR>'.. ':set nohlsearch<CR>'
+	local string_def   =  '/\\v^'..prefix..table.concat(array_def   , sep)..suffix..'<CR>'.. ':set nohlsearch<CR>'
+	local string_class   =  '/\\v^'..prefix..table.concat(array_class   , sep)..suffix..'<CR>'.. ':set nohlsearch<CR>'
+
+
+	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>na',    string_all    , opts_silent)
+	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>nd',    string_def   , opts_silent)
+	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>nm',    string_def   , opts_silent)
+	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>nc',    string_class , opts_silent)
+    --------------------------
 
 
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ra', ':lua require("harpoon.term").sendCommand(1, "pytest --no-header -v -rP \\r") <CR>', opts)

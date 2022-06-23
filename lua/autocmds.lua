@@ -18,3 +18,5 @@ cmd([[ au BufEnter  setlocal nowrap ]])
 --  command = 'setlocal nowrap'
 --})
 -- # vim: foldmethod=marker
+--
+

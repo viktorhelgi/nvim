@@ -54,7 +54,7 @@ if vim.g.neovide ~= nil then--{{{
     vim.api.nvim_set_keymap('n', '<F12>', ':let g:neovide_transparency+=0.01<CR>', {})
 end--}}}
 
-require('matchparen').setup()
+require('matchparen').setup({})
 
 
 

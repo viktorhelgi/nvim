@@ -173,6 +173,7 @@ local on_attach = function(client, bufnr)
 
         local python_exe = 'C:/Users/Lenovo/miniconda3/envs/LSPenv/python'
 	    vim.g.python3_host_prog = python_exe
+        local python_exe = 'python'
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rp', ':lua require("harpoon.term").sendCommand(1, "'..python_exe..' " .. vim.fn.expand(\'%\') .. "\\r")<CR>', opts)
 
         local fd_exe = "C:/Users/Lenovo/scoop/shims/fd.exe"
@@ -277,11 +278,16 @@ function _G.conda_python()
     return 'C:/Users/Lenovo/miniconda3/envs/'.. val .. '/python.exe'
 end
 
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+capabilities.textDocument.completion.completionItem.snippetSupport = false
+
 lspconfig.pyright.setup({
 	-- cmd = { 'pyright-langserver', '--stdio' },
 	on_attach = on_attach,
     -- filetypes = { 'python' },
 
+    capabilities = capabilities,
     -- root_dir = lspconfig.util.find_git_ancestor or lspconfig.util.find_package_pipfile_ancestor or lspconfig.util.find_package_pyproject_ancestor,
     -- root_dir = find_package_pipfile_ancestor,
 	root_dir = util.root_pattern(unpack(root_files)),
@@ -292,21 +298,21 @@ lspconfig.pyright.setup({
             --disableOrganizeImports = truee,
             disablerganizeImports = false,
         },
-        python = {
-            analysis = {
+        -- python = {
+            -- analysis = {
         --         stubPath = _G.pipenv_stubpath(),
         --
-                stubPath = _G.conda_stub(),
-            },
+                -- stubPath = _G.conda_stub(),
+            -- },
             -- venvPath = "C:/Users/Lenovo/.virtualenvs/",
         --     pythonPath = _G.pipenv_python(),
             -- pythonPath = _G.conda_python(),
-        },
-        -- python = {
+        -- },
+        python = {
             -- analysis = {
         --         autoImportCompletions = true,
         --         autoSearchPaths = true,
-        --         diagnosticMode = 'workspace', -- ["openfFilesOnly", "workspace"]
+                diagnosticMode = 'workspace', -- ["openfFilesOnly", "workspace"]
         --         -- diagnosticSeverityOverrides = ''
         --         -- extraPaths =
         --         logLevel = 'Warning',
@@ -319,7 +325,7 @@ lspconfig.pyright.setup({
         --     pythonPath = 'C:/Users/Lenovo/miniconda3/envs/'.. os.getenv("CONDA_DEFAULT_ENV") .. '/python.exe',
         --     --pythonPath = 'C:/Users/Lenovo/miniconda3/envs/NoDk/python.exe',
         --     venvPath = 'C:/Users/Lenovo/miniconda3/envs'
-        -- },
+        },
     },
 })
 

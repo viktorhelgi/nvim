@@ -68,6 +68,7 @@ local my_on_attach = function(client, bufnr)
     ---------------------------------------------------------------------------------
     
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
     -- vim.api.nvim_buf_set_option(bufnr, 'nowrap', 'true')
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>[', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>]', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
@@ -293,148 +294,193 @@ local my_on_attach = function(client, bufnr)
         })
     end
 
-    ---------------------------------------------------------------------------------
-    ---------------------------------------------------------------------------------
-    
+
+
+
+
+
+
+    -- vim.cmd("setlocal indentexpr=")
+    -- vim.cmd("setlocal nowrap")
+
+
+
+    local cmp = require'cmp'
+--
+--     require('lspkind').init({
+--         -- defines how annotations are shown
+--         -- default: symbol
+--         -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
+--         mode = 'symbol_text',
+--
+--         -- default symbol map
+--         -- can be either 'default' (requires nerd-fonts font) or
+--         -- 'codicons' for codicon preset (requires vscode-codicons font)
+--         --
+--         -- default: 'default'
+--         preset = 'codicons',
+--
+--         -- override preset symbols
+--         --
+--         -- default: {}
+--         symbol_map = {
+--           Text = "",
+--           Method = "",
+--           Function = "",
+--           Constructor = "",
+--           Field = "ﰠ",
+--           Variable = "",
+--           Class = "ﴯ",
+--           Interface = "",
+--           Module = "",
+--           Property = "ﰠ",
+--           Unit = "塞",
+--           Value = "",
+--           Enum = "",
+--           Keyword = "",
+--           Snippet = "",
+--           Color = "",
+--           File = "",
+--           Reference = "",
+--           Folder = "",
+--           EnumMember = "",
+--           Constant = "",
+--           Struct = "פּ",
+--           Event = "",
+--           Operator = "",
+--           TypeParameter = ""
+--         },
+--     })
+--
+--
+    -- cmp.setup({
+    --     -- snippet = { 
+    --     --     -- REQUIRED - you must specify a snippet engine 
+    --     --     expand = function(args) 
+    --     --         -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+    --     --         require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+    --     --         -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+    --     --         -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users. 
+    --     --     end,
+    --     -- },
+    --     window = {
+    --         -- completion = cmp.config.window.bordered(),
+    --         -- documentation = cmp.config.window.bordered(),
+    --     },
+    --     mapping = cmp.mapping.preset.insert({
+    --         ['<C-y>'] = cmp.mapping.scroll_docs(-4),
+    --         ['<C-e>'] = cmp.mapping.scroll_docs(4),
+    --         ['<C-Space>'] = cmp.mapping.complete(),
+    --         -- ['<C-q'] = cmp.mapping.abort(),
+    --         ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    --     }),
+    --     sources = cmp.config.sources({
+    --         { name = 'nvim_lsp' },
+    --         -- { name = 'vsnip' }, -- For vsnip users.
+    --         -- { name = 'luasnip' }, -- For luasnip users.
+    --         -- { name = 'ultisnips' }, -- For ultisnips users.
+    --         -- { name = 'snippy' }, -- For snippy users.
+    --     }, {
+    --         { name = 'buffer' },
+    --     }),
+    --     formatting = {
+    --       format = function(entry, vim_item)
+    --         -- fancy icons and a name of kind
+    --         vim_item.kind = require("lspkind").presets.default[vim_item.kind] .. " " .. vim_item.kind
+    --
+    --         -- set a name for each source
+    --         vim_item.menu = ({
+    --           buffer = "「Buffer」",
+    --           text = "「Text」",
+    --           nvim_lsp = "「Lsp」",
+    --           ultisnips = "「UltiSnips」",
+    --           nvim_lua = "「Lua」",
+    --         })[entry.source.name]
+    --         return vim_item
+    --       end,
+    --     }
+    -- })
+--         ---------------------------------------------------------------------------------
+--         ---------------------------------------------------------------------------------
+--        
 end
+--
+--
 
 
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+capabilities.textDocument.completion.completionItem.snippetSupport = false
+
+-- require("rust-tools").setup({
+--     capabilities = capabilities,
+--     filetypes = {"rs"},
+--     tools = { -- rust-tools options
+--         autoSetHints = true,
+--         hover_with_actions = true,
+--         inlay_hints = {
+--             show_parameter_hints = true,
+--             parameter_hints_prefix = " ",
+--             other_hints_prefix = "  ",
+--             highlight = "VirtualTextHint"
+--             --📜💡
+--             --, , , , , ,  
+--         },
+--     }
+-- })
+--
 local lspconfig = require('lspconfig')
 
 
--- local capabilities = vim.lsp.protocol.make_client_capabilities()
--- capabilities.textDocument.completion.completionItem.snippetSupport = true
--- lspconfig.rust_analyzer.setup({
---     -- capabilities=capabilities,
---     on_attach = my_on_attach,
--- 	filetypes = {'rust', 'rs'},
---     checkOnSave = {
---         enable = true,
---     },
---     -- server = {
---     --     path = "C:/Users/Lenovo/AppData/Roaming/nvim-data/lsp_servers/rust/rust-analyzer.exe"
---     -- }
--- })
---
+lspconfig.rust_analyzer.setup({
+    capabilities=capabilities,
+    on_attach = my_on_attach,
+	filetypes = {'rust', 'rs'},
+    checkOnSave = {
+        enable = true,
+    },
+    server = {
+        path = "C:/Users/Lenovo/AppData/Roaming/nvim-data/lsp_servers/rust/rust-analyzer.exe"
+    }
+})
+
 -- require'cmp'.setup {
-  -- sources = {
-    -- { name = 'nvim_lsp' }
-  -- }
+--   sources = {
+--     { name = 'nvim_lsp' }
+--   }
 -- }
 
 -- The nvim-cmp almost supports LSP's capabilities so You should advertise it to LSP servers..
 -- local capabilities = vim.lsp.protocol.make_client_capabilities()
--- capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
-
-
-
-
-
--- vim.cmd("setlocal indentexpr=")
--- vim.cmd("setlocal nowrap")
-
-
-
-local cmp = require'cmp'
-
-cmp.setup({
-    snippet = { 
-        -- REQUIRED - you must specify a snippet engine 
-        expand = function(args) 
-            vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-            -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-            -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
-            -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users. 
-        end,
-    },
-    window = {
-        -- completion = cmp.config.window.bordered(),
-        -- documentation = cmp.config.window.bordered(),
-    },
-    mapping = cmp.mapping.preset.insert({
-        ['<C-y>'] = cmp.mapping.scroll_docs(-4),
-        ['<C-e>'] = cmp.mapping.scroll_docs(4),
-        ['<C-Space>'] = cmp.mapping.complete(),
-        -- ['<C-q'] = cmp.mapping.abort(),
-        ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-    }),
-    sources = cmp.config.sources({
-        { name = 'nvim_lsp' },
-        { name = 'vsnip' }, -- For vsnip users.
-        -- { name = 'luasnip' }, -- For luasnip users.
-        -- { name = 'ultisnips' }, -- For ultisnips users.
-        -- { name = 'snippy' }, -- For snippy users.
-    }, {
-        { name = 'buffer' },
-    })
-})
-
--- Set configuration for specific filetype.
-cmp.setup.filetype('gitcommit', {
-    sources = cmp.config.sources({
-        { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
-    }, {
-        { name = 'buffer' },
-    })
-})
-
--- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
-cmp.setup.cmdline('/', {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = {
-        { name = 'buffer' }
-    }
-})
-
--- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-cmp.setup.cmdline(':', {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = cmp.config.sources({
-        { name = 'path' }
-    }, {
-        { name = 'cmdline' }
-    })
-})
 
 -- Setup lspconfig.
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+-- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+
+--
+--     -- all the opts to send to nvim-lspconfig
+--     -- these override the defaults set by rust-tools.nvim
+--     -- see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#rust_analyzer
+--     server = {
+--         -- on_attach is a callback called when the language server attachs to the buffer
+--         on_attach = my_on_attach,
+--         settings = {
+--             -- to enable rust-analyzer settings visit:
+--             -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
+--             ["rust-analyzer"] = {
+--                 -- enable clippy on save
+--                 checkOnSave = {
+--                     command = "clippy"
+--                 },
+--             }
+--         }
+--     },
+-- })
+--
+--
 
 
 
 
 
-local rust_tools_opts = {
-    capabilities = capabilities,
-    filetypes = {"rs"},
-    tools = { -- rust-tools options
-        autoSetHints = true,
-        hover_with_actions = true,
-        inlay_hints = {
-            show_parameter_hints = true,
-            parameter_hints_prefix = " ",
-            other_hints_prefix = "  ",
-            highlight = "VirtualTextHint"
-            --📜💡
-            --, , , , , ,  
-        },
-    },
 
-    -- all the opts to send to nvim-lspconfig
-    -- these override the defaults set by rust-tools.nvim
-    -- see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#rust_analyzer
-    server = {
-        -- on_attach is a callback called when the language server attachs to the buffer
-        on_attach = my_on_attach,
-        settings = {
-            -- to enable rust-analyzer settings visit:
-            -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
-            ["rust-analyzer"] = {
-                -- enable clippy on save
-                checkOnSave = {
-                    command = "clippy"
-                },
-            }
-        }
-    },
-}
-require("rust-tools").setup(rust_tools_opts)

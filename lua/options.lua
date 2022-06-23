@@ -11,8 +11,8 @@ local o = vim.o
 
 -- cmd('syntax enable') 	-- syntax highlighting
 
-g.matchparen_timeout = 2
-g.matchparen_insert_timeout = 2
+-- g.matchparen_timeout = 2
+-- g.matchparen_insert_timeout = 2
 cmd('autocmd User TelescopePreviewerLoaded set number relativenumber wrap list')
 cmd('autocmd User TelescopePreviewerLoaded redraw')
 cmd('set autowrite')
@@ -29,6 +29,12 @@ o.modeline = true   	-- enable modlines for files
 o.modelines = 5			-- number of modelines
 o.signcolumn = 'yes'
 
+--@type vim.
+-- vim.diagnostic({
+--     config = {
+--
+--     }
+-- })
 -- vim.diagnostic.config({
 --     virtual_text = false,
 -- })
@@ -60,7 +66,8 @@ opt.undofile = true		-- file undo history preserved outside current session
 -- new win split options
 opt.splitbelow = true
 opt.splitright = true
-o.completeopt = 'menuone,noselect'
+-- o.completeopt = 'menuone,noselect'
+opt.completeopt = {'menu', 'menuone', 'noselect'}
 
 
 vim.opt.termguicolors = true

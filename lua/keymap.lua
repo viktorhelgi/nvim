@@ -1,4 +1,3 @@
-
 local M = {}
 
 -- {{{ FUNCTIONS
@@ -13,11 +12,11 @@ local function map(mode, bind, exec, opts)
             - exec: command to execute
             - options: ...
     --]]
-	local options = { noremap = true, silent = true }
-	if opts then
-		options = vim.tbl_extend('force', options, opts)
-	end
-	vim.api.nvim_set_keymap(mode, bind, exec, opts)
+    local options = { noremap = true, silent = true }
+    if opts then
+        options = vim.tbl_extend('force', options, opts)
+    end
+    vim.api.nvim_set_keymap(mode, bind, exec, opts)
 end
 
 -- -- }}}
@@ -27,36 +26,36 @@ local function unmap(mode, bind)
     --[[ Umapping
     --unmap('n', '<leader>f')
     --]]
-	vim.api.nvim_del_keymap(mode, bind)
+    vim.api.nvim_del_keymap(mode, bind)
 end
 
 -- -- }}}
 -- -- {{{ function mysplit(inputstr, sep)
 
-local function mysplit (inputstr, sep)
-        if sep == nil then
-                sep = "%s"
-        end
-        local t={}
-        for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
-                table.insert(t, str)
-        end
-        return t
+local function mysplit(inputstr, sep)
+    if sep == nil then
+        sep = "%s"
+    end
+    local t = {}
+    for str in string.gmatch(inputstr, "([^" .. sep .. "]+)") do
+        table.insert(t, str)
+    end
+    return t
 end
 
 -- -- }}}
 -- -- {{{ function mm(file)
 
 local function mm(file)
-	local t = vim.fn.expand(file)
-	return t
+    local t = vim.fn.expand(file)
+    return t
 end
 
 -- -- }}}
 -- -- {{{ function mm(file)
 
 local function fterm_run(command)
-	return ":lua require('FTerm').run(" .. command .. ")<CR>"
+    return ":lua require('FTerm').run(" .. command .. ")<CR>"
 end
 
 -- -- }}}
@@ -65,10 +64,10 @@ end
 
 -- {{{ opts
 
-local opt_e = { silent=false } --empty opt for maps with no extra options
-local opt_n = { silent=false, noremap=true } --empty opt for maps with no extra options
-local opt_s = { silent=true } --empty opt for maps with no extra options
-local opt_sn ={ silent=true, noremap=true }
+local opt_e = { silent = false } --empty opt for maps with no extra options
+local opt_n = { silent = false, noremap = true } --empty opt for maps with no extra options
+local opt_s = { silent = true } --empty opt for maps with no extra options
+local opt_sn = { silent = true, noremap = true }
 vim.g.mapleader = ' ' -- Map leader key to space
 vim.g.maplocalleader = ','
 
@@ -76,23 +75,75 @@ vim.g.maplocalleader = ','
 
 -- {{{ Random
 
--- -- {{{ autocompletion mappings for cmp
+-- -- -- {{{ autocompletion mappings for cmp
+-- --
+-- ---@class cmp.CompleteParams
+-- ---@field public reason? cmp.ContextReason
+-- ---@field public config? cmp.ConfigSchema
+-- local CmpParams = {
+--     reason = {
+--         Auto = 'auto',
+--         Manual = 'manual',
+--         TriggerOnly = 'triggerOnly',
+--         None = 'none',
+--     },
+-- }
+-- 
+-- _G.check_back_space = function()
+--   local col = vim.fn.col '.' - 1
+--   return col == 0 or vim.fn.getline('.'):sub(col, col):match '%s' ~= nil
+-- end
+-- 
+-- local cmp = require('cmp.init')
+-- local cmp_types = require('cmp.types')
+-- M.cmp_mappings = {
+--     ['<C-Space>'] = function(core, fallback)
+--         if vim.fn.pumvisible() == 1 then
+--             cmp.complete()
+--         else
+--             fallback()
+--         end
+--         -- if vim.fn.pumvisible() == 1 then
+--         --     vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<C-n>', true, true, true), 'n')
+--         -- -- elseif luasnip.expand_or_jumpable() then
+--         --     -- vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<Plug>luasnip-expand-or-jump', true, true, true), '')
+--         -- elseif not (vim.fn.col '.' - 1 == 0) or (vim.fn.getline('.'):sub(vim.fn.col '.' - 1, vim.fn.col '.' - 1)):match ('%s' ~= nil) then
+--         --     cmp.mapping.complete()(core, fallback)
+--         -- else
+--         --     fallback()
+--         -- end
+--     end,
+--     ['<S-Tab>'] = function(core, fallback)
+--         if vim.fn.pumvisible() == 1 then
+--             cmp.complete()
+--         else
+--             fallback()
+--         end
+--         --     vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<C-n>', true, true, true), 'n')
+--         -- if vim.fn.pumvisible() == 1 then
+--         --     vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<C-p>', true, true, true), 'n')
+--         -- -- elseif luasnip.jumpable(-1) then
+--         --     -- vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<Plug>luasnip-jump-prev', true, true, true), '')
+--         -- else
+--         --     fallback()
+--         -- end
+--     end,
+--     ['<C-d>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 's' }),
+--     ['<C-u>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 's' }),
+--     ['<F6>'] = cmp.mapping.complete(CmpParams),
+--     ['<C-y>'] = cmp.mapping.scroll_docs(-4),
+--     ['<C-e>'] = cmp.mapping.scroll_docs(4),
+--     ['<C-e>'] = cmp.mapping.close(),
+--     ['<C-|>'] = cmp.mapping.confirm({
+--         behavior = cmp.ConfirmBehavior.Insert,
+--         select = true,
+--     }),
+-- }
+-- 
+-- map('', '<C-x>r', 'v:lua require(\'cmp\').complete()<CR>', opt_e)
 
-local cmp = require('cmp')
-M.cmp_mappings = {
-	['<Tab>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 's' }),
-	['<S-Tab>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 's' }),
-	['<C-d>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 's' }),
-	['<C-u>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 's' }),
-	['<C-Space>'] = cmp.mapping.complete(),
-	['<C-y>'] = cmp.mapping.scroll_docs(-4),
-	['<C-e>'] = cmp.mapping.scroll_docs(4),
-	-- ['<C-e>'] = cmp.mapping.close(),
-	['<C-k>'] = cmp.mapping.confirm({
-		behavior = cmp.ConfirmBehavior.Insert,
-		select = true,
-	}),
-}
+
+-- map('i', '<C-a>', '<Esc>Ea', opt_sn)
 
 -- -- }}}
 -- --{{{ gitsigns mappings
@@ -117,23 +168,42 @@ map('n', '<leader>bd', ':bd<CR>', { noremap = true })
 -- {{{ [c] - CommentToggle
 
 
-function _G._assign_n__CMD_cn_and_cp_CR__()
+function _G._open_qfl()
     -- set new keymaps
     vim.api.nvim_set_keymap('n', 'N', ':cp<CR>', {})
     vim.api.nvim_set_keymap('n', 'n', ':cn<CR>', {})
 
     -- set deactivation keymaps to "/"
     vim.api.nvim_set_keymap('n', '/',
-        ":lua vim.api.nvim_del_keymap('n', 'N')<CR>"..
-        ":lua vim.api.nvim_del_keymap('n', 'n')<CR>"..
-        ":lua vim.api.nvim_del_keymap('n', '/')<CR>/" , {})
+        ":lua vim.api.nvim_del_keymap('n', 'N')<CR>" ..
+        ":lua vim.api.nvim_del_keymap('n', 'n')<CR>" ..
+        ":lua vim.api.nvim_del_keymap('n', '/')<CR>/", {})
+
+    vim.api.nvim_set_keymap('n', '<leader>cq', ':ccl<CR>', opt_sn)
+end
+
+function _G._open_ll()
+    -- set new keymaps
+    vim.cmd("winc k")
+    vim.api.nvim_set_keymap('n', 'N', ':lprev<CR>', {})
+    vim.api.nvim_set_keymap('n', 'n', ':lnext<CR>', {})
+
+    -- set deactivation keymaps to "/"
+    vim.api.nvim_set_keymap('n', '/',
+        ":lua vim.api.nvim_del_keymap('n', 'N')<CR>" ..
+        ":lua vim.api.nvim_del_keymap('n', 'n')<CR>" ..
+        ":lua vim.api.nvim_del_keymap('n', '/')<CR>/", {})
+
+    vim.api.nvim_set_keymap('n', '<leader>cq', ':lclose<CR>', opt_sn)
 end
 
 -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>k',    aa_a()   , opts_silent)
-vim.api.nvim_set_keymap('n', '<leader>cn',    ':lua _G._assign_n__CMD_cn_and_cp_CR__()<CR>'   , opt_sn)
-vim.api.nvim_set_keymap('n', '<leader>co',    ':cope<CR>:lua _G._assign_n__CMD_cn_and_cp_CR__()<CR>'   , opt_sn)
-vim.api.nvim_set_keymap('n', '<leader>cq',    ':ccl<CR>'   , opt_sn)
-vim.api.nvim_set_keymap('n', '<leader>cd',    ':cope<CR>:lua vim.diagnostic.setqflist()<cr>:lua _G._assign_n__CMD_cn_and_cp_CR__()<CR>'   , opt_sn)
+vim.api.nvim_set_keymap('n', '<leader>cn', ':lua _G._assign_n__CMD_cn_and_cp_CR__()<CR>', opt_sn)
+vim.api.nvim_set_keymap('n', '<leader>co', ':cope<CR>:lua _G._assign_n__CMD_cn_and_cp_CR__()<CR>', opt_sn)
+vim.api.nvim_set_keymap('n', '<leader>cb', ':lua require(\'diaglist\').open_buffer_diagnostics()<CR>:lua _G._open_ll()<CR>', opt_sn)
+vim.api.nvim_set_keymap('n', '<leader>cd', ':lua require(\'diaglist\').open_buffer_diagnostics()<CR>:lua _G._open_qfl()<CR>', opt_sn)
+vim.api.nvim_set_keymap('n', '<leader>cq', ':ccl<CR>', opt_sn)
+-- vim.api.nvim_set_keymap('n', '<leader>cd',    ':cope<CR>:lua vim.diagnostic.setqflist()<cr>:lua _G._assign_n__CMD_cn_and_cp_CR__()<CR>'   , opt_sn)
 
 -- }}}
 -- {{{ [D] - DiffView
@@ -146,8 +216,8 @@ map('', '<leader>do4', ':DiffviewOpen HEAD~4<CR>', opt_sn) -- Previous Commit
 
 map('', '<leader>da', ':DiffviewOpen HEAD<CR>', opt_sn) -- Previous Commit
 map('', '<leader>db', ':DiffviewOpen HEAD~1<CR>', opt_sn) -- Previous Commit
-map('', '<leader>dc', ':DiffviewOpen origin/main<CR>', opt_sn)     -- Previous Push
-map('', '<leader>dd', ':DiffviewOpen origin/main...HEAD<CR>', opt_sn)     -- Previous Push
+map('', '<leader>dc', ':DiffviewOpen origin/main<CR>', opt_sn) -- Previous Push
+map('', '<leader>dd', ':DiffviewOpen origin/main...HEAD<CR>', opt_sn) -- Previous Push
 map('', '<leader>dq', ':DiffviewClose<CR>', opt_sn)
 map('', '<leader>dt', ':DiffviewToggleFiles<CR>', opt_sn)
 map('', '<leader>df', ':DiffviewFileHistory<CR>', opt_sn)
@@ -157,13 +227,13 @@ map('', '<leader>df', ':DiffviewFileHistory<CR>', opt_sn)
 
 map('n', '<leader>ea', ':AerialToggle<CR>:winc l<CR>', opt_sn)
 map('n', '<leader>ee', ':winc v<CR>:winc h<CR>:60 winc |<CR>:enew<CR>:set nonu<CR>:set nornu<CR>', opt_sn) -- toggle relative line numbers
-map('',  '<leader>ec', ':CommentToggle<CR>', opt_sn) -- toggle comment on current line or selection
-map('n', '<leader>edc',    ':cd %:p:h<CR>', opt_sn)
-map('n', '<leader>ed-',    ':cd ..<CR>', opt_sn)
+map('', '<leader>ec', ':CommentToggle<CR>', opt_sn) -- toggle comment on current line or selection
+map('n', '<leader>edc', ':cd %:p:h<CR>', opt_sn)
+map('n', '<leader>ed-', ':cd ..<CR>', opt_sn)
 map('n', '<leader>ePb', ':profile start profile.log<CR>:profile file *<CR>:profile func *<CR>:echo "profiling has started"<CR>', opt_sn)
 map('n', '<leader>ePe', ':profile pause<CR>:noautocmd qall!<CR>', opt_sn)
 map('n', '<leader>etv', ':vs | terminal<CR>i', opt_sn)
-map('n', '<leader>ets',   ':sp | terminal<CR>i', opt_sn)
+map('n', '<leader>ets', ':sp | terminal<CR>i', opt_sn)
 map('n', '<leader>eh', ':set hlsearch!<CR>:match none<CR>', opt_sn) -- toggle comment on current line or selection
 map('n', '<leader>er', ':set rnu!<CR>', opt_sn) -- toggle relative line numbers
 map('n', '<leader>ep', '"+p', opt_sn) -- toggle relative line numbers
@@ -189,33 +259,33 @@ map('n', '<leader>edS', ':lua _G.__reload()<CR>', opt_sn)
 -- }}}
 -- {{{ [G] - GitSigns - Gdiff - git_status
 M.gitsigns_mappings = {
-	noremap = true,
-	['n ]c'] = { expr = true, "&diff ? ']c' : '<cmd>lua require\"gitsigns.actions\".next_hunk()<CR>'" },
-	['n [c'] = { expr = true, "&diff ? '[c' : '<cmd>lua require\"gitsigns.actions\".prev_hunk()<CR>'" },
+    noremap = true,
+    ['n ]c'] = { expr = true, "&diff ? ']c' : '<cmd>lua require\"gitsigns.actions\".next_hunk()<CR>'" },
+    ['n [c'] = { expr = true, "&diff ? '[c' : '<cmd>lua require\"gitsigns.actions\".prev_hunk()<CR>'" },
 
-	['n <leader>Gs'] = '<cmd>lua require"gitsigns".stage_hunk()<CR>',
-	['v <leader>Gs'] = '<cmd>lua require"gitsigns".stage_hunk({vim.fn.line("."), vim.fn.line("v")})<CR>',
-	['n <leader>Gu'] = '<cmd>lua require"gitsigns".undo_stage_hunk()<CR>',
-	['n <leader>Gr'] = '<cmd>lua require"gitsigns".reset_hunk()<CR>',
-	['v <leader>Gr'] = '<cmd>lua require"gitsigns".reset_hunk({vim.fn.line("."), vim.fn.line("v")})<CR>',
-	['n <leader>GR'] = '<cmd>lua require"gitsigns".reset_buffer()<CR>',
-	['n <leader>Gp'] = '<cmd>lua require"gitsigns".preview_hunk()<CR>',
-	['n <leader>Gb'] = '<cmd>lua require"gitsigns".blame_line(true)<CR>',
-	['n <leader>GS'] = '<cmd>lua require"gitsigns".stage_buffer()<CR>',
-	['n <leader>GU'] = '<cmd>lua require"gitsigns".reset_buffer_index()<CR>',
+    ['n <leader>Gs'] = '<cmd>lua require"gitsigns".stage_hunk()<CR>',
+    ['v <leader>Gs'] = '<cmd>lua require"gitsigns".stage_hunk({vim.fn.line("."), vim.fn.line("v")})<CR>',
+    ['n <leader>Gu'] = '<cmd>lua require"gitsigns".undo_stage_hunk()<CR>',
+    ['n <leader>Gr'] = '<cmd>lua require"gitsigns".reset_hunk()<CR>',
+    ['v <leader>Gr'] = '<cmd>lua require"gitsigns".reset_hunk({vim.fn.line("."), vim.fn.line("v")})<CR>',
+    ['n <leader>GR'] = '<cmd>lua require"gitsigns".reset_buffer()<CR>',
+    ['n <leader>Gp'] = '<cmd>lua require"gitsigns".preview_hunk()<CR>',
+    ['n <leader>Gb'] = '<cmd>lua require"gitsigns".blame_line(true)<CR>',
+    ['n <leader>GS'] = '<cmd>lua require"gitsigns".stage_buffer()<CR>',
+    ['n <leader>GU'] = '<cmd>lua require"gitsigns".reset_buffer_index()<CR>',
 
-	-- Text objects
-	['o ih'] = ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>',
-	['x ih'] = ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>',
+    -- Text objects
+    ['o ih'] = ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>',
+    ['x ih'] = ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>',
 
-	['n <leader>gdm'] = '<cmd>Gdiffsplit master<CR><cmd>winc L<CR>',
-	['n <leader>gdh'] = '<cmd>Gdiffsplit HEAD<CR><cmd>winc L<CR>',
-	['n <leader>gdc1'] = '<cmd>Gdiffsplit !~1<CR><cmd>winc L<CR>',
-	['n <leader>gdc2'] = '<cmd>Gdiffsplit !~2<CR><cmd>winc L<CR>',
-	['n <leader>gdc3'] = '<cmd>Gdiffsplit !~3<CR><cmd>winc L<CR>',
-	['n <leader>gdc4'] = '<cmd>Gdiffsplit !~4<CR><cmd>winc L<CR>',
+    ['n <leader>gdm'] = '<cmd>Gdiffsplit master<CR><cmd>winc L<CR>',
+    ['n <leader>gdh'] = '<cmd>Gdiffsplit HEAD<CR><cmd>winc L<CR>',
+    ['n <leader>gdc1'] = '<cmd>Gdiffsplit !~1<CR><cmd>winc L<CR>',
+    ['n <leader>gdc2'] = '<cmd>Gdiffsplit !~2<CR><cmd>winc L<CR>',
+    ['n <leader>gdc3'] = '<cmd>Gdiffsplit !~3<CR><cmd>winc L<CR>',
+    ['n <leader>gdc4'] = '<cmd>Gdiffsplit !~4<CR><cmd>winc L<CR>',
 
-	['n <leader>gs'] = '<cmd>Telescope git_status<CR>',
+    ['n <leader>gs'] = '<cmd>Telescope git_status<CR>',
 }
 
 map('n', '<leader>gs', '<cmd>Telescope git_status<CR>', opt_sn)
@@ -271,8 +341,8 @@ map('n', '<leader>Ls', ':LspStart<CR>', opt_n)
 map('n', '<leader>LX', ':LspStop<CR>', opt_n)
 map('n', '<leader>Ll', ':LspLog<CR>', opt_n)
 
-map('n', '<leader>lf','<cmd>lua vim.lsp.buf.formatting()<CR>', opt_sn)
-map('n', '<leader>lr','<cmd>lua vim.lsp.buf.rename()<CR>', opt_sn)
+map('n', '<leader>lf', '<cmd>lua vim.lsp.buf.formatting()<CR>', opt_sn)
+map('n', '<leader>lr', '<cmd>lua vim.lsp.buf.rename()<CR>', opt_sn)
 
 -- }}}
 -- {{{ [M] - ...
@@ -390,7 +460,7 @@ map('n', '[p', ':TSTextobjectGotoPreviousStart @parameter.inner<CR>', opt_sn)
 map('n', ']p', ':TSTextobjectGotoNextStart @parameter.inner<CR>', opt_sn)
 
 -- }}}
--- {{{ [W] - 
+-- {{{ [W] -
 map('n', '<leader>ws', ':winc s<CR>', opt_sn)
 map('n', '<leader>wv', ':winc v<CR>', opt_sn)
 map('n', '<leader>wq', ':winc q<CR>', opt_sn)
@@ -475,7 +545,7 @@ map('c', '<C-k>', '<Up>', opt_e)
 map('t', '<C-j>', '<Down>', opt_e)
 map('t', '<C-k>', '<Up>', opt_e)
 
--- {{{ [g] - Aerial 
+-- {{{ [g] - Aerial
 
 map('n', 'g}', ':AerialNext<CR>', opt_sn)
 map('n', 'g{', ':AerialPrev<CR>', opt_sn)
@@ -485,11 +555,11 @@ map('n', 'g[', ':AerialPrevUp<CR>', opt_sn)
 -- }}}
 
 config = {
-   default_keybindings = true, -- Set to false to disable default keybindings
+    default_keybindings = true, -- Set to false to disable default keybindings
 
-   -- 'none', "single", "double", "rounded", "solid", 'shadow' or table
-   -- For explanation see: :help nvim_open_win()
-   border = {'', '', '', '', '', '', '', ''},
+    -- 'none', "single", "double", "rounded", "solid", 'shadow' or table
+    -- For explanation see: :help nvim_open_win()
+    border = { '', '', '', '', '', '', '', '' },
 }
 
 
@@ -531,11 +601,12 @@ map('n', '<leader>es3', ':set laststatus=3<CR>', opt_e)
 
 -- {{{ ?
 
-map('n', '<leader><F1>', ':%s/\//g<CR>', opt_sn)
+map('n', '<leader><F1>', ':%s/\
+//g<CR>', opt_sn)
 
 -- function create_dir(file)
-	-- local var = vim.cmd(':call input(\'ae\')<CR>')
-	-- vim.cmd(':echo ' .. var )
+-- local var = vim.cmd(':call input(\'ae\')<CR>')
+-- vim.cmd(':echo ' .. var )
 -- end
 -- map('n', '<F3>', ':!mkdir stinput(\'input: \')<CR>', opt_sn)
 -- map('n', 'bbb', 'create_dir(%)', opt_sn)

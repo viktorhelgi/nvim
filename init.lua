@@ -21,7 +21,11 @@ local scheme = require('lib.scheme')
 
 -- if you don't  want to specify the theme for each component,
 -- you can use the following function
-scheme.load_shared_scheme('everforest')
+
+-- scheme.load_shared_scheme('everforest')
+
+scheme.load_shared_scheme('catppuccin')
+
 -- scheme.load_scheme('alduin')
 -- scheme.load_scheme('everforest_tp')
 -- vim.cmd('colorscheme alduin')

@@ -20,7 +20,9 @@ cmd('set autowrite')
 -- cmd('set winhighlight=Normal:FTerm')
 -- cmd('hi FTerm guibg=#2b3339')
 
---cmd('set shellslash')
+-- cmd('set shellslash')
+-- cmd('set completeslash=backslash')
+cmd('set completeslash=slash')
 o.rnu = true         	-- relative line numbers
 o.nu = true         	-- line numbers
 o.mouse = 'a'       	-- mouse controls

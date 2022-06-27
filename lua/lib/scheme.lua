@@ -49,6 +49,7 @@ local lualine_def_themes = {
 	'solarized_light',
 	'tommorow',
 	'wombat',
+    'catppuccin'
 }
 
 -- string-based theme definitions for lualine schemes [WIP]

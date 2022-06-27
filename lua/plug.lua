@@ -91,6 +91,10 @@ require('packer').startup({
         use({ "ChristianChiarulli/nvcode-color-schemes.vim" }) --}}}
         -- monokai.nvim{{{
         use({ "tanvirtin/monokai.nvim" }) --}}}
+        use({
+            "catppuccin/nvim",
+            as = "catppuccin"
+        })
         -- }}}
 
         -- aerial.nvim{{{

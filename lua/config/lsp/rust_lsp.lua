@@ -32,8 +32,8 @@ local lsp_signature_configs = {
                    -- to view the hiding contents
   max_width = 76, -- max_width of signature floating_window, line will be wrapped if exceed max_width
   handler_opts = {
-    -- border = "rounded"   -- double, rounded, single, shadow, none
-    border = none
+    border = "rounded"   -- double, rounded, single, shadow, none
+    -- border = none
   },
 
   always_trigger = true, -- sometime show signature on new line or in middle of parameter can be confusing, set it to false for #58
@@ -98,7 +98,8 @@ local my_on_attach = function(client, bufnr)
 
     ---------------------------------------------------------------------------------
     ---------------------------------------------------------------------------------
-    
+
+
 	local prefix = '\\s*'
 	local suffix = '\\s\\zs\\w*'
 
@@ -118,6 +119,8 @@ local my_on_attach = function(client, bufnr)
 	for i = 1,#array_enum   do table.insert(array_enum,   'pub ' .. array_enum[i]) end
 	for i = 1,#array_mod_use   do table.insert(array_mod_use,   'pub ' .. array_mod_use[i]) end
 
+    local array_mod_pub = 'pub'
+
 	local sep = suffix .. '|^' .. prefix
 	local string_all    =  '/\\v^'..prefix..table.concat(array_all    , sep)..suffix..'<CR>'.. ':set nohlsearch<CR>'
 	local string_impl   =  '/\\v^'..prefix..table.concat(array_impl   , sep)..suffix..'<CR>'.. ':set nohlsearch<CR>'
@@ -126,15 +129,17 @@ local my_on_attach = function(client, bufnr)
 	local string_trait  =  '/\\v^'..prefix..table.concat(array_trait  , sep)..suffix..'<CR>'.. ':set nohlsearch<CR>'
 	local string_enum   =  '/\\v^'..prefix..table.concat(array_enum   , sep)..suffix..'<CR>'.. ':set nohlsearch<CR>'
 	local string_mod_use   =  '/\\v^'..prefix..table.concat(array_mod_use   , sep)..suffix..'<CR>'.. ':set nohlsearch<CR>'
+	local string_pub   =  '/\\v^'..prefix..array_mod_pub..suffix..'<CR>'.. ':set nohlsearch<CR>'
 
 
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>na',    string_all    , opt_sn)
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ni',    string_impl   , opt_sn)
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ns',    string_struct , opt_sn)
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>nf',    string_fn     , opt_sn)
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>nt',    string_trait  , opt_sn)
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ne',    string_enum   , opt_sn)
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>nm',    string_mod_use   , opt_sn)
+	vim.api.nvim_buf_set_keymap(bufnr, '', '<leader>na',    string_all    , opt_sn)
+	vim.api.nvim_buf_set_keymap(bufnr, '', '<leader>ni',    string_impl   , opt_sn)
+	vim.api.nvim_buf_set_keymap(bufnr, '', '<leader>ns',    string_struct , opt_sn)
+	vim.api.nvim_buf_set_keymap(bufnr, '', '<leader>nf',    string_fn     , opt_sn)
+	vim.api.nvim_buf_set_keymap(bufnr, '', '<leader>nt',    string_trait  , opt_sn)
+	vim.api.nvim_buf_set_keymap(bufnr, '', '<leader>ne',    string_enum   , opt_sn)
+	vim.api.nvim_buf_set_keymap(bufnr, '', '<leader>nm',    string_mod_use   , opt_sn)
+	vim.api.nvim_buf_set_keymap(bufnr, '', '<leader>np',    string_pub   , opt_sn)
 
 
 

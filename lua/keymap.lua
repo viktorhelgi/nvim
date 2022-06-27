@@ -73,87 +73,7 @@ vim.g.maplocalleader = ','
 
 -- }}}
 
--- {{{ Random
-
--- -- -- {{{ autocompletion mappings for cmp
--- --
--- ---@class cmp.CompleteParams
--- ---@field public reason? cmp.ContextReason
--- ---@field public config? cmp.ConfigSchema
--- local CmpParams = {
---     reason = {
---         Auto = 'auto',
---         Manual = 'manual',
---         TriggerOnly = 'triggerOnly',
---         None = 'none',
---     },
--- }
--- 
--- _G.check_back_space = function()
---   local col = vim.fn.col '.' - 1
---   return col == 0 or vim.fn.getline('.'):sub(col, col):match '%s' ~= nil
--- end
--- 
--- local cmp = require('cmp.init')
--- local cmp_types = require('cmp.types')
--- M.cmp_mappings = {
---     ['<C-Space>'] = function(core, fallback)
---         if vim.fn.pumvisible() == 1 then
---             cmp.complete()
---         else
---             fallback()
---         end
---         -- if vim.fn.pumvisible() == 1 then
---         --     vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<C-n>', true, true, true), 'n')
---         -- -- elseif luasnip.expand_or_jumpable() then
---         --     -- vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<Plug>luasnip-expand-or-jump', true, true, true), '')
---         -- elseif not (vim.fn.col '.' - 1 == 0) or (vim.fn.getline('.'):sub(vim.fn.col '.' - 1, vim.fn.col '.' - 1)):match ('%s' ~= nil) then
---         --     cmp.mapping.complete()(core, fallback)
---         -- else
---         --     fallback()
---         -- end
---     end,
---     ['<S-Tab>'] = function(core, fallback)
---         if vim.fn.pumvisible() == 1 then
---             cmp.complete()
---         else
---             fallback()
---         end
---         --     vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<C-n>', true, true, true), 'n')
---         -- if vim.fn.pumvisible() == 1 then
---         --     vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<C-p>', true, true, true), 'n')
---         -- -- elseif luasnip.jumpable(-1) then
---         --     -- vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<Plug>luasnip-jump-prev', true, true, true), '')
---         -- else
---         --     fallback()
---         -- end
---     end,
---     ['<C-d>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 's' }),
---     ['<C-u>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 's' }),
---     ['<F6>'] = cmp.mapping.complete(CmpParams),
---     ['<C-y>'] = cmp.mapping.scroll_docs(-4),
---     ['<C-e>'] = cmp.mapping.scroll_docs(4),
---     ['<C-e>'] = cmp.mapping.close(),
---     ['<C-|>'] = cmp.mapping.confirm({
---         behavior = cmp.ConfirmBehavior.Insert,
---         select = true,
---     }),
--- }
--- 
--- map('', '<C-x>r', 'v:lua require(\'cmp\').complete()<CR>', opt_e)
-
-
--- map('i', '<C-a>', '<Esc>Ea', opt_sn)
-
--- -- }}}
--- --{{{ gitsigns mappings
-
--- }}}
-
--- }}}
-
 -- {{{ <Leader>
-
 -- {{{ [A] - ...
 -- }}}
 -- {{{ [B] - Buffers
@@ -198,8 +118,8 @@ function _G._open_ll()
 end
 
 -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>k',    aa_a()   , opts_silent)
-vim.api.nvim_set_keymap('n', '<leader>cn', ':lua _G._assign_n__CMD_cn_and_cp_CR__()<CR>', opt_sn)
-vim.api.nvim_set_keymap('n', '<leader>co', ':cope<CR>:lua _G._assign_n__CMD_cn_and_cp_CR__()<CR>', opt_sn)
+vim.api.nvim_set_keymap('n', '<leader>cn', ':lua _G._open_qfl()<CR>', opt_sn)
+vim.api.nvim_set_keymap('n', '<leader>co', ':cope<CR>:lua _G._open_qfl()<CR>', opt_sn)
 vim.api.nvim_set_keymap('n', '<leader>cb', ':lua require(\'diaglist\').open_buffer_diagnostics()<CR>:lua _G._open_ll()<CR>', opt_sn)
 vim.api.nvim_set_keymap('n', '<leader>cd', ':lua require(\'diaglist\').open_buffer_diagnostics()<CR>:lua _G._open_qfl()<CR>', opt_sn)
 vim.api.nvim_set_keymap('n', '<leader>cq', ':ccl<CR>', opt_sn)
@@ -227,6 +147,7 @@ map('', '<leader>df', ':DiffviewFileHistory<CR>', opt_sn)
 
 map('n', '<leader>ea', ':AerialToggle<CR>:winc l<CR>', opt_sn)
 map('n', '<leader>ee', ':winc v<CR>:winc h<CR>:60 winc |<CR>:enew<CR>:set nonu<CR>:set nornu<CR>', opt_sn) -- toggle relative line numbers
+map('n', '<leader>ej', ':lua _G.create_header()<CR>', opt_sn) -- toggle relative line numbers
 map('', '<leader>ec', ':CommentToggle<CR>', opt_sn) -- toggle comment on current line or selection
 map('n', '<leader>edc', ':cd %:p:h<CR>', opt_sn)
 map('n', '<leader>ed-', ':cd ..<CR>', opt_sn)
@@ -235,10 +156,15 @@ map('n', '<leader>ePe', ':profile pause<CR>:noautocmd qall!<CR>', opt_sn)
 map('n', '<leader>etv', ':vs | terminal<CR>i', opt_sn)
 map('n', '<leader>ets', ':sp | terminal<CR>i', opt_sn)
 map('n', '<leader>eh', ':set hlsearch!<CR>:match none<CR>', opt_sn) -- toggle comment on current line or selection
-map('n', '<leader>er', ':set rnu!<CR>', opt_sn) -- toggle relative line numbers
 map('n', '<leader>ep', '"+p', opt_sn) -- toggle relative line numbers
 
-map('n', '<leader>esb', ':syncbind<CR>:set scrollbind<CR>:set cursorbind<CR>:set scrollopt=ver<CR>', opt_sn)
+map('n', '<leader>e.r', ':set rnu!<CR>', opt_sn) -- toggle relative line numbers
+map('n', '<leader>e.n', ':set number!<CR>', opt_sn) -- toggle relative line numbers
+map('n', '<leader>e.b', ':syncbind<CR>:set scrollbind<CR>:set cursorbind<CR>:set scrollopt=ver<CR>', opt_sn)
+map('n', '<leader>e.s0', ':set laststatus=0<CR>', opt_sn)
+map('n', '<leader>e.s1', ':set laststatus=1<CR>', opt_sn)
+map('n', '<leader>e.s2', ':set laststatus=2<CR>', opt_sn)
+map('n', '<leader>e.s3', ':set laststatus=3<CR>', opt_sn)
 
 map('v', '<leader>y', '"+y', opt_sn)
 
@@ -462,6 +388,8 @@ map('n', ']p', ':TSTextobjectGotoNextStart @parameter.inner<CR>', opt_sn)
 -- }}}
 -- {{{ [W] -
 map('n', '<leader>ws', ':winc s<CR>', opt_sn)
+map('n', '<leader>w+', ':2winc +<CR>', opt_sn)
+map('n', '<leader>w-', ':2winc -<CR>', opt_sn)
 map('n', '<leader>wv', ':winc v<CR>', opt_sn)
 map('n', '<leader>wq', ':winc q<CR>', opt_sn)
 map('n', '<leader>wc', ':winc c<CR>', opt_sn)
@@ -493,7 +421,7 @@ map('n', '<leader>wt', ':winc s<CR>:lua require(\'telescope.builtin\').lsp_type_
 -- keymap_amend('n', 'zh', pretty_pre.mapping.show_close_preview_open_fold)
 -- map('n', 'zc', ':lua require("pretty-fold.preview").mapping.show_close_preview_open_fold()<CR>', opt_sn)
 -- }}}
--- {{{ [<other>]
+-- {{{ [special chars]
 map('n', '<leader>~', ':Dashboard<CR>', opt_sn) -- map show dashboard
 map('n', '<leader>}', ':bn<CR>', { noremap = true })
 map('n', '<leader>{', ':bp<CR>', { noremap = true })
@@ -508,8 +436,29 @@ map('n', '<leader>\\', ':Telescope buffers<CR>', opt_sn)
 map('n', '<leader>-', ':Telescope find_files<CR>', opt_sn)
 map('n', '<leader>#', ':lua require(\'telescope.builtin\').find_files( { cwd = vim.fn.expand(\'%:p:h\') })<CR>', opt_sn)
 -- }}}
-
 -- }}}
+
+-- {{{ Letters
+-- {{{ [d]
+map('o', 'w', 'iw', opt_sn)
+map('o', 'W', 'iW', opt_sn)
+-- }}}
+-- {{{ [g] - Aerial
+map('n', 'g}', ':AerialNext<CR>', opt_sn)
+map('n', 'g{', ':AerialPrev<CR>', opt_sn)
+map('n', 'g]', ':AerialNextUp<CR>', opt_sn)
+map('n', 'g[', ':AerialPrevUp<CR>', opt_sn)
+map('', 'gF', ':lua _G.print_thing(vim.fn.expand("<cWORD>"))<CR>', opt_e)
+-- map('', 'gF', ':expand("<cWORD>")<CR>', opt_e)
+-- }}}
+-- }}}
+
+-- {{{ Visual-Block Mode
+-- {{{ [p]
+map('v', 'p', '"_dP', opt_sn)
+-- }}}
+-- }}}
+
 
 -- {{{ ['] - Marks
 
@@ -522,50 +471,11 @@ map('n', '\'-', ':lua require("harpoon.ui").nav_file(5)<CR>', opt_sn)
 map('n', '\'#', ':lua require("harpoon.ui").nav_file(6)<CR>', opt_sn)
 -- map('n', '\'g', ':lua require("harpoon.ui").nav_file(7)<CR>', opt_sn)
 map('n', '\'m', ':lua require("harpoon.term").gotoTerminal(1)<CR>', opt_sn)
+map('n', '\'w', ':lua require("harpoon.term").gotoTerminal(2)<CR>', opt_sn)
 -- map('n', '\'m', '<CMD>lua require("FTerm").toggle()<CR>', opt_sn)             -- returns any externally-required keymaps for usage
-map('n', '\'w', ':lua _G.__fterm_gitui()<CR>', opt_sn)
+map('n', '\'z', ':lua _G.__fterm_gitui()<CR>', opt_sn)
 
 -- }}}
-
--- {{{ buffer management
-
-map('n', '\\k', ':bn<CR>', { noremap = true })
-map('n', '\\j', ':bp<CR>', { noremap = true })
-
--- }}}
-
--- {{{ terminal commands
-
-map('t', '<esc>', '<C-\\><C-n>', opt_sn)
-
--- }}}
---
-map('c', '<C-j>', '<Down>', opt_e)
-map('c', '<C-k>', '<Up>', opt_e)
-map('t', '<C-j>', '<Down>', opt_e)
-map('t', '<C-k>', '<Up>', opt_e)
-
--- {{{ [g] - Aerial
-
-map('n', 'g}', ':AerialNext<CR>', opt_sn)
-map('n', 'g{', ':AerialPrev<CR>', opt_sn)
-map('n', 'g]', ':AerialNextUp<CR>', opt_sn)
-map('n', 'g[', ':AerialPrevUp<CR>', opt_sn)
-
--- }}}
-
-config = {
-    default_keybindings = true, -- Set to false to disable default keybindings
-
-    -- 'none', "single", "double", "rounded", "solid", 'shadow' or table
-    -- For explanation see: :help nvim_open_win()
-    border = { '', '', '', '', '', '', '', '' },
-}
-
-
-
-
-
 
 -- {{{ [Ctrl]
 
@@ -586,23 +496,43 @@ map('v', '<C-y>', '"+y', opt_sn)
 map('v', '<C-p>', '"+p', opt_sn)
 -- }}}
 
--- {{{ <F-Nr>
+
+-- {{{ terminal mappings
+map('t', '<esc>', '<C-\\><C-n>', opt_sn)
+map('t', '<C-j>', '<Down>', opt_e)
+map('t', '<C-k>', '<Up>', opt_e)
+-- }}}
+-- {{{ command-line mappings
+map('c', '<C-j>', '<Down>', opt_e)
+map('c', '<C-k>', '<Up>', opt_e)
+-- }}}
+
+
+
+-- {{{ buffer management
+
+map('n', '\\k', ':bn<CR>', { noremap = true })
+map('n', '\\j', ':bp<CR>', { noremap = true })
+
+-- }}}
+-- {{{ F-keys
 map('n', '<F1>', ':w<CR>', opt_n)
+-- }}}
+-- {{{
 -- local function F2er(input)
 --     if F
 --     map('n', '<F2>' ":set laststatus=3<CR>")
 -- end
 --
-map('n', '<leader>es2', ':set laststatus=2<CR>', opt_e)
-map('n', '<leader>es3', ':set laststatus=3<CR>', opt_e)
+-- map('n', '<leader>es2', ':set laststatus=2<CR>', opt_e)
+-- map('n', '<leader>es3', ':set laststatus=3<CR>', opt_e)
 -- map('n', '<F2>', ':w<CR>:winc l<CR>ipython main.py<CR>', opt_sn)
 
 -- }}}
 
 -- {{{ ?
 
-map('n', '<leader><F1>', ':%s/\
-//g<CR>', opt_sn)
+-- map('n', '<leader><F1>', ':%s/\ //g<CR>', opt_sn)
 
 -- function create_dir(file)
 -- local var = vim.cmd(':call input(\'ae\')<CR>')

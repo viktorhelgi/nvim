@@ -8,7 +8,7 @@ require('packer').startup({
         use({ 'neovim/nvim-lspconfig' }) --}}}
         -- lsp-kind* {{{
         use({ 'onsails/lspkind-nvim', commit = '57e5b5d' }) --}}}
-        -- use({'onsails/diaglist.nvim'})
+        use({'onsails/diaglist.nvim'})
         -- nvim-cmp* - [cmp-nvim-lsp*, cmp-path*, cmp-buffer*]{{{
         use({'hrsh7th/nvim-cmp'})
         --
@@ -75,6 +75,8 @@ require('packer').startup({
         use({ 'morhetz/gruvbox' }) --}}}
         -- gruvbox-material{{{
         use({ 'sainnhe/gruvbox-material' }) --}}}
+        -- edge{{{
+        use({ 'sainnhe/edge' }) --}}}
         -- nord{{{
         use({ 'shaunsingh/nord.nvim' }) --}}}
         -- everforest{{{
@@ -107,9 +109,12 @@ require('packer').startup({
         -- use({"Vimjas/vim-python-pep8-indent", ft="py"})
         use({ "Vimjas/vim-python-pep8-indent" }) --}}}
         -- harpoon{{{
-        use({ 'ThePrimeagen/harpoon', commit = 'b5cc65c731817faa5a505917b01de6a5ff0f2860' }) --}}}
+        -- use({ 'ThePrimeagen/harpoon', commit = 'b5cc65c731817faa5a505917b01de6a5ff0f2860' }) 
+        use({ 'ThePrimeagen/harpoon' })--}}}
         -- vim-fugitive{{{
         use({ 'tpope/vim-fugitive' }) --}}}
+
+        use({ 'JuliaEditorSupport/julia-vim' })
 
         use({ "rust-lang/rust-analyzer" })
         -- rust-tools.nvim{{{
@@ -180,7 +185,7 @@ require('packer').startup({
         -- use({'famiu/nvim-reload'})
         -- Debuggor: [one-small-step-for-vimkind] - [nvim-dap]
         -- use({'jbyuki/one-small-step-for-vimkind'})
-        -- use({'mfussenegger/nvim-dap'})
+        use({'mfussenegger/nvim-dap'})
         -- use {
         --     'chipsenkbeil/distant.nvim',
         --     config = function()
@@ -208,6 +213,10 @@ require('packer').startup({
         --     end
         -- })
         use({ 'monkoose/matchparen.nvim' })
+
+        use({ 'liuchengxu/graphviz.vim' })
+
+        -- use({ 'vimwiki/vimwiki' })
 
         -- use({"nathom/filetype.nvim"})
 

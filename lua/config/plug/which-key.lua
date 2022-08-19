@@ -100,26 +100,39 @@ local keymap = {
             name = 'Gdiffsplit',
             m = { 'Gdiffsplit master' },
             h = { 'Gdiffsplit HEAD' },
-            ["1"] = { 'Gdiffsplit 1 commit back' },
-            ["2"] = { 'Gdiffsplit 2 commit back ' },
-            ["3"] = { 'Gdiffsplit 3 commit back' },
-            ["4"] = { 'Gdiffsplit 4 commit back' },
+            c = {
+                name= 'Gdiffsplit commit',
+                ["1"] = { 'Gdiffsplit 1 commit back' },
+                ["2"] = { 'Gdiffsplit 2 commit back ' },
+                ["3"] = { 'Gdiffsplit 3 commit back' },
+                ["4"] = { 'Gdiffsplit 4 commit back' },
+            }
+        },
+        t = {
+            name = "Telescope",
+            s = { 'git status' },
         },
         s = { 'git status' },
+        a = {
+            name = "git add",
+            ["."] = { 'git add .'},
+            ["f"] = { 'git add "file"'},
+        },
+        c = { 'git commit' },
     },
     -- }}}
     -- {{{ [G]: Gitsigns
-    G = {
-        name = 'Gitsigns',
-        s = { 'stage hunk' },
-        u = { 'undo stage hunk' },
-        r = { 'reset hunk' },
-        R = { 'reset buffer' },
-        p = { 'preview hunk' },
-        b = { 'blame line' },
-        S = { 'stage buffer' },
-        U = { 'reset buffer index' },
-    },
+    -- G = {
+    --     name = 'Gitsigns',
+    --     s = { 'stage hunk' },
+    --     u = { 'undo stage hunk' },
+    --     r = { 'reset hunk' },
+    --     R = { 'reset buffer' },
+    --     p = { 'preview hunk' },
+    --     b = { 'blame line' },
+    --     S = { 'stage buffer' },
+    --     U = { 'reset buffer index' },
+    -- },
     -- }}}
     -- {{{ [P]: Packer
     P = {

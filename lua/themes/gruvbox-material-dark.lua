@@ -1,4 +1,4 @@
-vim.g.gruvbox_material_background = 'medium'
+vim.g.gruvbox_material_background = 'soft'
 vim.o.background = 'dark'
 vim.cmd('colorscheme gruvbox-material')
 vim.cmd('hi ColorColumn guibg=#504945')

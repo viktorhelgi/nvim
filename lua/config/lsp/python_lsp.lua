@@ -39,7 +39,7 @@ local lsp_signature_configs = {
   always_trigger = true, -- sometime show signature on new line or in middle of parameter can be confusing, set it to false for #58
 
   auto_close_after = nil, -- autoclose signature float win after x sec, disabled if nil.
-  extra_trigger_chars = {}, -- Array of extra characters that will trigger signature completion, e.g., {"(", ","}
+  extra_trigger_chars = {"(", ","}, -- Array of extra characters that will trigger signature completion, e.g., {"(", ","}
   zindex = 200000, -- by default it will be on top of all floating windows, set to <= 50 send it to bottom
 
   padding = '', -- character to pad on left and right of signature can be ' ', or '|'  etc
@@ -151,13 +151,15 @@ local on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rF', '<cmd>TestFile --no-header -v -rP <CR>' .. send_r, opts)
     vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rl', '<cmd>TestLast<CR>' .. send_r, opts)
     vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rn', '<cmd>TestNearest --no-header -v -rP <CR>' .. send_r, opts)
-    vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rN', '<cmd>TestNearest -m plot<CR>' .. send_r, opts)
+    vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rN', '<cmd>TestNearest -m analysis --no-header -v -rP<CR>' .. send_r, opts)
+    vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rI', '<cmd>TestNearest -m print_info --no-header -v -rP<CR>' .. send_r, opts)
     vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rS', '<cmd>TestSuit<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rV', '<cmd>TestVisit<CR>', opts)
 
+
     if vim.loop.os_uname().sysname=="Linux" then
-        local python_exe = '/usr/bin/python3.8'
-	    vim.g.python3_host_prog = python_exe
+	    vim.g.python3_host_prog = '/usr/bin/python3.8'
+        local python_exe = 'python'
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rp', ':lua require("harpoon.term").sendCommand(1, "'..python_exe..' " .. vim.fn.expand(\'%\') .. "\\r")<CR>', opts)
 
         local fd_exe = '/usr/bin/fdfind'
@@ -171,8 +173,7 @@ local on_attach = function(client, bufnr)
         vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rff', ':Telescope lsp_dynamic_workspace_symbols path=' .. vim.loop.cwd().. "/tests/fixtures<CR>", { noremap = true })
     else
 
-        local python_exe = 'C:/Users/Lenovo/miniconda3/envs/LSPenv/python'
-	    vim.g.python3_host_prog = python_exe
+	    vim.g.python3_host_prog = 'C:/Users/Lenovo/miniconda3/envs/LSPenv/python'
         local python_exe = 'python'
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rp', ':lua require("harpoon.term").sendCommand(1, "'..python_exe..' " .. vim.fn.expand(\'%\') .. "\\r")<CR>', opts)
 
@@ -185,6 +186,10 @@ local on_attach = function(client, bufnr)
         vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rfg', ':Telescope file_browser path=' .. vim.loop.cwd().. "\\tests\\fixtures<CR>", opts)
         vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>ru', ':Telescope file_browser path=' .. vim.loop.cwd().. "\\tests\\fixtures<CR>", opts)
         vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rff', ':Telescope lsp_dynamic_workspace_symbols path=' .. vim.loop.cwd().. "\\tests\\fixtures<CR>", { noremap = true })
+
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rm', ':lua require("harpoon.term").sendCommand(1, "pipenv run maturin develop --release \\rpipenv run '..python_exe..' "  .. vim.fn.expand(\'%\') .. "\\r") <CR>', opts)
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rP', ':lua require("harpoon.term").sendCommand(1, \'python -c "import analyze_trip.main;analyze_trip.main.main()" \\r \' )<CR>', opts)
+
     end
 
     require('which-key').register({
@@ -309,10 +314,10 @@ lspconfig.pyright.setup({
             -- pythonPath = _G.conda_python(),
         -- },
         python = {
-            -- analysis = {
+            analysis = {
         --         autoImportCompletions = true,
-        --         autoSearchPaths = true,
-                diagnosticMode = 'workspace', -- ["openfFilesOnly", "workspace"]
+                autoSearchPaths = true,
+                -- diagnosticMode = 'workspace', -- ["openfFilesOnly", "workspace"]
         --         -- diagnosticSeverityOverrides = ''
         --         -- extraPaths =
         --         logLevel = 'Warning',
@@ -321,7 +326,7 @@ lspconfig.pyright.setup({
         --         typeCheckingMode = 'basic',
         --         -- typeshedPaths
         --         -- useLibraryCodeForTypes = false
-        --     },
+            },
         --     pythonPath = 'C:/Users/Lenovo/miniconda3/envs/'.. os.getenv("CONDA_DEFAULT_ENV") .. '/python.exe',
         --     --pythonPath = 'C:/Users/Lenovo/miniconda3/envs/NoDk/python.exe',
         --     venvPath = 'C:/Users/Lenovo/miniconda3/envs'

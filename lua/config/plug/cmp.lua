@@ -7,21 +7,25 @@ local lspkind = require('lspkind')
 ---@type cmp.ConfigSchema
 local cmp_setup_global = {
     window = {
-        completion = CmpWindow.bordered({
-            border = 'rounded', --opts.border or 'rounded',
+        completion = {
+            border = '', --opts.border or 'rounded',
+            
             -- winhighlight = opts.winhighlight or 'Normal:Normal,FloatBorder:Normal,CursorLine:Visual,Search:None',
             -- zindex = opts.zindex or 1001,
             -- col_offset = opts.col_offset or 0,
-            side_padding = 0 -- opts.side_padding or 0
-        }),
-        documentation = cmp.config.window.bordered(),
+            -- side_padding = 0 -- opts.side_padding or 0
+        },
+        documentation = {
+            border = 'rounded',
+            max_width=60,
+        }
     },
     mapping = cmp.mapping.preset.insert({
         ['<C-u>'] = cmp.mapping.scroll_docs(-4),
         ['<C-d>'] = cmp.mapping.scroll_docs(4),
         ['<C-Space>'] = cmp.mapping.complete(),
         ['<C-e>'] = cmp.mapping.abort(),
-        ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+        ['<C-i>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
     }),
     sources = CmpConfigSources({
         { name = 'nvim_lsp' },
@@ -43,7 +47,16 @@ local cmp_setup_global = {
 
 ---@type cmp.ConfigSchema
 local cmp_setup_rust = {
-    mapping = cmp.mapping.preset.cmdline(),
+    mapping = cmp.mapping.preset.insert({
+        ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-d>'] = cmp.mapping.scroll_docs(4),
+        ['<C-Space>'] = cmp.mapping.complete({}),
+        ['<C-e>'] = cmp.mapping.abort(),
+        ['<Tab>'] = cmp.mapping.confirm({
+            behavior = cmp.ConfirmBehavior.Insert,
+            select = true,
+        }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    }),
     sources = CmpConfigSources({
         { name = 'nvim_lsp' },
         { name = 'path' }
@@ -129,6 +142,7 @@ cmp.setup.filetype('gitcommit', cmp_setup_git_commit)
 cmp.setup.cmdline('/', cmp_setup_cmdline_slash)
 cmp.setup.cmdline(':', cmp_setup_cmdline_colon)
 lspkind.init(lspkind)
-cmp.setup.filetype('rs', cmp_setup_rust)
+cmp.setup.filetype('rust', cmp_setup_rust)
+cmp.setup.filetype('julia', cmp_setup_rust)
 
 

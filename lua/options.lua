@@ -83,10 +83,12 @@ g.python3_host_prog = "C:/Python310/python.exe"
 cmd('let test#python#runner = \'pytest\'')
 cmd('let g:test#preserve_screen = 1')
 cmd('let test#strategy = "harpoon"')
+cmd('let g:test#harpoon_term = 1')
+cmd('let g:test#harpoon#gototerminal = 0')
 
 
 
-g.do_filetype_lua = 1
+-- g.do_filetype_lua = 1
 
 -- vim.filetype.add({
 --     filename = {

@@ -121,7 +121,7 @@ end
 vim.api.nvim_set_keymap('n', '<leader>cn', ':lua _G._open_qfl()<CR>', opt_sn)
 vim.api.nvim_set_keymap('n', '<leader>co', ':cope<CR>:lua _G._open_qfl()<CR>', opt_sn)
 vim.api.nvim_set_keymap('n', '<leader>cb', ':lua require(\'diaglist\').open_buffer_diagnostics()<CR>:lua _G._open_ll()<CR>', opt_sn)
-vim.api.nvim_set_keymap('n', '<leader>cd', ':lua require(\'diaglist\').open_buffer_diagnostics()<CR>:lua _G._open_qfl()<CR>', opt_sn)
+vim.api.nvim_set_keymap('n', '<leader>cd', ':lua vim.diagnostic.setqflist()<CR>:lua _G._open_qfl()<CR>', opt_sn)
 vim.api.nvim_set_keymap('n', '<leader>cq', ':ccl<CR>', opt_sn)
 -- vim.api.nvim_set_keymap('n', '<leader>cd',    ':cope<CR>:lua vim.diagnostic.setqflist()<cr>:lua _G._assign_n__CMD_cn_and_cp_CR__()<CR>'   , opt_sn)
 
@@ -149,14 +149,16 @@ map('n', '<leader>ea', ':AerialToggle<CR>:winc l<CR>', opt_sn)
 map('n', '<leader>ee', ':winc v<CR>:winc h<CR>:60 winc |<CR>:enew<CR>:set nonu<CR>:set nornu<CR>', opt_sn) -- toggle relative line numbers
 map('n', '<leader>ej', ':lua _G.create_header()<CR>', opt_sn) -- toggle relative line numbers
 map('', '<leader>ec', ':CommentToggle<CR>', opt_sn) -- toggle comment on current line or selection
+map('n', '<leader>el', 'O//-----------------------------------------------------------------------------', opt_sn)
 map('n', '<leader>edc', ':cd %:p:h<CR>', opt_sn)
 map('n', '<leader>ed-', ':cd ..<CR>', opt_sn)
-map('n', '<leader>ePb', ':profile start profile.log<CR>:profile file *<CR>:profile func *<CR>:echo "profiling has started"<CR>', opt_sn)
-map('n', '<leader>ePe', ':profile pause<CR>:noautocmd qall!<CR>', opt_sn)
+map('n', '<leader>eSb', ':profile start profile.log<CR>:profile file *<CR>:profile func *<CR>:echo "profiling has started"<CR>', opt_sn)
+map('n', '<leader>eSe', ':profile pause<CR>:noautocmd qall!<CR>', opt_sn)
 map('n', '<leader>etv', ':vs | terminal<CR>i', opt_sn)
 map('n', '<leader>ets', ':sp | terminal<CR>i', opt_sn)
 map('n', '<leader>eh', ':set hlsearch!<CR>:match none<CR>', opt_sn) -- toggle comment on current line or selection
 map('n', '<leader>ep', '"+p', opt_sn) -- toggle relative line numbers
+map('n', '<leader>eP', '"+P', opt_sn) -- toggle relative line numbers
 
 map('n', '<leader>e.r', ':set rnu!<CR>', opt_sn) -- toggle relative line numbers
 map('n', '<leader>e.n', ':set number!<CR>', opt_sn) -- toggle relative line numbers
@@ -186,24 +188,25 @@ map('n', '<leader>edS', ':lua _G.__reload()<CR>', opt_sn)
 -- {{{ [G] - GitSigns - Gdiff - git_status
 M.gitsigns_mappings = {
     noremap = true,
-    ['n ]c'] = { expr = true, "&diff ? ']c' : '<cmd>lua require\"gitsigns.actions\".next_hunk()<CR>'" },
-    ['n [c'] = { expr = true, "&diff ? '[c' : '<cmd>lua require\"gitsigns.actions\".prev_hunk()<CR>'" },
+    -- ['n ]c'] = { expr = true, "&diff ? ']c' : '<cmd>lua require\"gitsigns.actions\".next_hunk()<CR>'" },
+    -- ['n [c'] = { expr = true, "&diff ? '[c' : '<cmd>lua require\"gitsigns.actions\".prev_hunk()<CR>'" },
 
-    ['n <leader>Gs'] = '<cmd>lua require"gitsigns".stage_hunk()<CR>',
-    ['v <leader>Gs'] = '<cmd>lua require"gitsigns".stage_hunk({vim.fn.line("."), vim.fn.line("v")})<CR>',
-    ['n <leader>Gu'] = '<cmd>lua require"gitsigns".undo_stage_hunk()<CR>',
-    ['n <leader>Gr'] = '<cmd>lua require"gitsigns".reset_hunk()<CR>',
-    ['v <leader>Gr'] = '<cmd>lua require"gitsigns".reset_hunk({vim.fn.line("."), vim.fn.line("v")})<CR>',
-    ['n <leader>GR'] = '<cmd>lua require"gitsigns".reset_buffer()<CR>',
-    ['n <leader>Gp'] = '<cmd>lua require"gitsigns".preview_hunk()<CR>',
-    ['n <leader>Gb'] = '<cmd>lua require"gitsigns".blame_line(true)<CR>',
-    ['n <leader>GS'] = '<cmd>lua require"gitsigns".stage_buffer()<CR>',
-    ['n <leader>GU'] = '<cmd>lua require"gitsigns".reset_buffer_index()<CR>',
+    -- ['n <leader>Gs'] = '<cmd>lua require"gitsigns".stage_hunk()<CR>',
+    -- ['v <leader>Gs'] = '<cmd>lua require"gitsigns".stage_hunk({vim.fn.line("."), vim.fn.line("v")})<CR>',
+    -- ['n <leader>Gu'] = '<cmd>lua require"gitsigns".undo_stage_hunk()<CR>',
+    -- ['n <leader>Gr'] = '<cmd>lua require"gitsigns".reset_hunk()<CR>',
+    -- ['v <leader>Gr'] = '<cmd>lua require"gitsigns".reset_hunk({vim.fn.line("."), vim.fn.line("v")})<CR>',
+    -- ['n <leader>GR'] = '<cmd>lua require"gitsigns".reset_buffer()<CR>',
+    -- ['n <leader>Gp'] = '<cmd>lua require"gitsigns".preview_hunk()<CR>',
+    -- ['n <leader>Gb'] = '<cmd>lua require"gitsigns".blame_line(true)<CR>',
+    -- ['n <leader>GS'] = '<cmd>lua require"gitsigns".stage_buffer()<CR>',
+    -- ['n <leader>GU'] = '<cmd>lua require"gitsigns".reset_buffer_index()<CR>',
 
     -- Text objects
-    ['o ih'] = ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>',
-    ['x ih'] = ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>',
+    -- ['o ih'] = ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>',
+    -- ['x ih'] = ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>',
 
+    -- Git Diff View
     ['n <leader>gdm'] = '<cmd>Gdiffsplit master<CR><cmd>winc L<CR>',
     ['n <leader>gdh'] = '<cmd>Gdiffsplit HEAD<CR><cmd>winc L<CR>',
     ['n <leader>gdc1'] = '<cmd>Gdiffsplit !~1<CR><cmd>winc L<CR>',
@@ -211,10 +214,26 @@ M.gitsigns_mappings = {
     ['n <leader>gdc3'] = '<cmd>Gdiffsplit !~3<CR><cmd>winc L<CR>',
     ['n <leader>gdc4'] = '<cmd>Gdiffsplit !~4<CR><cmd>winc L<CR>',
 
-    ['n <leader>gs'] = '<cmd>Telescope git_status<CR>',
-}
+    -- Git Telescope
+    ['n <leader>gts'] = '<cmd>Telescope git_status<CR>',
 
-map('n', '<leader>gs', '<cmd>Telescope git_status<CR>', opt_sn)
+    -- Git Operations
+    -- ['n <leader>gs'] = '<cmd>Git status<CR>',
+    -- ['n <leader>ga.'] = '<cmd>Git add .<CR>',
+    -- ['n <leader>gaf'] = ':Git add vim.fn.expand(\'%:p:h\')<CR>',
+    -- ['n <leader>gc'] = '<cmd>Git commit<CR>',
+    -- ['n <leader>gp'] = '<cmd>Git push<CR>',
+    -- ['n <leader>gP'] = '<cmd>Git pull<CR>',
+}
+-- Git Operations
+map('n', '<leader>gs', ':Git status<CR>', { noremap = true })
+map('n', '<leader>ga.', ':Git add .<CR>', { noremap = true })
+map('n', '<leader>gaf', '<cmd>Git add '.. vim.fn.expand('%:p:h') .. '<CR><CMD>echo "git add file"<CR>', { noremap = true })
+map('n', '<leader>gc', ':Git commit<CR>', { noremap = true })
+map('n', '<leader>gp', ':Git push<CR>', { noremap = true })
+map('n', '<leader>gP', ':Git Pull<CR>', { noremap = true })
+
+-- map('n', '<leader>gs', '<cmd>Telescope git_status<CR>', opt_sn)
 -- }}}
 -- {{{ [H] - Harpoon
 
@@ -446,8 +465,9 @@ map('o', 'W', 'iW', opt_sn)
 -- {{{ [g] - Aerial
 map('n', 'g}', ':AerialNext<CR>', opt_sn)
 map('n', 'g{', ':AerialPrev<CR>', opt_sn)
-map('n', 'g]', ':AerialNextUp<CR>', opt_sn)
+-- map('n', 'g]', ':TSTextobjectGotoNextStart @function.inner<CR>:TSTextobjectGotoNextStart @function.inner<CR>', opt_sn)
 map('n', 'g[', ':AerialPrevUp<CR>', opt_sn)
+map('n', 'g]', ':AerialNextUp<CR>', opt_sn)
 map('', 'gF', ':lua _G.print_thing(vim.fn.expand("<cWORD>"))<CR>', opt_e)
 -- map('', 'gF', ':expand("<cWORD>")<CR>', opt_e)
 -- }}}
@@ -455,7 +475,7 @@ map('', 'gF', ':lua _G.print_thing(vim.fn.expand("<cWORD>"))<CR>', opt_e)
 
 -- {{{ Visual-Block Mode
 -- {{{ [p]
-map('v', 'p', '"_dP', opt_sn)
+-- map('v', 'p', '"_dp', opt_sn)
 -- }}}
 -- }}}
 
@@ -463,12 +483,17 @@ map('v', 'p', '"_dP', opt_sn)
 -- {{{ ['] - Marks
 
 map('n', '\'/', '<cmd>A<CR>', opt_sn)
+map('n', '\'\\', '<cmd>AV<CR>', opt_sn)
 map('n', '\'h', ':lua require("harpoon.ui").nav_file(1)<CR>', opt_sn)
 map('n', '\'t', ':lua require("harpoon.ui").nav_file(2)<CR>', opt_sn)
 map('n', '\'n', ':lua require("harpoon.ui").nav_file(3)<CR>', opt_sn)
 map('n', '\'s', ':lua require("harpoon.ui").nav_file(4)<CR>', opt_sn)
 map('n', '\'-', ':lua require("harpoon.ui").nav_file(5)<CR>', opt_sn)
 map('n', '\'#', ':lua require("harpoon.ui").nav_file(6)<CR>', opt_sn)
+map('n', '\'g', ':lua require("harpoon.ui").nav_file(7)<CR>', opt_sn)
+map('n', '\'c', ':lua require("harpoon.ui").nav_file(8)<CR>', opt_sn)
+map('n', '\'r', ':lua require("harpoon.ui").nav_file(9)<CR>', opt_sn)
+map('n', '\'l', ':lua require("harpoon.ui").nav_file(10)<CR>', opt_sn)
 -- map('n', '\'g', ':lua require("harpoon.ui").nav_file(7)<CR>', opt_sn)
 map('n', '\'m', ':lua require("harpoon.term").gotoTerminal(1)<CR>', opt_sn)
 map('n', '\'w', ':lua require("harpoon.term").gotoTerminal(2)<CR>', opt_sn)
@@ -484,8 +509,8 @@ map('n', '<C-l>', ':winc l<CR>', opt_sn)
 map('n', '<C-j>', ':winc j<CR>', opt_sn)
 map('n', '<C-k>', ':winc k<CR>', opt_sn)
 map('n', '<C-\\>', ':w<CR>', opt_sn)
-map('n', '<C-d>', 'jjj', opt_sn)
-map('n', '<C-u>', 'kkk', opt_sn)
+map('n', '<C-d>', '3<C-e>', opt_sn)
+map('n', '<C-u>', '3<C-y>', opt_sn)
 
 map('i', '<C-a>', '<Esc>Ea', opt_sn)
 map('i', '<C-l>', '<Esc>la', opt_sn)

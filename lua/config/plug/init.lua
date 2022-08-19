@@ -17,6 +17,7 @@ return {
     -- {{{ [D] - dashboard - diffview
 	require('config.plug.dashboard'),
 	require('config.plug.diffview'),
+	require('config.plug.nvim-dap'),
     -- }}}
     -- {{{ [E]
     -- }}}
@@ -40,7 +41,7 @@ return {
 	require('config.plug.lspkind'),
 	require('config.plug.lualine'),
 	require('config.plug.luasnip'),
-    -- require("config.plug.diaglist"),
+    require("config.plug.diaglist"),
     -- }}}
     -- {{{ [J]
     -- }}}

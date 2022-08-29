@@ -159,6 +159,7 @@ map('n', '<leader>ets', ':sp | terminal<CR>i', opt_sn)
 map('n', '<leader>eh', ':set hlsearch!<CR>:match none<CR>', opt_sn) -- toggle comment on current line or selection
 map('n', '<leader>ep', '"+p', opt_sn) -- toggle relative line numbers
 map('n', '<leader>eP', '"+P', opt_sn) -- toggle relative line numbers
+map('n', '<leader>ef', '<cmd>set foldenable!<CR>', opt_sn)
 
 map('n', '<leader>e.r', ':set rnu!<CR>', opt_sn) -- toggle relative line numbers
 map('n', '<leader>e.n', ':set number!<CR>', opt_sn) -- toggle relative line numbers
@@ -339,8 +340,8 @@ map('n', '<leader>to', ':Telescope buffers<CR>', { noremap = true })
 
 map('n', '<leader>tw', ':Telescope live_grep<CR>', { noremap = true })
 map('n', '<leader>tv', ':lua require(\'telescope.builtin\').live_grep({cwd = vim.fn.expand(\'%:p:h\')})<CR>', opt_sn)
-map('n', '<leader>tz', ':lua require(\'telescope.builtin\').live_grep({grep_open_files=true})<CR>', opt_sn)
-map('n', '<leader>tp', ':Telescope live_grep<CR>', { noremap = true })
+-- map('n', '<leader>tz', ':lua require(\'telescope.builtin\').live_grep({grep_open_files=true})<CR>', opt_sn)
+-- map('n', '<leader>tp', ':Telescope live_grep<CR>', { noremap = true })
 -- map('n', '<leader>t.', ':lua require(\'telescope.builtin\').live_grep({cwd = vim.fn.expand(\'%:p:h\')})<CR>', opt_sn)
 -- map('n', '<leader>t,', ':lua require(\'telescope.builtin\').live_grep({grep_open_files=true})<CR>', opt_sn)
 

@@ -1,3 +1,10 @@
+
+
+local o = vim.o
+
+
+
+--
 --require("nvim-test").setup{}
 local lsp_signature_configs = {
   debug = false, -- set to true to enable debug logging
@@ -62,6 +69,8 @@ local opts = { noremap=true, silent=false }
 local opts_silent = { noremap=true, silent=true }
 local on_attach = function(client, bufnr)
 
+    o.foldmethod = 'indent' -- set fold method to marker
+    vim.cmd('set nofoldenable')
     -- local fd_exe = ""
     require'lsp_signature'.on_attach(lsp_signature_configs, bufnr) -- no need to specify bufnr if you don't use toggle_key
     -- require("aerial").on_attach(client, bufnr)
@@ -179,6 +188,7 @@ local on_attach = function(client, bufnr)
 
         local fd_exe = "C:/Users/Lenovo/scoop/shims/fd.exe"
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tt', ':lua require(\'telescope.builtin\').find_files({find_command={"' .. fd_exe .. '", "test_",     "--type", "f",  "--extension", "py"                         }})<CR>', opts)
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tp', ':lua require(\'telescope.builtin\').find_files({find_command={"' .. fd_exe .. '", "conftest",     "--type", "f",  "--extension", "py"                         }})<CR>', opts)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tn', ':lua require(\'telescope.builtin\').find_files({find_command={"' .. fd_exe .. '",             "--type", "f",  "--extension", "py",    "--exclude", "tests"}})<CR>', opts)
 
         vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rfn', ':e tests/fixtures/', opts)

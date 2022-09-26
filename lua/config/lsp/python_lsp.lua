@@ -152,24 +152,42 @@ local on_attach = function(client, bufnr)
 	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>nc',    string_class , opts_silent)
     --------------------------
 
-
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ra', ':lua require("harpoon.term").sendCommand(1, "pytest --no-header -v -rP \\r") <CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rt', ':lua require("harpoon.term").sendCommand(1, "pytest --no-header -v -rP " .. vim.fn.expand(\'%\') .. "\\r") <CR>', opts)
-
     local send_r = ':lua require("harpoon.term").sendCommand(1, "\\r")<CR>'
-    vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rF', '<cmd>TestFile --no-header -v -rP <CR>' .. send_r, opts)
-    vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rl', '<cmd>TestLast<CR>' .. send_r, opts)
-    vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rn', '<cmd>TestNearest --no-header -v -rP <CR>' .. send_r, opts)
-    vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rN', '<cmd>TestNearest -m analysis --no-header -v -rP<CR>' .. send_r, opts)
-    vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rI', '<cmd>TestNearest -m print_info --no-header -v -rP<CR>' .. send_r, opts)
-    vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rS', '<cmd>TestSuit<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rV', '<cmd>TestVisit<CR>', opts)
+
+    local function harpoon_map(mapping, command)
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>'..mapping, ':lua require("harpoon.term").sendCommand(1, ' .. command .. '.."\\r") <CR>', opts)
+    end
+    local function terminal_map(mapping, command)
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>'..mapping, '<cmd>' .. command .. '<CR>' .. send_r, opts)
+    end
+
+
+
+    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rp', ':lua require("harpoon.term").sendCommand(1, "pytest --no-header -v -rP \\r") <CR>', opts)
+    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rm', ':lua require("harpoon.term").sendCommand(1, "pytest --no-header -v -rP " .. vim.fn.expand(\'%\') .. "\\r") <CR>', opts)
+    -- vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>ri', '<cmd>TestNearest -m continuous_integration --no-header -v -rP<CR>' .. send_r, opts)
+
+    -- vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rI', ':lua require("harpoon.term").sendCommand(1, "pytest -m continuous_integration --no-header -v -rP\\r")<CR>' .. send_r, opts)
+    --pytest --no-header -v -rP --disable-warnings
+    harpoon_map('rp', '"pytest --no-header -v -rP --disable-warnings"')
+    harpoon_map('rm', '"pytest --no-header -v -rP --disable-warnings " .. vim.fn.expand(\'%\') ')
+    harpoon_map('rI', '"pytest -m continuous_integration --no-header -v -rP"')
+    -- harpoon_map('rc', '"pytest --collect-only --no-header --cov="')
+    -- pytest --collect-only --cov=wfrg_api tests/
+
+    terminal_map('ri', 'TestNearest -m continuous_integration --no-header -v -rP --disable-warnings')
+    terminal_map('rF', 'TestFile --no-header -v -rP --disable-warnings')
+    terminal_map('rl', 'TestLast')
+    terminal_map('rn', 'TestNearest --no-header -v -rP --disable-warnings')
+    terminal_map('rN', 'TestNearest -m \\"analysis or continuous_integration\\" --no-header -v -rP')
+    terminal_map('rS', 'TestSuit')
+    terminal_map('rV', 'TestVisit --no-header -v -rP --disable-warnings')
 
 
     if vim.loop.os_uname().sysname=="Linux" then
 	    vim.g.python3_host_prog = '/usr/bin/python3.8'
         local python_exe = 'python'
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rp', ':lua require("harpoon.term").sendCommand(1, "'..python_exe..' " .. vim.fn.expand(\'%\') .. "\\r")<CR>', opts)
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rr', ':lua require("harpoon.term").sendCommand(1, "'..python_exe..' " .. vim.fn.expand(\'%\') .. "\\r")<CR>', opts)
 
         local fd_exe = '/usr/bin/fdfind'
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tt', ':lua require(\'telescope.builtin\').find_files({find_command={"' .. fd_exe .. '", "test_",     "--type", "f",  "--extension", "py"                         }})<CR>', opts)
@@ -181,10 +199,9 @@ local on_attach = function(client, bufnr)
         vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>ru', ':Telescope file_browser path=' .. vim.loop.cwd().. "/tests/fixtures<CR>", opts)
         vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rff', ':Telescope lsp_dynamic_workspace_symbols path=' .. vim.loop.cwd().. "/tests/fixtures<CR>", { noremap = true })
     else
-
 	    vim.g.python3_host_prog = 'C:/Users/Lenovo/miniconda3/envs/LSPenv/python'
         local python_exe = 'python'
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rp', ':lua require("harpoon.term").sendCommand(1, "'..python_exe..' " .. vim.fn.expand(\'%\') .. "\\r")<CR>', opts)
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rr', ':lua require("harpoon.term").sendCommand(1, "'..python_exe..' " .. vim.fn.expand(\'%\') .. "\\r")<CR>', opts)
 
         local fd_exe = "C:/Users/Lenovo/scoop/shims/fd.exe"
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tt', ':lua require(\'telescope.builtin\').find_files({find_command={"' .. fd_exe .. '", "test_",     "--type", "f",  "--extension", "py"                         }})<CR>', opts)
@@ -197,7 +214,7 @@ local on_attach = function(client, bufnr)
         vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>ru', ':Telescope file_browser path=' .. vim.loop.cwd().. "\\tests\\fixtures<CR>", opts)
         vim.api.nvim_buf_set_keymap(bufnr,'n', '<leader>rff', ':Telescope lsp_dynamic_workspace_symbols path=' .. vim.loop.cwd().. "\\tests\\fixtures<CR>", { noremap = true })
 
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rm', ':lua require("harpoon.term").sendCommand(1, "pipenv run maturin develop --release \\rpipenv run '..python_exe..' "  .. vim.fn.expand(\'%\') .. "\\r") <CR>', opts)
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rM', ':lua require("harpoon.term").sendCommand(1, "pipenv run maturin develop --release \\rpipenv run '..python_exe..' "  .. vim.fn.expand(\'%\') .. "\\r") <CR>', opts)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rP', ':lua require("harpoon.term").sendCommand(1, \'python -c "import analyze_trip.main;analyze_trip.main.main()" \\r \' )<CR>', opts)
 
     end
@@ -343,6 +360,10 @@ lspconfig.pyright.setup({
         },
     },
 })
+
+local neotest = require('neotest.init')
+
+-- neotest.setup
 
 
 

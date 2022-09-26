@@ -17,8 +17,8 @@ local scheme = require('lib.scheme')
 -- scheme.load_scheme('edge_light')
 --
 -- scheme.load_shared_scheme('gruvbox-material-light')
-scheme.load_shared_scheme('gruvbox-material-dark')
--- scheme.load_shared_scheme('catppuccin')
+-- scheme.load_shared_scheme('gruvbox-material-dark')
+scheme.load_shared_scheme('catppuccin')
 -- scheme.load_shared_scheme('everforest')
 
 -- Load Themes (loads everforest theme by default)

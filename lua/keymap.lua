@@ -2,6 +2,17 @@ local M = {}
 
 -- {{{ FUNCTIONS
 
+-- {{{ opts
+
+local opt_e = { silent = false } --empty opt for maps with no extra options
+local opt_n = { silent = false, noremap = true } --empty opt for maps with no extra options
+local opt_s = { silent = true } --empty opt for maps with no extra options
+local opt_sn = { silent = true, noremap = true }
+vim.g.mapleader = ' ' -- Map leader key to space
+vim.g.maplocalleader = ','
+
+-- }}}
+--
 -- -- {{{ function map(mode, bind, exec, opts)
 
 local function map(mode, bind, exec, opts)
@@ -16,7 +27,54 @@ local function map(mode, bind, exec, opts)
     if opts then
         options = vim.tbl_extend('force', options, opts)
     end
+
+    -- print()
+    -- print(mode)
+    -- print(bind)
+    -- print(exec)
+    -- print(opts)
     vim.api.nvim_set_keymap(mode, bind, exec, opts)
+end
+
+local function process_opts(opt)
+    if opt==nil then
+        return opt_sn
+    end
+    return opt
+end
+local function process_func(func)
+    if type(func)=="table" then
+        return table.concat(func, '<CR>:')
+    end
+    return func
+end
+
+local function nmap(bind, func, opt)
+    -- print('nmap')
+    func = process_func(func)
+    opt = process_opts(opt)
+    local exec_func = ':'..func..'<CR>'
+    local echo_func = ':echo "'..func..'"<CR>'
+    -- print(echo_func)
+    map('n', '<leader>'..bind, exec_func .. echo_func , opt)
+    -- print('-------------------------------')
+end
+local function snmap(bind, func, opt, mode)
+    if mode==nil then
+        mode='n'
+    end
+    -- print('snmap')
+    local func_str = process_func(func)
+    local exec_func = ':'..func_str..'<CR>'
+    local echo_func = ':echo "'..func_str..'"<CR>'
+    opt = process_opts(opt)
+    --vim.pretty_print(func)
+    map(mode, '<leader>'..bind, exec_func .. echo_func , opt)
+    -- print('--------------------------')
+end
+
+local function amap(bind, func, opt)
+    snmap(bind, func, opt, '')
 end
 
 -- -- }}}
@@ -62,27 +120,22 @@ end
 
 -- }}}
 
--- {{{ opts
-
-local opt_e = { silent = false } --empty opt for maps with no extra options
-local opt_n = { silent = false, noremap = true } --empty opt for maps with no extra options
-local opt_s = { silent = true } --empty opt for maps with no extra options
-local opt_sn = { silent = true, noremap = true }
-vim.g.mapleader = ' ' -- Map leader key to space
-vim.g.maplocalleader = ','
-
--- }}}
 
 -- {{{ <Leader>
 -- {{{ [A] - ...
 -- }}}
 -- {{{ [B] - Buffers
 
-map('n', '<leader>bf', ':bf<CR>', { noremap = true })
-map('n', '<leader>bk', ':bn<CR>', { noremap = true })
-map('n', '<leader>bj', ':bp<CR>', { noremap = true })
-map('n', '<leader>bl', ':bl<CR>', { noremap = true })
-map('n', '<leader>bd', ':bd<CR>', { noremap = true })
+nmap('bf', 'BufferFirst')
+nmap('bf', 'BufferLast')
+nmap('bk', 'BufferNext')
+nmap('bj', 'BufferPrevious')
+nmap('bmk', 'BufferMoveNext')
+nmap('bmj', 'BufferMovePrevious')
+nmap('bp', 'BufferPick')
+nmap('bsk', 'BufferScrollRight')
+nmap('bsj', 'BufferScrollLeft')
+nmap('bd', 'bd')
 
 -- }}}
 -- {{{ [c] - CommentToggle
@@ -118,69 +171,65 @@ function _G._open_ll()
 end
 
 -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>k',    aa_a()   , opts_silent)
-vim.api.nvim_set_keymap('n', '<leader>cn', ':lua _G._open_qfl()<CR>', opt_sn)
-vim.api.nvim_set_keymap('n', '<leader>co', ':cope<CR>:lua _G._open_qfl()<CR>', opt_sn)
-vim.api.nvim_set_keymap('n', '<leader>cb', ':lua require(\'diaglist\').open_buffer_diagnostics()<CR>:lua _G._open_ll()<CR>', opt_sn)
-vim.api.nvim_set_keymap('n', '<leader>cd', ':lua vim.diagnostic.setqflist()<CR>:lua _G._open_qfl()<CR>', opt_sn)
-vim.api.nvim_set_keymap('n', '<leader>cq', ':ccl<CR>', opt_sn)
+snmap('cn', 'lua _G._open_qfl()')
+snmap('co', {'cope',  'lua _G._open_qfl()'})
+snmap('cb', {'lua require(\'diaglist\').open_buffer_diagnostics()', 'lua _G._open_ll()'})
+snmap('cd', {'lua vim.diagnostic.setqflist()', 'lua _G._open_qfl()'})
+snmap('cq', 'ccl')
+snmap('ros', 'lua _G.split_term()')
+snmap('r<space>', 'lua _G.term_float( vim.fn.bufnr())')
+-- 'echo "git reset file:\\n - " .. expand(\'%\')'})
 -- vim.api.nvim_set_keymap('n', '<leader>cd',    ':cope<CR>:lua vim.diagnostic.setqflist()<cr>:lua _G._assign_n__CMD_cn_and_cp_CR__()<CR>'   , opt_sn)
 
 -- }}}
 -- {{{ [D] - DiffView
 
-map('', '<leader>do0', ':DiffviewOpen HEAD<CR>', opt_sn) -- Previous Commit
-map('', '<leader>do1', ':DiffviewOpen HEAD~1<CR>', opt_sn) -- Previous Commit
-map('', '<leader>do2', ':DiffviewOpen HEAD~2<CR>', opt_sn) -- Previous Commit
-map('', '<leader>do3', ':DiffviewOpen HEAD~3<CR>', opt_sn) -- Previous Commit
-map('', '<leader>do4', ':DiffviewOpen HEAD~4<CR>', opt_sn) -- Previous Commit
+snmap('do0', 'DiffviewOpen HEAD') -- Previous Commit
+snmap('do1', 'DiffviewOpen HEAD~1') -- Previous Commit
+snmap('do2', 'DiffviewOpen HEAD~2') -- Previous Commit
+snmap('do3', 'DiffviewOpen HEAD~3') -- Previous Commit
+snmap('do4', 'DiffviewOpen HEAD~4') -- Previous Commit
 
-map('', '<leader>da', ':DiffviewOpen HEAD<CR>', opt_sn) -- Previous Commit
-map('', '<leader>db', ':DiffviewOpen HEAD~1<CR>', opt_sn) -- Previous Commit
-map('', '<leader>dc', ':DiffviewOpen origin/main<CR>', opt_sn) -- Previous Push
-map('', '<leader>dd', ':DiffviewOpen origin/main...HEAD<CR>', opt_sn) -- Previous Push
-map('', '<leader>dq', ':DiffviewClose<CR>', opt_sn)
-map('', '<leader>dt', ':DiffviewToggleFiles<CR>', opt_sn)
-map('', '<leader>df', ':DiffviewFileHistory<CR>', opt_sn)
+snmap('da', 'DiffviewOpen HEAD') -- Previous Commit
+snmap('db', 'DiffviewOpen HEAD~1') -- Previous Commit
+snmap('dc', 'DiffviewOpen origin/main') -- Previous Push
+-- snmap('dd', 'DiffviewOpen origin/main...HEAD') -- Previous Push
+snmap('dq', 'DiffviewClose')
+snmap('dt', 'DiffviewToggleFiles')
+snmap('df', 'DiffviewFileHistory')
 
 -- }}}
 -- {{{ [E] - Extra
 
-map('n', '<leader>ea', ':AerialToggle<CR>:winc l<CR>', opt_sn)
-map('n', '<leader>ee', ':winc v<CR>:winc h<CR>:60 winc |<CR>:enew<CR>:set nonu<CR>:set nornu<CR>', opt_sn) -- toggle relative line numbers
-map('n', '<leader>ej', ':lua _G.create_header()<CR>', opt_sn) -- toggle relative line numbers
-map('', '<leader>ec', ':CommentToggle<CR>', opt_sn) -- toggle comment on current line or selection
+snmap('ea', {'AerialToggle',  'winc l'})
+snmap('ee', {'winc v',  'winc h',  '60 winc |',  'enew',  'set nonu',  'set nornu'}) -- toggle relative line numbers
+snmap('ej', 'lua _G.create_header()') -- toggle relative line numbers
+amap('ec', 'CommentToggle') -- toggle comment on current line or selection
+snmap('edc', 'cd %:p:h')
+snmap('ed-', 'cd ..')
+snmap('eSb', { 'profile start profile.log', 'profile file *', 'profile func *', 'echo "profiling has started"' })
+snmap('eSe', {'profile pause',  'noautocmd qall!'})
+snmap('eh', {'set hlsearch!',  'match none'}) -- toggle comment on current line or selection
+snmap('ef', 'set foldenable!')
+
+snmap('e.r', 'set rnu!') -- toggle relative line numbers
+snmap('e.n', 'set number!') -- toggle relative line numbers
+snmap('e.b', {'syncbind',  'set scrollbind',  'set cursorbind',  'set scrollopt=ver'})
+snmap('e.s0', 'set laststatus=0')
+snmap('e.s1', 'set laststatus=1')
+snmap('e.s2', 'set laststatus=2')
+snmap('e.s3', 'set laststatus=3')
+
 map('n', '<leader>el', 'O//-----------------------------------------------------------------------------', opt_sn)
-map('n', '<leader>edc', ':cd %:p:h<CR>', opt_sn)
-map('n', '<leader>ed-', ':cd ..<CR>', opt_sn)
-map('n', '<leader>eSb', ':profile start profile.log<CR>:profile file *<CR>:profile func *<CR>:echo "profiling has started"<CR>', opt_sn)
-map('n', '<leader>eSe', ':profile pause<CR>:noautocmd qall!<CR>', opt_sn)
 map('n', '<leader>etv', ':vs | terminal<CR>i', opt_sn)
 map('n', '<leader>ets', ':sp | terminal<CR>i', opt_sn)
-map('n', '<leader>eh', ':set hlsearch!<CR>:match none<CR>', opt_sn) -- toggle comment on current line or selection
 map('n', '<leader>ep', '"+p', opt_sn) -- toggle relative line numbers
 map('n', '<leader>eP', '"+P', opt_sn) -- toggle relative line numbers
-map('n', '<leader>ef', '<cmd>set foldenable!<CR>', opt_sn)
-
-map('n', '<leader>e.r', ':set rnu!<CR>', opt_sn) -- toggle relative line numbers
-map('n', '<leader>e.n', ':set number!<CR>', opt_sn) -- toggle relative line numbers
-map('n', '<leader>e.b', ':syncbind<CR>:set scrollbind<CR>:set cursorbind<CR>:set scrollopt=ver<CR>', opt_sn)
-map('n', '<leader>e.s0', ':set laststatus=0<CR>', opt_sn)
-map('n', '<leader>e.s1', ':set laststatus=1<CR>', opt_sn)
-map('n', '<leader>e.s2', ':set laststatus=2<CR>', opt_sn)
-map('n', '<leader>e.s3', ':set laststatus=3<CR>', opt_sn)
-
 map('v', '<leader>y', '"+y', opt_sn)
 
--- debugger
--- map('n', '<leader>edl', ':lua require("osv").launch({port = 8086})<CR>', opt_sn)
--- map('n', '<leader>edb', ':lua require("dap").toggle_breakpoint()<CR>', opt_sn)
--- map('n', '<leader>edc', ':lua require("dap").continue()<CR>', opt_sn)
--- map('n', '<leader>edi', ':lua require("dap").step_into()<CR>', opt_sn)
--- map('n', '<leader>edo', ':lua require("dap").step_over()<CR>', opt_sn)
--- map('n', '<leader>eds', ':lua require("dap").repl.open()<CR>', opt_sn)
 
 -- local function m
-map('n', '<leader>edS', ':lua _G.__reload()<CR>', opt_sn)
+snmap('edS', 'lua _G.__reload()')
 
 
 -- }}}
@@ -227,12 +276,19 @@ M.gitsigns_mappings = {
     -- ['n <leader>gP'] = '<cmd>Git pull<CR>',
 }
 -- Git Operations
-map('n', '<leader>gs', ':Git status<CR>', { noremap = true })
-map('n', '<leader>ga.', ':Git add .<CR>', { noremap = true })
-map('n', '<leader>gaf', '<cmd>Git add '.. vim.fn.expand('%:p:h') .. '<CR><CMD>echo "git add file"<CR>', { noremap = true })
-map('n', '<leader>gc', ':Git commit<CR>', { noremap = true })
-map('n', '<leader>gp', ':Git push<CR>', { noremap = true })
-map('n', '<leader>gP', ':Git Pull<CR>', { noremap = true })
+nmap('gs', 'Git status')
+-- git add [ < . > , < % > ]
+nmap('ga.', 'Git add . ')
+nmap('gaf', {'Git add % ',   'echo "git add file:\\n - " .. expand(\'%\')'})
+-- git reset [ < . > , < % > ]
+nmap('gr.', 'Git reset . ')
+nmap('grf', {'Git reset % ',   'echo "git reset file:\\n - " .. expand(\'%\')'})
+-- git commit
+nmap('gc', 'Git commit ')
+-- git push
+nmap('gp', 'Git push ')
+-- git pull
+nmap('gP', 'Git pull ')
 
 -- map('n', '<leader>gs', '<cmd>Telescope git_status<CR>', opt_sn)
 -- }}}
@@ -241,10 +297,22 @@ map('n', '<leader>gP', ':Git Pull<CR>', { noremap = true })
 local send_r = ':lua require("harpoon.term").sendCommand(1, "\\r")<CR>'
 map('n', '<leader>rl', '<cmd>TestLast<CR>' .. send_r, opt_sn)
 
-map('n', '<leader>h\'', ':lua require("harpoon.mark").add_file()<CR>', opt_sn)
-map('n', '<leader>ht', ':lua require("harpoon.ui").toggle_quick_menu()<CR>', opt_sn)
-map('n', '<leader>hn', ':lua require("harpoon.ui").nav_next()<CR>', opt_sn)
-map('n', '<leader>hp', ':lua require("harpoon.ui").nav_prev()<CR>', opt_sn)
+local function require_map(bind, path, func, args)
+    if args==nil then
+        args = ""
+    end
+    map('n', '<leader>'..bind, ':lua require("'..path..'").'..func..'('..args..')<CR>', opt_sn)
+end
+
+require_map('h\'', 'harpoon.mark', 'add_file')
+require_map('ht', 'harpoon.ui', 'toggle_quick_menu')
+require_map('hn', 'harpoon.ui', 'nav_next')
+require_map('hp', 'harpoon.ui', 'nav_prev')
+
+--map('n', '<leader>h\'', ':lua require("harpoon.mark").add_file()<CR>', opt_sn)
+--map('n', '<leader>ht', ':lua require("harpoon.ui").toggle_quick_menu()<CR>', opt_sn)
+--map('n', '<leader>hn', ':lua require("harpoon.ui").nav_next()<CR>', opt_sn)
+--map('n', '<leader>hp', ':lua require("harpoon.ui").nav_prev()<CR>', opt_sn)
 
 -- -- {{{ related
 
@@ -281,14 +349,14 @@ map('n', '<leader>i', 'V]M', opt_sn)
 -- }}}
 -- {{{ [L] - Lsp
 
-map('n', '<leader>Li', ':LspInfo<CR>', opt_n)
-map('n', '<leader>Lr', ':LspRestart<CR>', opt_n)
-map('n', '<leader>Ls', ':LspStart<CR>', opt_n)
-map('n', '<leader>LX', ':LspStop<CR>', opt_n)
-map('n', '<leader>Ll', ':LspLog<CR>', opt_n)
+snmap('Li', 'LspInfo')
+snmap('Lr', 'LspRestart')
+snmap('Ls', 'LspStart')
+snmap('LX', 'LspStop')
+snmap('Ll', 'LspLog')
 
-map('n', '<leader>lf', '<cmd>lua vim.lsp.buf.formatting()<CR>', opt_sn)
-map('n', '<leader>lr', '<cmd>lua vim.lsp.buf.rename()<CR>', opt_sn)
+snmap('lf', 'lua vim.lsp.buf.formatting()')
+snmap('lr', 'lua vim.lsp.buf.rename()')
 
 -- }}}
 -- {{{ [M] - ...
@@ -301,23 +369,23 @@ map('n', '<leader>lr', '<cmd>lua vim.lsp.buf.rename()<CR>', opt_sn)
 -- }}}
 
 -- {{{ [P] - Packer ...
-map('n', '<leader>Pc', ':PackerClean<CR>', opt_n)
-map('n', '<leader>PC', ':PackerCompile<CR>', opt_n)
-map('n', '<leader>Pi', ':PackerInstall<CR>', opt_n)
-map('n', '<leader>Pl', ':PackerLoad<CR>', opt_n)
-map('n', '<leader>PP', ':PackerProfile<CR>', opt_n)
-map('n', '<leader>Po', ':PackerStatus<CR>', opt_n)
-map('n', '<leader>Ps', ':PackerSync<CR>', opt_n)
-map('n', '<leader>PSi', ':PackerSnapshot<CR>', opt_n)
-map('n', '<leader>PSd', ':PackerSnapshotDelete<CR>', opt_n)
-map('n', '<leader>PSr', ':PackerSnapshotRollback<CR>', opt_n)
-map('n', '<leader>Pu', ':PackerUpdate<CR>', opt_n)
-map('n', '<leader>Pa', ':packadd ', opt_n)
-map('n', '<leader>PL', ':packloadall<CR>', opt_n)
-map('n', '<leader>P\'', ':e C:/Users/Lenovo/AppData/Local/nvim/lua/plug.lua<CR>', opt_n)
+snmap('Pc', 'PackerClean')
+snmap('PC', 'PackerCompile')
+snmap('Pi', 'PackerInstall')
+snmap('Pl', 'PackerLoad')
+snmap('PP', 'PackerProfile')
+snmap('Po', 'PackerStatus')
+snmap('Ps', 'PackerSync')
+snmap('PSi', 'PackerSnapshot')
+snmap('PSd', 'PackerSnapshotDelete')
+snmap('PSr', 'PackerSnapshotRollback')
+snmap('Pu', 'PackerUpdate')
+-- snmap('Pa', 'packadd ')
+snmap('Pa', 'packloadall')
+snmap('P\'', 'e C:/Users/Lenovo/AppData/Local/nvim/lua/plug.lua')
 -- }}}
 -- {{{ [q] - Quit [:q]
-map('n', '<leader>q', ':q<CR>', opt_sn)
+snmap('q', 'q')
 -- }}}
 -- {{{ [R] - Testing
 -- map('n', '<leader>rp', fterm_run('"python " .. vim.fn.expand(\'%\') .. "\\r"'), opt_sn)
@@ -328,44 +396,61 @@ map('n', '<leader>q', ':q<CR>', opt_sn)
 
 -- }}}
 -- {{{ [s] - Alternate Buffers
-map('n', '<leader>s', ':b#<CR>', opt_sn)
+snmap('s', 'b#')
 -- }}}
 -- {{{ [T] - Telescope
-map('n', '<leader>tf', ':Telescope find_files<CR>', { noremap = true })
-map('n', '<leader>tg', ':lua require(\'telescope.builtin\').find_files( { cwd = vim.fn.expand(\'%:p:h\') })<CR>', { noremap = true })
-map('n', '<leader>tc', ':Telescope buffers<CR>', { noremap = true })
-map('n', '<leader>tu', ':Telescope find_files<CR>', { noremap = true })
-map('n', '<leader>te', ':lua require(\'telescope.builtin\').find_files( { cwd = vim.fn.expand(\'%:p:h\') })<CR>', { noremap = true })
-map('n', '<leader>to', ':Telescope buffers<CR>', { noremap = true })
+-- local function TSmap(mapping, func, inputs)
+--     if inputs==nil then
+--         map('n', '<leader>'..mapping, ':'..func..'<CR>', {noremap = true})
+--     else
+-- 	local st = ':lua require(\'telescope.builtin\').'
+-- 	map('n', '<leader>'..mapping, st..func..'('..inputs..')<CR>', { noremap = true })
+--     end
+-- end
+local function TSmap(bind, func, args)
+    require_map(bind, 'telescope.builtin', func, args)
+end
 
-map('n', '<leader>tw', ':Telescope live_grep<CR>', { noremap = true })
-map('n', '<leader>tv', ':lua require(\'telescope.builtin\').live_grep({cwd = vim.fn.expand(\'%:p:h\')})<CR>', opt_sn)
--- map('n', '<leader>tz', ':lua require(\'telescope.builtin\').live_grep({grep_open_files=true})<CR>', opt_sn)
--- map('n', '<leader>tp', ':Telescope live_grep<CR>', { noremap = true })
--- map('n', '<leader>t.', ':lua require(\'telescope.builtin\').live_grep({cwd = vim.fn.expand(\'%:p:h\')})<CR>', opt_sn)
--- map('n', '<leader>t,', ':lua require(\'telescope.builtin\').live_grep({grep_open_files=true})<CR>', opt_sn)
 
-map('n', '<leader>tr', ':Telescope resume<CR>', { noremap = true })
-map('n', '<leader>tx', ':Telescope keymaps<CR>', { noremap = true })
-map('n', '<leader>th', ':Telescope help_tags<CR>', { noremap = true })
 
-map('n', '<leader>ts', ':lua require(\'telescope.builtin\').lsp_dynamic_workspace_symbols({ ignore_symbols = {"variable", "constant"} })<CR>', { noremap = true })
-map('n', '<leader>t-', ':lua require(\'telescope.builtin\').lsp_document_symbols({})<CR>', { noremap = true })
+nmap('tf', 'Telescope find_files')
+nmap('tc', 'Telescope buffers')
+nmap('tu', 'Telescope find_files')
+nmap('to', 'Telescope buffers')
+nmap('tw', 'Telescope live_grep')
+TSmap('tg', 'find_files', '{ cwd = vim.fn.expand(\'%:p:h\') }')
+TSmap('te', 'find_files', '{ cwd = vim.fn.expand(\'%:p:h\') }')
+
+
+TSmap('tv', 'live_grep', '{cwd = vim.fn.expand(\'%:p:h\')}')
+TSmap('tz', 'live_grep', '{grep_open_files=true}')
+
+snmap('wt', {'winc s',   'lua require(\'telescope.builtin\').lsp_type_definitions()'})
+
+nmap('tr', 'Telescope resume')
+nmap('tx', 'Telescope keymaps')
+nmap('th', 'Telescope help_tags')
+
+TSmap('tsa', 'lsp_dynamic_workspace_symbols', '{ ignore_symbols = {"variable", "constant"} }')
+TSmap('tsc', 'lsp_dynamic_workspace_symbols', '{ symbols = {"class"} }')
+TSmap('tsf', 'lsp_dynamic_workspace_symbols', '{ symbols = {"function"} }')
+TSmap('t-',  'lsp_document_symbols', '{}')
+TSmap('td',  'find_files','{ find_command={ "C:/Users/Lenovo/scoop/shims/fd.exe", "--type", "d" } }')
+
 -- map('n', '<leader>tj', ':lua require(\'telescope.builtin\').lsp_dynamic_workspace_symbols({ignore_symbols = {"variable", "constant"}, cwd = vim.fn.expand(\'%:p:h\')})<CR>', { noremap = true })
 -- map('n', '<leader>tq', ':lua require(\'telescope.builtin\').lsp_dynamic_workspace_symbols({ignore_symbols = {"variable", "constant"}, grep_open_files = true})<CR>', { noremap = true })
 
-map('n', '<leader>tb', ':Telescope file_browser<CR>', { noremap = true })
-map('n', '<leader>tm', ':Telescope file_browser path=%:p:h<CR>', { noremap = true })
+nmap('tb', 'Telescope file_browser')
+nmap('tm', 'Telescope file_browser path=%:p:h')
 
-map('n', '<leader>td', ':lua require(\'telescope.builtin\').find_files({find_command={"C:/Users/Lenovo/scoop/shims/fd.exe",             "--type", "d"                                               }})<CR>', opt_sn)
 -- }}}
 -- {{{ [U] - ...
 -- }}}
 -- {{{ [V] - ...
-map('n', '<leader>vj', ':TSTextobjectGotoNextStart @block.outer<CR>', opt_sn)
-map('n', '<leader>vk', ':TSTextobjectGotoNextStart @block.inner<CR>', opt_sn)
-map('n', '<leader>ve', ':TSTextobjectGotoPreviousEnd @block.outer<CR>', opt_sn)
-map('n', '<leader>vu', ':TSTextobjectGotoPreviousEnd @block.inner<CR>', opt_sn)
+snmap('vj', 'TSTextobjectGotoNextStart @block.outer')
+snmap('vk', 'TSTextobjectGotoNextStart @block.inner')
+snmap('ve', 'TSTextobjectGotoPreviousEnd @block.outer')
+snmap('vu', 'TSTextobjectGotoPreviousEnd @block.inner')
 
 -- function
 map('n', '[mi', ':TSTextobjectGotoPreviousStart @function.inner<CR>', opt_sn)
@@ -407,20 +492,19 @@ map('n', ']p', ':TSTextobjectGotoNextStart @parameter.inner<CR>', opt_sn)
 
 -- }}}
 -- {{{ [W] -
-map('n', '<leader>ws', ':winc s<CR>', opt_sn)
-map('n', '<leader>w+', ':2winc +<CR>', opt_sn)
-map('n', '<leader>w-', ':2winc -<CR>', opt_sn)
-map('n', '<leader>wv', ':winc v<CR>', opt_sn)
-map('n', '<leader>wq', ':winc q<CR>', opt_sn)
-map('n', '<leader>wc', ':winc c<CR>', opt_sn)
-map('n', '<leader>wo', ':winc o<CR>', opt_sn)
-map('n', '<leader>wK', ':winc K<CR>', opt_sn)
-map('n', '<leader>wJ', ':winc J<CR>', opt_sn)
-map('n', '<leader>wL', ':winc L<CR>', opt_sn)
-map('n', '<leader>wH', ':winc H<CR>', opt_sn)
-map('n', '<leader>wT', ':winc T<CR>', opt_sn)
-map('n', '<leader>w=', ':winc =<CR>', opt_sn)
-map('n', '<leader>wt', ':winc s<CR>:lua require(\'telescope.builtin\').lsp_type_definitions()<CR>', opt_sn)
+snmap('ws', 'winc s')
+snmap('w+', '2winc +')
+snmap('w-', '2winc -')
+snmap('wv', 'winc v')
+snmap('wq', 'winc q')
+snmap('wc', 'winc c')
+snmap('wo', 'winc o')
+snmap('wK', 'winc K')
+snmap('wJ', 'winc J')
+snmap('wL', 'winc L')
+snmap('wH', 'winc H')
+snmap('wT', 'winc T')
+snmap('w=', 'winc =')
 
 -- map('n', '<leader>wt', ':lua require(\'telescope.builtin\').lsp_type_definition()<CR>:winc s<CR>:b#<CR>:winc K<CR>', opt_sn)
 -- }}}
@@ -442,19 +526,19 @@ map('n', '<leader>wt', ':winc s<CR>:lua require(\'telescope.builtin\').lsp_type_
 -- map('n', 'zc', ':lua require("pretty-fold.preview").mapping.show_close_preview_open_fold()<CR>', opt_sn)
 -- }}}
 -- {{{ [special chars]
-map('n', '<leader>~', ':Dashboard<CR>', opt_sn) -- map show dashboard
-map('n', '<leader>}', ':bn<CR>', { noremap = true })
-map('n', '<leader>{', ':bp<CR>', { noremap = true })
-map('n', '<leader>!', ':s/<c-r>///g<left><left>', opt_sn)
-map('n', '<leader>|', ":let @/='<C-R>=expand('<cword>')<CR>'<CR>:set hls<CR>", opt_sn)
+snmap('~', 'Dashboard')
+snmap('}', 'bn')
+snmap('{', 'bp')
+snmap('!', 's/<c-r>///g<left><left>')
+snmap('|', "let @/='<C-R>=expand('<cword>')<CR>'<CR>:set hls")
 
 
-map('n', '<leader>,', ':w<CR>', opt_sn)
+map('n','<leader>,', '<cmd>w<cr>', opt_sn)
 
-map('n', '<leader>/', '<cmd>A<CR>', opt_sn)
-map('n', '<leader>\\', ':Telescope buffers<CR>', opt_sn)
-map('n', '<leader>-', ':Telescope find_files<CR>', opt_sn)
-map('n', '<leader>#', ':lua require(\'telescope.builtin\').find_files( { cwd = vim.fn.expand(\'%:p:h\') })<CR>', opt_sn)
+snmap('/', 'A')
+TSmap('\\', 'Telescope buffers')
+TSmap('-', 'Telescope find_files')
+TSmap('#', 'find_files',   '{ cwd = vim.fn.expand(\'%:p:h\') }')
 -- }}}
 -- }}}
 
@@ -571,5 +655,24 @@ map('n', '<F1>', ':w<CR>', opt_n)
 -- map('n', '<leader>rt', fterm_run('"pytest -v " .. vim.fn.expand(\'%\') .. "\\r"'), opt_sn)
 
 -- }}}
+
+ 
+-- Vimspector
+vim.cmd([[
+nmap <F9> <cmd>call vimspector#Launch()<cr>
+nmap <F5> <cmd>call vimspector#StepOver()<cr>
+nmap <F8> <cmd>call vimspector#Reset()<cr>
+nmap <F11> <cmd>call vimspector#StepOver()<cr>")
+nmap <F12> <cmd>call vimspector#StepOut()<cr>")
+nmap <F10> <cmd>call vimspector#StepInto()<cr>")
+]])
+map('n', "<leader>Db", ":call vimspector#ToggleBreakpoint()<cr>", opt_sn)
+map('n', "<leader>Dw", ":call vimspector#AddWatch()<cr>", opt_sn)
+map('n', "<leader>De", ":call vimspector#Evaluate()<cr>", opt_sn)
+map('n', "<leader>Dl", ":call vimspector#Launch()<cr>", opt_sn)
+map('n', "<leader>Dq", ":call vimspector#Reset()<cr>", opt_sn)
+map('n', "<leader>Dc", ":call vimspector#Continue()<cr>", opt_sn)
+map('n', "<leader>Dr", ":call vimspector#Reset()<cr>", opt_sn)
+map('n', "<leader>DR", ":call vimspector#Restart()<cr>", opt_sn)
 
 return M

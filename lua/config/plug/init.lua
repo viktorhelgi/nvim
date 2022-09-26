@@ -17,7 +17,7 @@ return {
     -- {{{ [D] - dashboard - diffview
 	require('config.plug.dashboard'),
 	require('config.plug.diffview'),
-	require('config.plug.nvim-dap'),
+	-- require('config.plug.nvim-dap'),
     -- }}}
     -- {{{ [E]
     -- }}}
@@ -50,6 +50,7 @@ return {
     -- {{{ [N] - nvimcolorizer - nvimcomment - *nvimreload
 	require('config.plug.nvimcolorizer'),
 	require('config.plug.nvimcomment'),
+	require('config.plug.neotest'),
     -- require('config.plug.nvim-bqf'),
 	-- require('config.plug.nvimreload'),
     -- }}}

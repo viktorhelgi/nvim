@@ -17,7 +17,7 @@ local cmp_setup_global = {
         },
         documentation = {
             border = 'rounded',
-            max_width=60,
+            max_width=90,
         }
     },
     mapping = cmp.mapping.preset.insert({

@@ -4,6 +4,8 @@ require('packer').startup({
         -- Packer{{{
         use({ 'wbthomason/packer.nvim' }) --}}}
         -- nvim-lspconfig{{{
+        use({'williamboman/mason.nvim'})
+        use({'williamboman/mason-lspconfig.nvim'})
         use({"williamboman/nvim-lsp-installer"})
         use({ 'neovim/nvim-lspconfig' }) --}}}
         -- lsp-kind* {{{
@@ -162,6 +164,18 @@ require('packer').startup({
         } -- }}}
         -- vim-test{{{
         use({ "vim-test/vim-test" }) --}}}
+        -- neotest{{{
+        use({"nvim-neotest/neotest-plenary"})
+        use({"nvim-neotest/neotest-python"})
+        use({"nvim-neotest/neotest-vim-test"})
+        use({
+            "nvim-neotest/neotest",
+            requires = {
+                "nvim-lua/plenary.nvim",
+                "nvim-treesitter/nvim-treesitter",
+                "antoinemadec/FixCursorHold.nvim"
+            }
+        }) --}}}
         --         -- FTerm.nvim{{{
         -- use({"numToStr/FTerm.nvim"})--}}}
         -- vim-projectionist{{{
@@ -181,11 +195,15 @@ require('packer').startup({
         --         -- })
         --    end
         -- })--}}}
-
+        use({
+          'romgrk/barbar.nvim',
+          requires = {'kyazdani42/nvim-web-devicons'}
+        })
         -- use({'famiu/nvim-reload'})
         -- Debuggor: [one-small-step-for-vimkind] - [nvim-dap]
         -- use({'jbyuki/one-small-step-for-vimkind'})
-        use({'mfussenegger/nvim-dap'})
+        -- use({'mfussenegger/nvim-dap'})
+        use({'puremourning/vimspector'})
         -- use {
         --     'chipsenkbeil/distant.nvim',
         --     config = function()
@@ -222,6 +240,7 @@ require('packer').startup({
 
     end,
 
+
     -- display packer dialouge in the center in a floating window{{{
     config = {
         display = {
@@ -229,5 +248,8 @@ require('packer').startup({
         },
     }, --}}}
 })
+require("mason").setup()
+require("mason-lspconfig").setup()
 
 -- # vim foldmethod=marker
+--

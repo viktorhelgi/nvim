@@ -9,3 +9,5 @@ vim.cmd('hi VirtualTextHint guifg=#89b482')
 -- vim.cmd('hi NormalFloat guibg=#5f534b')
 vim.cmd('hi NormalFloat  guibg=#504945')
 vim.cmd('hi DiagnosticFloatingError guifg=#EA6962 guibg=#504945')
+
+vim.cmd('hi TSParameter guifg=#a99573')

@@ -235,9 +235,11 @@ require('packer').startup({
         use({ 'liuchengxu/graphviz.vim' })
 
         -- use({ 'vimwiki/vimwiki' })
+        use({'jose-elias-alvarez/null-ls.nvim'})
+        use({'MunifTanjim/eslint.nvim'})
 
         -- use({"nathom/filetype.nvim"})
-
+        use 'euclio/vim-markdown-composer'
     end,
 
 

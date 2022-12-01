@@ -44,7 +44,7 @@ local function process_opts(opt)
 end
 local function process_func(func)
     if type(func)=="table" then
-        return table.concat(func, '<CR>:')
+        return table.concat(func, '<CR><cmd>')
     end
     return func
 end
@@ -53,10 +53,10 @@ local function nmap(bind, func, opt)
     -- print('nmap')
     func = process_func(func)
     opt = process_opts(opt)
-    local exec_func = ':'..func..'<CR>'
-    local echo_func = ':echo "'..func..'"<CR>'
+    local exec_func = '<cmd>'..func..'<CR>'
+    -- local echo_func = ':echo "'..func..'"<CR>'
     -- print(echo_func)
-    map('n', '<leader>'..bind, exec_func .. echo_func , opt)
+    map('n', '<leader>'..bind, exec_func, opt)
     -- print('-------------------------------')
 end
 local function snmap(bind, func, opt, mode)
@@ -65,11 +65,11 @@ local function snmap(bind, func, opt, mode)
     end
     -- print('snmap')
     local func_str = process_func(func)
-    local exec_func = ':'..func_str..'<CR>'
-    local echo_func = ':echo "'..func_str..'"<CR>'
+    local exec_func = '<cmd>'..func_str..'<CR>'
+    local echo_func = '<cmd>echo \''..func_str..'\'<CR>'
     opt = process_opts(opt)
     --vim.pretty_print(func)
-    map(mode, '<leader>'..bind, exec_func .. echo_func , opt)
+    map(mode, '<leader>'..bind, exec_func, opt)
     -- print('--------------------------')
 end
 
@@ -170,12 +170,61 @@ function _G._open_ll()
     vim.api.nvim_set_keymap('n', '<leader>cq', ':lclose<CR>', opt_sn)
 end
 
+_G.set_jump_mappings = function(cmd_prev, cmd_next)
+    vim.api.nvim_set_keymap('n', 'N', ':'..cmd_prev..'<CR>', {})
+    vim.api.nvim_set_keymap('n', 'n', ':'..cmd_next..'<CR>', {})
+
+    -- set deactivation keymaps to "/"
+    vim.api.nvim_set_keymap('n', '/',
+        ":lua vim.api.nvim_del_keymap('n', 'N')<CR>" ..
+        ":lua vim.api.nvim_del_keymap('n', 'n')<CR>" ..
+        ":lua vim.api.nvim_del_keymap('n', '/')<CR>/", {})
+end
+_G.set_trouble_mappigs = function()
+    local opts = '{ skip_groups = true, jump = true }'
+    set_jump_mappings("lua require('trouble').previous("..opts..")", "lua require('trouble').next("..opts..")")
+end
+
+snmap('cse', 'lua _G.set_jump_mappings(\'cp\', \'cn\')')
+snmap('cj', 'lua _G.set_jump_mappings(\'cp\', \'cn\')')
+snmap('cx', 'lua _G.set_trouble_mappigs()')
+snmap('csl', 'lua _G.set_jump_mappings(\'lprev\', \'lnext\')')
+vim.api.nvim_set_keymap('n', '<leader>cu', '<cmd>Task start cmake build_all<cr>', opt_sn)
+
+-- vim.api.nvim_set_keymap('n', '<leader>ce', '<cmd>cex! execute(\'!cd build && ctest --output-on-failure\')<cr>', opt_sn)
+
+snmap('ce', {'silent! execute(\'!cd build && make\')',  'cex! execute(\'!cd build && ctest --output-on-failure\')', 'echo "Done running ctest"'})
+
+snmap('li', 'Trouble lsp_implementations')
+snmap('lr', 'Trouble lsp_references')
+snmap('lR', 'lua vim.lsp.buf.rename()')
+snmap('ld', 'Trouble lsp_definitions')
+snmap('lt', 'Trouble lsp_type_definitions')
+
+-- snmap('csl', 'lua _G.activate_ql_mappings("lprev", "lnext")')
+
 -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>k',    aa_a()   , opts_silent)
-snmap('cn', 'lua _G._open_qfl()')
+-- snmap('cn', 'lua _G._open_qfl()')
+snmap('cp', 'cp')
+snmap('cn', 'cn')
+snmap('ca', 'CodeActionMenu')
+map('n', 'g,', '<cmd> cp <cr>', opt_sn)
+map('n', 'g.', '<cmd> cn <cr>', opt_sn)
+map('n', 'cp', '<cmd> cp <cr>', opt_sn)
+map('n', 'cn', '<cmd> cn <cr>', opt_sn)
+map('n', 'c,', '<cmd> cp <cr>', opt_sn)
+map('n', 'c.', '<cmd> cn <cr>', opt_sn)
+
 snmap('co', {'cope',  'lua _G._open_qfl()'})
+snmap('cl', {'cope',  'lua _G._open_qfl()', 'winc L'})
 snmap('cb', {'lua require(\'diaglist\').open_buffer_diagnostics()', 'lua _G._open_ll()'})
+-- snmap('ca', {'lua require(\'diaglist\').open_all_diagnostics()', 'lua _G._open_ll()'})
 snmap('cd', {'lua vim.diagnostic.setqflist()', 'lua _G._open_qfl()'})
-snmap('cq', 'ccl')
+snmap('cq', {'ccl', 'TroubleClose', 'echo "Close quicfix window"'})
+
+vim.cmd( "map <leader>ag :<C-U>lua require('aerial').select({jump=true, index=vim.v.count})<CR>")
+
+
 snmap('ros', 'lua _G.split_term()')
 snmap('r<space>', 'lua _G.term_float( vim.fn.bufnr())')
 -- 'echo "git reset file:\\n - " .. expand(\'%\')'})
@@ -207,10 +256,11 @@ snmap('ej', 'lua _G.create_header()') -- toggle relative line numbers
 amap('ec', 'CommentToggle') -- toggle comment on current line or selection
 snmap('edc', 'cd %:p:h')
 snmap('ed-', 'cd ..')
+-- snmap('es', {'so %', "echo 'source -> '..expand('%')"})
+snmap('es', 'so %')
 snmap('eSb', { 'profile start profile.log', 'profile file *', 'profile func *', 'echo "profiling has started"' })
 snmap('eSe', {'profile pause',  'noautocmd qall!'})
 snmap('eh', {'set hlsearch!',  'match none'}) -- toggle comment on current line or selection
-snmap('ef', 'set foldenable!')
 
 snmap('e.r', 'set rnu!') -- toggle relative line numbers
 snmap('e.n', 'set number!') -- toggle relative line numbers
@@ -220,6 +270,7 @@ snmap('e.s1', 'set laststatus=1')
 snmap('e.s2', 'set laststatus=2')
 snmap('e.s3', 'set laststatus=3')
 
+map('n', '<leader>ef', ':setlocal foldenable!<CR>:setlocal foldmethod=indent<CR>', opt_sn)
 map('n', '<leader>el', 'O//-----------------------------------------------------------------------------', opt_sn)
 map('n', '<leader>etv', ':vs | terminal<CR>i', opt_sn)
 map('n', '<leader>ets', ':sp | terminal<CR>i', opt_sn)
@@ -257,12 +308,6 @@ M.gitsigns_mappings = {
     -- ['x ih'] = ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>',
 
     -- Git Diff View
-    ['n <leader>gdm'] = '<cmd>Gdiffsplit master<CR><cmd>winc L<CR>',
-    ['n <leader>gdh'] = '<cmd>Gdiffsplit HEAD<CR><cmd>winc L<CR>',
-    ['n <leader>gdc1'] = '<cmd>Gdiffsplit !~1<CR><cmd>winc L<CR>',
-    ['n <leader>gdc2'] = '<cmd>Gdiffsplit !~2<CR><cmd>winc L<CR>',
-    ['n <leader>gdc3'] = '<cmd>Gdiffsplit !~3<CR><cmd>winc L<CR>',
-    ['n <leader>gdc4'] = '<cmd>Gdiffsplit !~4<CR><cmd>winc L<CR>',
 
     -- Git Telescope
     ['n <leader>gts'] = '<cmd>Telescope git_status<CR>',
@@ -279,7 +324,12 @@ M.gitsigns_mappings = {
 nmap('gs', 'Git status')
 -- git add [ < . > , < % > ]
 nmap('ga.', 'Git add . ')
-nmap('gaf', {'Git add % ',   'echo "git add file:\\n - " .. expand(\'%\')'})
+
+if vim.loop.os_uname().sysname == "Linux" then
+    snmap('gaf', 'Git add %')
+else
+    nmap('gaf', {'Git add % ',   'echo "git add file:\\n - " .. expand(\'%\')'})
+end
 -- git reset [ < . > , < % > ]
 nmap('gr.', 'Git reset . ')
 nmap('grf', {'Git reset % ',   'echo "git reset file:\\n - " .. expand(\'%\')'})
@@ -296,6 +346,7 @@ nmap('gP', 'Git pull ')
 
 local send_r = ':lua require("harpoon.term").sendCommand(1, "\\r")<CR>'
 map('n', '<leader>rl', '<cmd>TestLast<CR>' .. send_r, opt_sn)
+map('n', '<leader>rs', '<cmd>TestSuite<CR>' .. send_r, opt_sn)
 
 local function require_map(bind, path, func, args)
     if args==nil then
@@ -350,13 +401,15 @@ map('n', '<leader>i', 'V]M', opt_sn)
 -- {{{ [L] - Lsp
 
 snmap('Li', 'LspInfo')
+snmap('LI', 'LspInstallInfo')
 snmap('Lr', 'LspRestart')
 snmap('Ls', 'LspStart')
 snmap('LX', 'LspStop')
 snmap('Ll', 'LspLog')
 
 snmap('lf', 'lua vim.lsp.buf.formatting()')
-snmap('lr', 'lua vim.lsp.buf.rename()')
+snmap('la', 'lua vim.lsp.buf.code_action()')
+-- snmap('lr', 'lua vim.lsp.buf.rename()')
 
 -- }}}
 -- {{{ [M] - ...
@@ -415,19 +468,35 @@ end
 
 nmap('tf', 'Telescope find_files')
 nmap('tc', 'Telescope buffers')
-nmap('tu', 'Telescope find_files')
-nmap('to', 'Telescope buffers')
-nmap('tw', 'Telescope live_grep')
-TSmap('tg', 'find_files', '{ cwd = vim.fn.expand(\'%:p:h\') }')
+
+-- find-files
+nmap( 'tu', 'Telescope find_files')
 TSmap('te', 'find_files', '{ cwd = vim.fn.expand(\'%:p:h\') }')
+nmap( 'to', 'Telescope buffers')
+
+-- grep
+nmap( 'tp', 'Telescope live_grep')
+TSmap('t.', 'live_grep', '{cwd = vim.fn.expand(\'%:p:h\')}')
+TSmap('t,', 'live_grep', '{grep_open_files=true}')
+
+-- file-browser
+nmap('tb', 'Telescope file_browser')
+nmap('tk', 'Telescope file_browser')
+nmap('tm', 'Telescope file_browser path=%:p:h')
+nmap('tj', 'Telescope file_browser path=%:p:h')
+
+nmap('tgs', 'Telescope git_status')
+nmap('tgf', 'Telescope git_files')
+
+-- TSmap('tg', 'find_files', '{ cwd = vim.fn.expand(\'%:p:h\') }')
 
 
-TSmap('tv', 'live_grep', '{cwd = vim.fn.expand(\'%:p:h\')}')
-TSmap('tz', 'live_grep', '{grep_open_files=true}')
 
 snmap('wt', {'winc s',   'lua require(\'telescope.builtin\').lsp_type_definitions()'})
 
-nmap('tr', 'Telescope resume')
+nmap('tR', 'Telescope resume')
+nmap('tlr', 'Telescope lsp_references')
+nmap('tr', 'Telescope lsp_references')
 nmap('tx', 'Telescope keymaps')
 nmap('th', 'Telescope help_tags')
 
@@ -440,8 +509,6 @@ TSmap('td',  'find_files','{ find_command={ "C:/Users/Lenovo/scoop/shims/fd.exe"
 -- map('n', '<leader>tj', ':lua require(\'telescope.builtin\').lsp_dynamic_workspace_symbols({ignore_symbols = {"variable", "constant"}, cwd = vim.fn.expand(\'%:p:h\')})<CR>', { noremap = true })
 -- map('n', '<leader>tq', ':lua require(\'telescope.builtin\').lsp_dynamic_workspace_symbols({ignore_symbols = {"variable", "constant"}, grep_open_files = true})<CR>', { noremap = true })
 
-nmap('tb', 'Telescope file_browser')
-nmap('tm', 'Telescope file_browser path=%:p:h')
 
 -- }}}
 -- {{{ [U] - ...
@@ -568,20 +635,22 @@ map('', 'gF', ':lua _G.print_thing(vim.fn.expand("<cWORD>"))<CR>', opt_e)
 -- {{{ ['] - Marks
 
 map('n', '\'/', '<cmd>A<CR>', opt_sn)
-map('n', '\'\\', '<cmd>AV<CR>', opt_sn)
+-- map('n', '\'\\', '<cmd>AV<CR>', opt_sn)
+
+map('n', '\'c',   '<cmd>FSHere<CR>', opt_sn)
+map('n', '\'\\h', '<cmd>FSHere<CR>', opt_sn)
+map('n', '\'\\v', '<cmd>FSSplitRight<CR>', opt_sn)
+map('n', '\'\\s', '<cmd>FSSplitBelow<CR>', opt_sn)
 map('n', '\'h', ':lua require("harpoon.ui").nav_file(1)<CR>', opt_sn)
 map('n', '\'t', ':lua require("harpoon.ui").nav_file(2)<CR>', opt_sn)
 map('n', '\'n', ':lua require("harpoon.ui").nav_file(3)<CR>', opt_sn)
 map('n', '\'s', ':lua require("harpoon.ui").nav_file(4)<CR>', opt_sn)
 map('n', '\'-', ':lua require("harpoon.ui").nav_file(5)<CR>', opt_sn)
 map('n', '\'#', ':lua require("harpoon.ui").nav_file(6)<CR>', opt_sn)
-map('n', '\'g', ':lua require("harpoon.ui").nav_file(7)<CR>', opt_sn)
-map('n', '\'c', ':lua require("harpoon.ui").nav_file(8)<CR>', opt_sn)
-map('n', '\'r', ':lua require("harpoon.ui").nav_file(9)<CR>', opt_sn)
-map('n', '\'l', ':lua require("harpoon.ui").nav_file(10)<CR>', opt_sn)
 -- map('n', '\'g', ':lua require("harpoon.ui").nav_file(7)<CR>', opt_sn)
 map('n', '\'m', ':lua require("harpoon.term").gotoTerminal(1)<CR>', opt_sn)
 map('n', '\'w', ':lua require("harpoon.term").gotoTerminal(2)<CR>', opt_sn)
+map('n', '\'v', ':lua require("harpoon.term").gotoTerminal(3)<CR>', opt_sn)
 -- map('n', '\'m', '<CMD>lua require("FTerm").toggle()<CR>', opt_sn)             -- returns any externally-required keymaps for usage
 map('n', '\'z', ':lua _G.__fterm_gitui()<CR>', opt_sn)
 
@@ -597,8 +666,8 @@ map('n', '<C-\\>', ':w<CR>', opt_sn)
 map('n', '<C-d>', '3<C-e>', opt_sn)
 map('n', '<C-u>', '3<C-y>', opt_sn)
 
-map('i', '<C-a>', '<Esc>Ea', opt_sn)
-map('i', '<C-l>', '<Esc>la', opt_sn)
+-- map('i', '<C-a>', '<Esc>Ea', opt_sn)
+-- map('i', '<C-l>', '<Esc>la', opt_sn)
 map('i', '<C-o>', '<C-x><C-o>', opt_sn)
 map('i', '<C-f>', '<C-x><C-f>', opt_sn)
 
@@ -656,7 +725,6 @@ map('n', '<F1>', ':w<CR>', opt_n)
 
 -- }}}
 
- 
 -- Vimspector
 vim.cmd([[
 nmap <F9> <cmd>call vimspector#Launch()<cr>
@@ -674,5 +742,94 @@ map('n', "<leader>Dq", ":call vimspector#Reset()<cr>", opt_sn)
 map('n', "<leader>Dc", ":call vimspector#Continue()<cr>", opt_sn)
 map('n', "<leader>Dr", ":call vimspector#Reset()<cr>", opt_sn)
 map('n', "<leader>DR", ":call vimspector#Restart()<cr>", opt_sn)
+
+
+map('n', '<leader>[', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opt_sn)
+map('n', '<leader>]', '<cmd>lua vim.diagnostic.goto_next()<CR>', opt_sn)
+map('n', '<leader>ds', '<cmd>lua vim.diagnostic.show()<CR>', opt_sn)
+
+local function gs_map(mode, l, r, opts)
+  opts = opts or {}
+  -- opts.buffer = 0
+  vim.keymap.set(mode, l, r, opts)
+end
+
+local gs = require('gitsigns')
+
+function _G.activate_git_inspect()
+    require('gitsigns').toggle_linehl()
+    require('gitsigns').toggle_numhl()
+    require('gitsigns').toggle_word_diff()
+    -- Navigation
+    -- gs_map('n', ']]', function()
+    --     -- if vim.wo.diff then return ']]' end
+    --     vim.schedule(function() require('gitsigns'))
+    --     return '<Ignore>'
+    --     end, {expr=true}
+    -- )
+
+    -- gs_map('n', '[[', function()
+    --   -- if vim.wo.diff then return '[[' end
+    --   vim.schedule(function() require('gitsigns'))
+    --   return '<Ignore>'
+    -- end, {expr=true})
+end
+map('n', '<leader>gi', '<cmd>lua _G.activate_git_inspect()<CR>', opt_sn)
+
+
+
+
+local gs = require('gitsigns')
+-- Actions
+gs_map({'n', 'v'}, '<leader>uh', ':Gitsigns stage_hunk<CR>')
+gs_map({'n', 'v'}, '<leader>ur', ':Gitsigns reset_hunk<CR>')
+gs_map({'o', 'x'}, 'uh',         ':<c-u>gitsigns select_hunk<cr>')
+gs_map('n', '<leader>ub', require('gitsigns').toggle_current_line_blame)
+gs_map('n', '<leader>us', require('gitsigns').stage_buffer)
+gs_map('n', '<leader>uu', require('gitsigns').undo_stage_hunk)
+gs_map('n', '<leader>ur', require('gitsigns').reset_buffer)
+gs_map('n', '<leader>up', require('gitsigns').preview_hunk)
+gs_map('n', '<leader>ub', function() require('gitsigns').blame_line{full=true} end)
+gs_map('n', '<leader>ud', require('gitsigns').diffthis)
+gs_map('n', '<leader>uD', function() require('gitsigns').diffthis('~') end)
+gs_map('n', '<leader>ud', require('gitsigns').toggle_deleted)
+
+map('n', '<leader>uv',  '<cmd>Gdiffsplit HEAD<CR><cmd>winc L<CR>', opt_sn)
+map('n', '<leader>ut',  '<cmd>Telescope git_status<cr>', opt_sn)
+-- map('n', '<leader>gdm',  '<cmd>Gdiffsplit master<CR><cmd>winc L<CR>', opt_sn)
+-- map('n', '<leader>gdc1', '<cmd>Gdiffsplit !~1<CR><cmd>winc L<CR>', opt_sn)
+-- map('n', '<leader>gdc2', '<cmd>Gdiffsplit !~2<CR><cmd>winc L<CR>', opt_sn)
+-- map('n', '<leader>gdc3', '<cmd>Gdiffsplit !~3<CR><cmd>winc L<CR>', opt_sn)
+-- map('n', '<leader>gdc4', '<cmd>Gdiffsplit !~4<CR><cmd>winc L<CR>', opt_sn)
+
+-- Text object
+local wk = require('which-key')
+local keymap = {
+    u = {
+        name = "Gitsigns",
+        s = "stage hunk",
+        S = "stage buffer",
+        n = "reset hunk",
+        u = "undo stage hunk",
+        R = "reset buffer",
+        p = "preview hunk",
+        b = "blame line",
+        d = "diff this && toggle deleted",
+        D = "diff this ~",
+        v = "diff-split",
+        t = "Telescope git status"
+    }
+}
+wk.register(keymap, {
+    prefix = '<leader>',
+})
+
+
+map('n', '<leader>gdm',  '<cmd>Gdiffsplit master<CR><cmd>winc L<CR>', opt_sn)
+map('n', '<leader>gdh',  '<cmd>Gdiffsplit HEAD<CR><cmd>winc L<CR>', opt_sn)
+map('n', '<leader>gdc1', '<cmd>Gdiffsplit !~1<CR><cmd>winc L<CR>', opt_sn)
+map('n', '<leader>gdc2', '<cmd>Gdiffsplit !~2<CR><cmd>winc L<CR>', opt_sn)
+map('n', '<leader>gdc3', '<cmd>Gdiffsplit !~3<CR><cmd>winc L<CR>', opt_sn)
+map('n', '<leader>gdc4', '<cmd>Gdiffsplit !~4<CR><cmd>winc L<CR>', opt_sn)
 
 return M

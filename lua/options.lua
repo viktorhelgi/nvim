@@ -30,6 +30,7 @@ o.cursorline = true 	-- highlight line cursor is in
 o.modeline = true   	-- enable modlines for files
 o.modelines = 5			-- number of modelines
 o.signcolumn = 'yes'
+o.smartcase = true
 
 --@type vim.
 -- vim.diagnostic({
@@ -76,7 +77,7 @@ vim.opt.termguicolors = true
 
 -- # vim foldmethod=marker
 
-g.python3_host_prog = "C:/Python310/python.exe"
+g.python3_host_prog = "/usr/bin/python3"
 
 -- https://github.com/rcarriga/vim-ultest
 -- g.ultest_use_pty = 1

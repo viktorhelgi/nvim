@@ -98,7 +98,7 @@ local on_attach = function(client, bufnr)
 	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-g>',       ':lua require(\'telescope.builtin\').lsp_definitions()<CR>', opts)
 	vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gt',       ':lua require(\'telescope.builtin\').lsp_type_definitions()<CR>', opts)
 	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-t>',       ':lua require(\'telescope.builtin\').lsp_type_definitions()<CR>', opts)
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gc',       ':lua require(\'telescope.builtin\').lsp_workspace_symbols({query="def"})<CR>', opts)
+	-- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gc',       ':lua require(\'telescope.builtin\').lsp_workspace_symbols({query="def"})<CR>', opts)
 	vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gC',       ':lua require(\'telescope.builtin\').lsp_document_symbols({query="def"})<CR>', opts)
 	vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gf',       ':lua require(\'pytrize.api\').jump_fixture()<CR>', opts)
 
@@ -311,7 +311,7 @@ function _G.conda_python()
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+-- capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 capabilities.textDocument.completion.completionItem.snippetSupport = false
 
 lspconfig.pyright.setup({
@@ -322,7 +322,7 @@ lspconfig.pyright.setup({
     capabilities = capabilities,
     -- root_dir = lspconfig.util.find_git_ancestor or lspconfig.util.find_package_pipfile_ancestor or lspconfig.util.find_package_pyproject_ancestor,
     -- root_dir = find_package_pipfile_ancestor,
-	root_dir = util.root_pattern(unpack(root_files)),
+	root_dir = lspconfig.util.root_pattern(unpack(root_files)),
     filetypes = {'python'},
     settings = {
         pyright = {
@@ -361,7 +361,7 @@ lspconfig.pyright.setup({
     },
 })
 
-local neotest = require('neotest.init')
+-- local neotest = require('neotest.init')
 
 -- neotest.setup
 

@@ -173,11 +173,10 @@ _G.library = library
 -- for i = 1,#array_all    do table.insert(array_all,    'pub ' .. array_all[i]) end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+-- capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 capabilities.textDocument.completion.completionItem.snippetSupport = false
 
-require('lspconfig').sumneko_lua.setup({
-	cmd = { sumneko_binary, '-E', sumneko_install_path .. '/main.lua' },
+local cfg = {
     on_attach = on_attach,
     capabilities = capabilities,
 	settings = {
@@ -195,6 +194,7 @@ require('lspconfig').sumneko_lua.setup({
 			workspace = {
 				-- Make the server aware of Neovim runtime files
 				library = vim.api.nvim_get_runtime_file('', true),
+                checkThirdParty = false
                 -- library = library
 			},
 			-- Do not send telemetry data containing a randomized but unique identifier
@@ -203,4 +203,13 @@ require('lspconfig').sumneko_lua.setup({
 			},
 		},
 	},
-})
+}
+
+
+if vim.loop.os_uname().sysname == "Linux" then
+    local what = "that"
+else
+    cfg.cmd = { sumneko_binary, '-E', sumneko_install_path .. '/main.lua' }
+end
+
+require('lspconfig').sumneko_lua.setup(cfg)

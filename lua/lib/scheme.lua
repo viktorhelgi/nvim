@@ -61,7 +61,7 @@ local lualine_def_styles = {
 -- }}}
 
 -- {{{ varible definitions
-M.scheme = 'everforest' -- specifies scheme. default is "everforest"
+M.scheme = 'catppuccin' -- specifies scheme. default is "everforest"
 
 -- specifies line style
 M.lualine_style_left = ''

@@ -7,6 +7,11 @@
 -- -- edit snippets file in vertical window
 -- g.UltiSnipsEditSplit = 'vertical'
 --
--- g.UltiSnipsSnippetDirectories = {
 -- 	"snips"
 -- }
+--
+--
+vim.g.UltiSnipsSnippetDirectories = { "~/.config/nvim/ultisnippets" }
+vim.g.UltiSnipsExpandTrigger = "<C-y>"
+vim.g.UltiSnipsJumpForwardTrigger="<c-l>"
+vim.g.UltiSnipsJumpBackwardTrigger="<c-b>"

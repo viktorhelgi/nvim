@@ -77,11 +77,7 @@ local keymap = {
             e = 'end',
         },
         r = 'tgl rel nr',
-        s = {
-            name = "set laststatus",
-            ["2"] = "set laststatus=2",
-            ["3"] = "set laststatus=3",
-        },
+        s = 'source %',
     },
     -- }}}
     -- {{{ [h]: Harpoon

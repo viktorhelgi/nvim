@@ -88,7 +88,7 @@ local on_attach = function(client, bufnr)
 	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-g>',       ':lua require(\'telescope.builtin\').lsp_definitions()<CR>', opts)
 	vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gt',       ':lua require(\'telescope.builtin\').lsp_type_definitions()<CR>', opts)
 	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-t>',       ':lua require(\'telescope.builtin\').lsp_type_definitions()<CR>', opts)
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gc',       ':lua require(\'telescope.builtin\').lsp_workspace_symbols({query="def"})<CR>', opts)
+	-- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gc',       ':lua require(\'telescope.builtin\').lsp_workspace_symbols({query="def"})<CR>', opts)
 	vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gC',       ':lua require(\'telescope.builtin\').lsp_document_symbols({query="def"})<CR>', opts)
 	-- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gf',       ':lua require(\'pytrize.api\').jump_fixture()<CR>', opts)
 

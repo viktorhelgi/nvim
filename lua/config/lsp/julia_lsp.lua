@@ -86,7 +86,7 @@ local my_on_attach = function(client, bufnr)
 	vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gt',       ':lua require(\'telescope.builtin\').lsp_type_definitions()<CR>', opts)
 	vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-t>',    ':lua require(\'telescope.builtin\').lsp_type_definitions()<CR>', opts)
 	vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gI',    	':lua require(\'telescope.builtin\').lsp_implementations({ignore_filenames=false, path_display=hidden})<CR>', opts)
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gc',       ':lua require(\'telescope.builtin\').lsp_workspace_symbols({query="def"})<CR>', opts)
+	-- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gc',       ':lua require(\'telescope.builtin\').lsp_workspace_symbols({query="def"})<CR>', opts)
 	vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gC',       ':lua require(\'telescope.builtin\').lsp_document_symbols({query="def"})<CR>', opts)
 
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi',       '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
@@ -226,7 +226,7 @@ end
 local lspconfig = require('lspconfig')
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+-- capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 capabilities.textDocument.completion.completionItem.snippetSupport = false
 
 

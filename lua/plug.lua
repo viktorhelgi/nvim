@@ -4,24 +4,25 @@ require('packer').startup({
         -- Packer{{{
         use({ 'wbthomason/packer.nvim' }) --}}}
         -- nvim-lspconfig{{{
-        use({'williamboman/mason.nvim'})
-        use({'williamboman/mason-lspconfig.nvim'})
-        use({"williamboman/nvim-lsp-installer"})
+        use({ 'williamboman/mason.nvim' })
+        use({ 'williamboman/mason-lspconfig.nvim' })
+        use({ "williamboman/nvim-lsp-installer" })
         use({ 'neovim/nvim-lspconfig' }) --}}}
         -- lsp-kind* {{{
         use({ 'onsails/lspkind-nvim', commit = '57e5b5d' }) --}}}
-        use({'onsails/diaglist.nvim'})
+        use({ 'onsails/diaglist.nvim' })
         -- nvim-cmp* - [cmp-nvim-lsp*, cmp-path*, cmp-buffer*]{{{
-        use({'hrsh7th/nvim-cmp'})
+        use({ 'hrsh7th/nvim-cmp' })
         --
-        use({'hrsh7th/cmp-nvim-lsp'})
-        use({'hrsh7th/cmp-path'})
-        use({'hrsh7th/cmp-buffer'})
-        use({'L3MON4D3/LuaSnip'})
-        use({'saadparwaiz1/cmp_luasnip'})
-        use({'hrsh7th/cmp-nvim-lsp-document-symbol'})
-        use({'hrsh7th/cmp-nvim-lua'})
+        use({ 'hrsh7th/cmp-nvim-lsp' })
+        use({ 'hrsh7th/cmp-path' })
+        use({ 'hrsh7th/cmp-buffer' })
+        use({ 'L3MON4D3/LuaSnip' })
+        use({ 'saadparwaiz1/cmp_luasnip' })
+        use({ 'hrsh7th/cmp-nvim-lsp-document-symbol' })
+        use({ 'hrsh7th/cmp-nvim-lua' })
         --}}}
+        use({ 'SirVer/ultisnips' })
         -- cmp-nvim-ultisnips{{{
         -- use({ 'quangnguyen30192/cmp-nvim-ultisnips', commit = 'c6ace8c' })--}}}
         -- UTILITY PLUGINS
@@ -50,19 +51,20 @@ require('packer').startup({
         -- nvim-autopairs* {{{
         use({ 'windwp/nvim-autopairs', commit = '38d486a' }) --}}}
         -- nvim-comment* {{{
-        use({ 'terrortylor/nvim-comment', commit = '8619217' }) --}}}
+        -- use({ 'terrortylor/nvim-comment', commit = '8619217' }) --}}}
         -- neoformat* {{{
         use({ 'sbdchd/neoformat', commit = '06920fa' }) --}}}
         -- hop.nvim* {{{
         use({ 'phaazon/hop.nvim', commit = 'e2f978b' }) --}}}
         -- gitsigns* - plenary {{{
-        use({ 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' }, commit = '565b94d' }) --}}}
+        use({ 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' } }) --}}}
         -- which-key*{{{
         use({ 'folke/which-key.nvim', commit = 'a3c19ec' }) --}}}
 
         -- IMPORVED SYNTAX PLUGINS
         -- nvim-treesitter*{{{
-        use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate', commit = '9425591' }) --}}}
+        -- use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate', commit = '9425591' }) --}}}
+        use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate', commit = '4cccb6f494eb255b32a290d37c35ca12584c74d0' }) --}}}
         -- nvim-treesitter-textobjects{{{
         use({ 'nvim-treesitter/nvim-treesitter-textobjects' }) --}}}
         -- dashboard {{{
@@ -82,7 +84,7 @@ require('packer').startup({
         -- nord{{{
         use({ 'shaunsingh/nord.nvim' }) --}}}
         -- everforest{{{
-        use({ 'sainnhe/everforest' }) --}}}
+        --use({ 'sainnhe/everforest' }) --}}}
         -- bluewery{{{
         use({ 'relastle/bluewery.vim' }) --}}}
         -- night-owl{{{
@@ -95,14 +97,25 @@ require('packer').startup({
         use({ "ChristianChiarulli/nvcode-color-schemes.vim" }) --}}}
         -- monokai.nvim{{{
         use({ "tanvirtin/monokai.nvim" }) --}}}
-        use({
+        use {
             "catppuccin/nvim",
-            as = "catppuccin"
-        })
+            as = "catppuccin",
+            tag = "v0.2.4",
+            config = function()
+                require("catppuccin").setup {
+                    flavour = "frappe" -- mocha, macchiato, frappe, latte
+                }
+                vim.api.nvim_command "colorscheme catppuccin"
+            end
+        }
         -- }}}
 
         -- aerial.nvim{{{
         use({ 'stevearc/aerial.nvim' }) --}}}
+        -- use {
+        --   'stevearc/aerial.nvim',
+        --   config = function() require('aerial').setup() end
+        -- } -- }}}
         -- impatient.nvim{{{
         use({ 'lewis6991/impatient.nvim' }) --}}}
         -- lsp_signature{{{
@@ -111,8 +124,8 @@ require('packer').startup({
         -- use({"Vimjas/vim-python-pep8-indent", ft="py"})
         use({ "Vimjas/vim-python-pep8-indent" }) --}}}
         -- harpoon{{{
-        -- use({ 'ThePrimeagen/harpoon', commit = 'b5cc65c731817faa5a505917b01de6a5ff0f2860' }) 
-        use({ 'ThePrimeagen/harpoon' })--}}}
+        -- use({ 'ThePrimeagen/harpoon', commit = 'b5cc65c731817faa5a505917b01de6a5ff0f2860' })
+        use({ 'ThePrimeagen/harpoon' }) --}}}
         -- vim-fugitive{{{
         use({ 'tpope/vim-fugitive' }) --}}}
 
@@ -165,17 +178,25 @@ require('packer').startup({
         -- vim-test{{{
         use({ "vim-test/vim-test" }) --}}}
         -- neotest{{{
-        use({"nvim-neotest/neotest-plenary"})
-        use({"nvim-neotest/neotest-python"})
-        use({"nvim-neotest/neotest-vim-test"})
-        use({
-            "nvim-neotest/neotest",
-            requires = {
-                "nvim-lua/plenary.nvim",
-                "nvim-treesitter/nvim-treesitter",
-                "antoinemadec/FixCursorHold.nvim"
-            }
-        }) --}}}
+        -- use({"nvim-neotest/neotest-plenary"})
+        -- use({"nvim-neotest/neotest-python"})
+        -- use({"nvim-neotest/neotest-vim-test"})
+        -- use({
+        --     "nvim-neotest/neotest",
+        --     requires = {
+        --         "nvim-lua/plenary.nvim",
+        --         "nvim-treesitter/nvim-treesitter",
+        --         "antoinemadec/FixCursorHold.nvim"
+        --     }
+        -- })
+
+        -- use {
+        --   "klen/nvim-test",
+        --   config = function()
+        --     require('nvim-test').setup()
+        --   end
+        -- }
+        --}}}
         --         -- FTerm.nvim{{{
         -- use({"numToStr/FTerm.nvim"})--}}}
         -- vim-projectionist{{{
@@ -195,15 +216,15 @@ require('packer').startup({
         --         -- })
         --    end
         -- })--}}}
-        use({
-          'romgrk/barbar.nvim',
-          requires = {'kyazdani42/nvim-web-devicons'}
-        })
+        -- use({
+        --   'romgrk/barbar.nvim',
+        --   requires = {'kyazdani42/nvim-web-devicons'}
+        -- })
         -- use({'famiu/nvim-reload'})
         -- Debuggor: [one-small-step-for-vimkind] - [nvim-dap]
         -- use({'jbyuki/one-small-step-for-vimkind'})
         -- use({'mfussenegger/nvim-dap'})
-        use({'puremourning/vimspector'})
+        use({ 'puremourning/vimspector' })
         -- use {
         --     'chipsenkbeil/distant.nvim',
         --     config = function()
@@ -230,14 +251,117 @@ require('packer').startup({
         --         }
         --     end
         -- })
+        -- Lua
+        use { "folke/trouble.nvim", -- {{{
+            requires = "kyazdani42/nvim-web-devicons",
+            config = function()
+                require("trouble").setup({
+                    position = "bottom", -- position of the list can be: bottom, top, left, right
+                    height = 10, -- height of the trouble list when position is top or bottom
+                    width = 50, -- width of the list when position is left or right
+                    icons = true, -- use devicons for filenames
+                    mode = "workspace_diagnostics", -- "workspace_diagnostics", "document_diagnostics", "quickfix", "lsp_references", "loclist"
+                    fold_open = "", -- icon used for open folds
+                    fold_closed = "", -- icon used for closed folds
+                    group = true, -- group results by file
+                    padding = true, -- add an extra new line on top of the list
+                    action_keys = { -- key mappings for actions in the trouble list
+                        -- map to {} to remove a mapping, for example:
+                        -- close = {},
+                        close = "q", -- close the list
+                        cancel = "<esc>", -- cancel the preview and get back to your last window / buffer / cursor
+                        refresh = "r", -- manually refresh
+                        jump = { "<cr>", "<tab>" }, -- jump to the diagnostic or open / close folds
+                        open_split = { "<c-x>" }, -- open buffer in new split
+                        open_vsplit = { "<c-v>" }, -- open buffer in new vsplit
+                        open_tab = { "<c-t>" }, -- open buffer in new tab
+                        jump_close = { "o" }, -- jump to the diagnostic and close the list
+                        toggle_mode = "m", -- toggle between "workspace" and "document" diagnostics mode
+                        toggle_preview = "P", -- toggle auto_preview
+                        hover = "K", -- opens a small popup with the full multiline message
+                        preview = "p", -- preview the diagnostic location
+                        close_folds = { "zM", "zm" }, -- close all folds
+                        open_folds = { "zR", "zr" }, -- open all folds
+                        toggle_fold = { "zA", "za" }, -- toggle fold of current file
+                        previous = "k", -- previous item
+                        next = "j" -- next item
+                    },
+                    indent_lines = true, -- add an indent guide below the fold icons
+                    auto_open = false, -- automatically open the list when you have diagnostics
+                    auto_close = false, -- automatically close the list when you have no diagnostics
+                    auto_preview = true, -- automatically preview the location of the diagnostic. <esc> to close preview and go back to last window
+                    auto_fold = false, -- automatically fold a file trouble list at creation
+                    auto_jump = { "lsp_definitions" }, -- for the given modes, automatically jump if there is only a single result
+                    signs = {
+                        -- icons / text used for a diagnostic
+                        error = "",
+                        warning = "",
+                        hint = "",
+                        information = "",
+                        other = "﫠"
+                    },
+                    use_diagnostic_signs = false -- enabling this will use the signs defined in your lsp client
+                })
+            end
+        } --- }}}
         use({ 'monkoose/matchparen.nvim' })
 
         use({ 'liuchengxu/graphviz.vim' })
 
+        use({ 'derekwyatt/vim-fswitch' })
+
+        -- use({ 'jose-elias-alvarez/null-ls.nvim' })
+
+        use({ 'mhartington/formatter.nvim' })
+
+        use({ 'p00f/clangd_extensions.nvim' })
+        use {
+            "lewis6991/hover.nvim",
+            config = function()
+                require("hover").setup {
+                    init = function()
+                        -- Require providers
+                        require("hover.providers.lsp")
+                        -- require('hover.providers.gh')
+                        -- require('hover.providers.jira')
+                        -- require('hover.providers.man')
+                        -- require('hover.providers.dictionary')
+                    end,
+                    preview_opts = {
+                        border = nil
+                    },
+                    -- Whether the contents of a currently open hover window should be moved
+                    -- to a :h preview-window when pressing the hover keymap.
+                    preview_window = false,
+                    title = true
+                }
+
+                -- Setup keymaps
+                vim.keymap.set("n", "K", require("hover").hover, {desc = "hover.nvim"})
+                vim.keymap.set("n", "gK", require("hover").hover_select, {desc = "hover.nvim (select)"})
+            end
+        }
+
+        use 'Shatur/neovim-tasks'
+        use {
+            'weilbith/nvim-code-action-menu',
+            cmd = 'CodeActionMenu'
+        }
+
+        use {
+            'numToStr/Comment.nvim',
+            config = function()
+                require('Comment').setup()
+            end
+        }
+
+        -- use 'euclio/vim-markdown-composer'
+
         -- use({ 'vimwiki/vimwiki' })
 
         -- use({"nathom/filetype.nvim"})
-
+        -- use {"ellisonleao/glow.nvim"}
+        -- use 'JASONews/glow-hover'
     end,
 
 

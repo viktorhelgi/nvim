@@ -1,3 +1,27 @@
+local hover = function(_, result, ctx, config)
+    if not (result and result.contents) then
+        print("thath1")
+        return pcall(vim.lsp.handlers.hover(_, result, ctx, config), 1)
+    end
+    if type(result.contents) == "string" then
+        print("thth2")
+        local s = string.gsub(result.contents or "", "&nbsp;", " ")
+        print(s)
+        s = string.gsub(s, [[\\\n]], [[\n]])
+        print(s)
+        result.contents = s
+        print("2")
+        return pcall(vim.lsp.handlers.hover(_, result, ctx, config), 2)
+    else
+        print("thth3")
+        local s = string.gsub((result.contents or {}).value or "", "&nbsp;", " ")
+        s = string.gsub(s, "\\\n", "\n")
+        result.contents.value = s
+        print("3")
+        return pcall(vim.lsp.handlers.hover(_, result, ctx, config), 3)
+    end
+end
+
 
 local lsp_signature_configs = {
     debug = false, -- set to true to enable debug logging
@@ -37,16 +61,33 @@ local opts = { noremap = true, silent = false }
 local opt_sn = { noremap = true, silent = true }
 
 local my_on_attach = function(client, bufnr)
+    -- require("aerial").on_attach(client, bufnr)
+
+    local function create_command(commands, delim)
+        if type(commands)=="table" then
+            return table.concat(commands, delim)
+        end
+        return commands
+    end
+
+    local function harpoon_map(mapping, commands)
+        local command = create_command(commands, "\\r")
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>'..mapping, ':lua require("harpoon.term").sendCommand(1, ' .. command .. '.."\\r") <CR>', opts)
+    end
+
+    -- local function terminal_map(mapping, command)
+    --     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>'..mapping, '<cmd>' .. command .. '<CR>' .. send_r, opts)
+    -- end
     vim.cmd("set colorcolumn=102")
 
     require('lsp_signature').on_attach(lsp_signature_configs, bufnr) -- no need to specify bufnr if you don't use toggle_key
-    require("aerial").on_attach(client, bufnr)
     ---------------------------------------------------------------------------------
+    harpoon_map('rb', {'cd build', 'cmake fog_program' , 'cd ..', 'build/fog_program'})
 
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>[', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>]', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>[', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>]', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gef', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'geq', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>zt', opts)
@@ -61,20 +102,27 @@ local my_on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gt', ':lua require(\'telescope.builtin\').lsp_type_definitions()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-t>', ':lua require(\'telescope.builtin\').lsp_type_definitions()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gI', ':lua require(\'telescope.builtin\').lsp_implementations({ignore_filenames=false, path_display=hidden})<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gc', ':lua require(\'telescope.builtin\').lsp_workspace_symbols({query="def"})<CR>', opts)
+    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gc', ':lua require(\'telescope.builtin\').lsp_workspace_symbols({query="def"})<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gC', ':lua require(\'telescope.builtin\').lsp_document_symbols({query="def"})<CR>', opts)
+
 
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
 
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rF', ':TestFile<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rl', ':TestLast<CR>', opts)
+    -- TestNearest
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', ':lua _G.run_test(\'%\')<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rt', ':lua _G.run_test(\'%\', true)<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rS', ':TestSuit<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rV', ':TestVisit<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lf', '<cmd>Format<CR>', opts)
 
 
-    ---------------------------------------------------------------------------------
-    ---------------------------------------------------------------------------------
 
-
+    --[[
     local prefix = '\\s*'
     local suffix = '\\s\\zs\\w*'
 
@@ -119,6 +167,10 @@ local my_on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, '', '<leader>nm', string_mod_use, opt_sn)
     vim.api.nvim_buf_set_keymap(bufnr, '', '<leader>np', string_pub, opt_sn)
 
+    vim.api.nvim_buf_set_keymap(bufnr, '', '<leader>cu', '<cmd>Task start cmake build_all<cr>', opt_sn)
+    vim.api.nvim_buf_set_keymap(bufnr, '', '<leader>ce', '/Error<CR>', opt_sn)
+    --]]
+
 
 
     ---------------------------------------------------------------------------------
@@ -152,6 +204,7 @@ local my_on_attach = function(client, bufnr)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rl', '<cmd>TestLast<CR>' .. send_r, opt_sn)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rN', '<cmd>lua require("harpoon.term").sendCommand(2, "cargo test " .. split( vim.fn.expand(\'%\'):match(\'[^\\\\]*.cpp$\'), \'.cpp\')[1] .. "\\r") <CR>', opt_sn)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>M', ':lua vim.fn.expand(\'%\'):match(\'[\\^\\]*.cpp$\')', opt_sn)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rb', '<cmd>lua require("harpoon.term").sendCommand(2, "cargo test " .. split( vim.fn.expand(\'%\'):match(\'[^\\\\]*.cpp$\'), \'.cpp\')[1] .. "\\r") <CR>', opt_sn)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rs', '<cmd>TestSuite<CR>' .. send_r, opt_sn)
     ---------------------------------------------------------------------------------
 
@@ -188,11 +241,123 @@ end
 
 local lspconfig = require('lspconfig')
 
-lspconfig.clangd.setup({
-    path = "C:/Users/Lenovo/AppData/Local/nvim-data/lsp_servers/clangd/clangd/bin/clangd.exe",
-    on_attach = my_on_attach,
-    -- root_dir = function(fname)
-    --     local filename = util.path.is_absolute(fname) and fname or util.path.join(vim.loop.cwd(), fname)
-    --     return root_pattern(filename) or util.path.dirname(filename)
-    --     end;
-})
+local path
+if vim.loop.os_uname().sysname == "Linux" then
+    path = "/home/viktor/.local/share/nvim/lsp_servers/clangd/clangd/bin/clangd"
+else
+    path = "C:/Users/Lenovo/AppData/Local/nvim-data/lsp_servers/clangd/clangd/bin/clangd.exe"
+end
+
+local root_files = {
+  'CMakeLists.txt'
+}
+
+-- local capabilities = vim.lsp.protocol.make_client_capabilities()
+-- capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+-- capabilities.textDocument.completion.completionItem.snippetSupport = false
+
+
+-- lspconfig.clangd.setup({
+--     -- path = "/home/viktor/.local/share/nvim/lsp_servers/clangd/clangd/bin/clangd",
+--     -- capabilities = capabilities,
+--
+-- })
+
+require("clangd_extensions").setup {
+    server = {
+
+        on_attach = my_on_attach,
+        root_dir = lspconfig.util.root_pattern(unpack(root_files)),
+        -- options to pass to nvim-lspconfig
+        -- i.e. the arguments to require("lspconfig").clangd.setup({})
+    },
+
+    handlers = {
+        ["textDocument/hover"] = vim.lsp.with(hover),
+    },
+    extensions = {
+        -- defaults:
+        -- Automatically set inlay hints (type hints)
+        autoSetHints = true,
+        -- These apply to the default ClangdSetInlayHints command
+        inlay_hints = {
+            -- Only show inlay hints for the current line
+            only_current_line = false,
+            -- Event which triggers a refersh of the inlay hints.
+            -- You can make this "CursorMoved" or "CursorMoved,CursorMovedI" but
+            -- not that this may cause  higher CPU usage.
+            -- This option is only respected when only_current_line and
+            -- autoSetHints both are true.
+            only_current_line_autocmd = "CursorHold",
+            -- whether to show parameter hints with the inlay hints or not
+            show_parameter_hints = true,
+            -- prefix for parameter hints
+            parameter_hints_prefix = "<- ",
+            -- prefix for all the other hints (type, chaining)
+            other_hints_prefix = "=> ",
+            -- whether to align to the length of the longest line in the file
+            max_len_align = false,
+            -- padding from the left if max_len_align is true
+            max_len_align_padding = 1,
+            -- whether to align to the extreme right or not
+            right_align = false,
+            -- padding from the right if right_align is true
+            right_align_padding = 7,
+            -- The color of the hints
+            highlight = "Comment",
+            -- The highlight group priority for extmark
+            priority = 100,
+        },
+        ast = {
+            -- These are unicode, should be available in any font
+            -- role_icons = {
+            --      type = "🄣",
+            --      declaration = "🄓",
+            --      expression = "🄔",
+            --      statement = ";",
+            --      specifier = "🄢",
+            --      ["template argument"] = "🆃",
+            -- },
+            -- kind_icons = {
+            --     Compound = "🄲",
+            --     Recovery = "🅁",
+            --     TranslationUnit = "🅄",
+            --     PackExpansion = "🄿",
+            --     TemplateTypeParm = "🅃",
+            --     TemplateTemplateParm = "🅃",
+            --     TemplateParamObject = "🅃",
+            -- },
+            -- [[ These require codicons (https://github.com/microsoft/vscode-codicons)
+
+            role_icons = {
+                type = "",
+                declaration = "",
+                expression = "",
+                specifier = "",
+                statement = "",
+                ["template argument"] = "",
+            },
+
+            kind_icons = {
+                Compound = "",
+                Recovery = "",
+                TranslationUnit = "",
+                PackExpansion = "",
+                TemplateTypeParm = "",
+                TemplateTemplateParm = "",
+                TemplateParamObject = "",
+            },
+
+            highlights = {
+                detail = "Comment",
+            },
+        },
+        memory_usage = {
+            border = "none",
+        },
+        symbol_info = {
+            border = "none",
+        },
+    },
+}
+

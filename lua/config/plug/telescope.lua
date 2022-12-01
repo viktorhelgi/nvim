@@ -31,10 +31,12 @@ require('telescope').setup({
 			n = {
 				["<C-b>"] = actions.cycle_previewers_next,
 				["<C-l>"] = actions.cycle_previewers_prev,
+				["<C-n"] = actions.move_selection_next,
+				["<C-p"] = actions.move_selection_previous,
 			},
 			i = {
-				["<C-j"] = actions.move_selection_next,
-				["<C-k"] = actions.move_selection_previous,
+				["<C-n"] = actions.move_selection_next,
+				["<C-p"] = actions.move_selection_previous,
 			},
 		},
 		layout_strategy = 'horizontal',
@@ -68,12 +70,17 @@ require('telescope').setup({
 		-- },
     	file_browser = {
       		-- disables netrw and use telescope-file-browser in its place
-      		hijack_netrw = true,
+      		hijack_netrw = false,
       		mappings = {
         		["i"] = {
+                    ["<C-n"] = actions.move_selection_next,
+                    ["<C-p"] = actions.move_selection_previous,
           			-- your custom insert mode mappings
         		},
         		["n"] = {
+
+                    ["<C-n"] = actions.move_selection_next,
+                    ["<C-p"] = actions.move_selection_previous,
           			-- your custom normal mode mappings
         		},
       		},
@@ -91,4 +98,6 @@ require('telescope').load_extension('fzf')
 -- To get telescope-file-browser loaded and working with telescope,
 -- you need to call load_extension, somewhere after setup function:
 require("telescope").load_extension "file_browser"
+
+
 

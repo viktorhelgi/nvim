@@ -65,13 +65,19 @@ local lsp_signature_configs = {
 local opts = { noremap = true, silent = false }
 local opt_sn = { noremap = true, silent = true }
 
+
 local my_on_attach = function(client, bufnr)
+    local function harpoon_map(mapping, command)
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>'..mapping, ':lua require("harpoon.term").sendCommand(1, ' .. command .. '.."\\r") <CR>', opts)
+    end
+    local function terminal_map(mapping, command)
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>'..mapping, '<cmd>' .. command .. '<CR>' .. send_r, opts)
+    end
     vim.cmd("set colorcolumn=101")
     ---------------------------------------------------------------------------------
     ---------------------------------------------------------------------------------
 
     require('lsp_signature').on_attach(lsp_signature_configs, bufnr) -- no need to specify bufnr if you don't use toggle_key
-    require("aerial").on_attach(client, bufnr)
 
 
 
@@ -97,7 +103,7 @@ local my_on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gt', ':lua require(\'telescope.builtin\').lsp_type_definitions()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-t>', ':lua require(\'telescope.builtin\').lsp_type_definitions()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gI', ':lua require(\'telescope.builtin\').lsp_implementations({ignore_filenames=false, path_display=hidden})<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gc', ':lua require(\'telescope.builtin\').lsp_workspace_symbols({query="def"})<CR>', opts)
+    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gc', ':lua require(\'telescope.builtin\').lsp_workspace_symbols({query="def"})<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gC', ':lua require(\'telescope.builtin\').lsp_document_symbols({query="def"})<CR>', opts)
 
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
@@ -457,7 +463,7 @@ end
 
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+-- capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 capabilities.textDocument.completion.completionItem.snippetSupport = false
 
 -- require("rust-tools").setup({

@@ -362,6 +362,10 @@ require('packer').startup({
         -- use({"nathom/filetype.nvim"})
         -- use {"ellisonleao/glow.nvim"}
         -- use 'JASONews/glow-hover'
+        use({
+            'terror/chatgpt.nvim',
+            run = 'pip3 install -r requirements.txt'
+        })
     end,
 
 
@@ -372,6 +376,8 @@ require('packer').startup({
         },
     }, --}}}
 })
+
+
 require("mason").setup()
 require("mason-lspconfig").setup()
 

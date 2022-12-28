@@ -356,6 +356,7 @@ local function require_map(bind, path, func, args)
 end
 
 require_map('h\'', 'harpoon.mark', 'add_file')
+require_map('h\'', 'harpoon.mark', 'add_file')
 require_map('ht', 'harpoon.ui', 'toggle_quick_menu')
 require_map('hn', 'harpoon.ui', 'nav_next')
 require_map('hp', 'harpoon.ui', 'nav_prev')
@@ -449,7 +450,7 @@ snmap('q', 'q')
 
 -- }}}
 -- {{{ [s] - Alternate Buffers
-snmap('s', 'b#')
+snmap('s', 'w')
 -- }}}
 -- {{{ [T] - Telescope
 -- local function TSmap(mapping, func, inputs)
@@ -481,6 +482,7 @@ TSmap('t,', 'live_grep', '{grep_open_files=true}')
 
 -- file-browser
 nmap('tb', 'Telescope file_browser')
+nmap(',', 'Telescope file_browser')
 nmap('tk', 'Telescope file_browser')
 nmap('tm', 'Telescope file_browser path=%:p:h')
 nmap('tj', 'Telescope file_browser path=%:p:h')
@@ -597,12 +599,14 @@ snmap('~', 'Dashboard')
 snmap('}', 'bn')
 snmap('{', 'bp')
 snmap('!', 's/<c-r>///g<left><left>')
-snmap('|', "let @/='<C-R>=expand('<cword>')<CR>'<CR>:set hls")
+snmap('|', "let @/=\"<C-R>=expand(\"<CWORD>\")<CR>\"<CR>:set hls")
 
+-- vim.api.nvim_set_keymap('n', "<leader>|", ":<C-u>let @/=\"<C-R>=expand(\"<CWORD>\")<CR>\"<CR>:set hls<CR>", opt_sn)
+-- vim.cmd('nnoremap <expr> <leader>| ":let @/=\"<C-R>=expand(\"<CWORD>\")<CR>\"<CR>:set hls<CR>"')
 
 map('n','<leader>,', '<cmd>w<cr>', opt_sn)
 
-snmap('/', 'A')
+snmap('/', 'b#')
 TSmap('\\', 'Telescope buffers')
 TSmap('-', 'Telescope find_files')
 TSmap('#', 'find_files',   '{ cwd = vim.fn.expand(\'%:p:h\') }')
@@ -620,10 +624,12 @@ map('n', 'g{', ':AerialPrev<CR>', opt_sn)
 -- map('n', 'g]', ':TSTextobjectGotoNextStart @function.inner<CR>:TSTextobjectGotoNextStart @function.inner<CR>', opt_sn)
 map('n', 'g[', ':AerialPrevUp<CR>', opt_sn)
 map('n', 'g]', ':AerialNextUp<CR>', opt_sn)
-map('', 'gF', ':lua _G.print_thing(vim.fn.expand("<cWORD>"))<CR>', opt_e)
+map('', 'gF', ':lua _G.print_thing(vim.fn.expand("<CWORD>"))<CR>', opt_e)
 -- map('', 'gF', ':expand("<cWORD>")<CR>', opt_e)
 -- }}}
 -- }}}
+
+
 
 -- {{{ Visual-Block Mode
 -- {{{ [p]
@@ -641,6 +647,9 @@ map('n', '\'c',   '<cmd>FSHere<CR>', opt_sn)
 map('n', '\'\\h', '<cmd>FSHere<CR>', opt_sn)
 map('n', '\'\\v', '<cmd>FSSplitRight<CR>', opt_sn)
 map('n', '\'\\s', '<cmd>FSSplitBelow<CR>', opt_sn)
+
+map('n', '<leader>\'', ':lua require("harpoon.mark").add_file()<CR>', opt_sn)
+-- require_map('h\'', 'harpoon.mark', 'add_file')
 map('n', '\'h', ':lua require("harpoon.ui").nav_file(1)<CR>', opt_sn)
 map('n', '\'t', ':lua require("harpoon.ui").nav_file(2)<CR>', opt_sn)
 map('n', '\'n', ':lua require("harpoon.ui").nav_file(3)<CR>', opt_sn)
@@ -831,5 +840,9 @@ map('n', '<leader>gdc1', '<cmd>Gdiffsplit !~1<CR><cmd>winc L<CR>', opt_sn)
 map('n', '<leader>gdc2', '<cmd>Gdiffsplit !~2<CR><cmd>winc L<CR>', opt_sn)
 map('n', '<leader>gdc3', '<cmd>Gdiffsplit !~3<CR><cmd>winc L<CR>', opt_sn)
 map('n', '<leader>gdc4', '<cmd>Gdiffsplit !~4<CR><cmd>winc L<CR>', opt_sn)
+nmap(',', 'Telescope file_browser theme=dropdown path=%:p:h')
+
+map('n', '<c-u>', '<c-u>zz', opt_sn)
+map('n', '<c-d>', '<c-d>zz', opt_sn)
 
 return M

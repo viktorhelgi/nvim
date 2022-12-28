@@ -115,6 +115,8 @@ local my_on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rl', ':TestLast<CR>', opts)
     -- TestNearest
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', ':lua _G.run_test(\'%\')<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>r;', ':lua require(\'harpoon.tmux\').sendCommand("{last}", "cr\\n")<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>r,', ':lua require(\'harpoon.tmux\').sendCommand("{last}", "ct\\n")<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rt', ':lua _G.run_test(\'%\', true)<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rS', ':TestSuit<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rV', ':TestVisit<CR>', opts)
@@ -263,9 +265,29 @@ local root_files = {
 --
 -- })
 
+-- require('lsp-')
+
 require("clangd_extensions").setup {
     server = {
-
+        cmd = {
+            "clangd",
+            "--background-index",
+            -- by default, clang-tidy use -checks=clang-diagnostic-*,clang-analyzer-*
+            -- to add more checks, create .clang-tidy file in the root directory
+            -- and add Checks key, see https://clang.llvm.org/extra/clang-tidy/
+            "--clang-tidy",
+            "--completion-style=bundled",
+            "--cross-file-rename",
+            "--header-insertion=iwyu"
+            -- "--header-filter=."
+        },
+        init_options = {
+            clangdFileStatus = true, -- Provides information about activity on clangd’s per-file worker thread
+            usePlaceholders = true,
+            completeUnimported = true,
+            semanticHighlighting = true,
+        },
+        -- handlers = handler.with({ handler.hover, clangd_ext_handler }),
         on_attach = my_on_attach,
         root_dir = lspconfig.util.root_pattern(unpack(root_files)),
         -- options to pass to nvim-lspconfig

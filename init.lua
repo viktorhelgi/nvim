@@ -244,13 +244,15 @@ _G.run_test = function (file, with_valgrind)
     local cd_back_to_root  = "cd ".._G.get_root_directory(file)
 
     -- run test
+    -- vim.cmd('winc l')
+    -- harpoon.gotoTerminal(1)
     harpoon.sendCommand(1, cr)
     harpoon.sendCommand(1,
-        "echo && echo Configure Tests "..exe_name.." && echo ".."&&"..cd_build_dir.."&& cmake .. && make && cd "..exe_folder.." && "..run_test.." && "..cd_back_to_root..cr)
+        "echo && echo =================================== && echo - Configure Tests && echo --- "..exe_name.." && echo =================================== && echo ".."&&"..cd_build_dir.."&& cmake .. && make && cd "..exe_folder.." && "..run_test.." && "..cd_back_to_root..cr)
 
     print("Test Executed: "..exe_name)
 end
 
 -- %:~:.:h
 
-
+-- vim.call("remote#host#RegisterPlugin('python3', '$HOME/.vim/plugged/chatgpt.nvim/rplugin/python3/chatgpt_nvim.py', [{'sync': v:false, 'name': 'ChatGPT', 'type': 'command', 'opts': {'nargs': '1'}}])")

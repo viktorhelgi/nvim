@@ -192,10 +192,11 @@ end
 
 -- checks if a scheme has been specified by the user
 -- if not, loads default scheme
-if scheme_loaded == false then
-	require('themes.' .. M.scheme)
-	M.load_lualine_scheme(M.scheme)
-end
+
+-- if scheme_loaded == false then
+-- 	require('themes.' .. M.scheme)
+-- 	M.load_lualine_scheme(M.scheme)
+-- end
 
 return M
 

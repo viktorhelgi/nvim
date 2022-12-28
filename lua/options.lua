@@ -72,6 +72,7 @@ opt.splitright = true
 -- o.completeopt = 'menuone,noselect'
 opt.completeopt = {'menu', 'menuone', 'noselect'}
 
+-- g.omn
 
 vim.opt.termguicolors = true
 

@@ -41,7 +41,7 @@ return {
     -- }}}
     -- {{{ [L] - lspkind - lualine
 	require('config.plug.lspkind'),
-	require('config.plug.lualine'),
+	-- require('config.plug.lualine'),
 	require('config.plug.luasnip'),
     require("config.plug.diaglist"),
     -- }}}

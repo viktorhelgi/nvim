@@ -1,4 +1,5 @@
 return {
+    require('config.lsp.mason'),
 	require('config.lsp.setup'),
 	require('config.lsp.lua_lsp'),
 

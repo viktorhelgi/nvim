@@ -36,6 +36,7 @@ vim.cmd('colorscheme duskfox')
 
 
 
+
 -- vim.cmd('let g:test#cpp#catch2#bin_dir = "tests"')
 -- vim.cmd('let g:test#cpp#catch2#bin_dir = "./tests"')
 -- vim.cmd('let g:test#cpp#catch2#suite_command = "cd tests && ctest --ouput-on-failure"')

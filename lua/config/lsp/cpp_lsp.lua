@@ -1,3 +1,5 @@
+
+
 local hover = function(_, result, ctx, config)
     if not (result and result.contents) then
         print("thath1")
@@ -238,6 +240,22 @@ local my_on_attach = function(client, bufnr)
             { border = "single" }
         )
     end
+
+
+    require('lint').linters_by_ft = {
+      cpp = {'cpplint'}
+    }
+    -- local cpplint = require('lint').linters.cpplint
+
+    -- cpplint.args = {
+    --     ''
+    -- }
+
+    vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+      callback = function()
+        require("lint").try_lint()
+      end,
+    })
 end
 
 
@@ -276,9 +294,10 @@ require("clangd_extensions").setup {
             -- to add more checks, create .clang-tidy file in the root directory
             -- and add Checks key, see https://clang.llvm.org/extra/clang-tidy/
             "--clang-tidy",
-            "--completion-style=bundled",
+            "--completion-style=detailed",
             "--cross-file-rename",
-            "--header-insertion=iwyu"
+            "--header-insertion=iwyu",
+            "--header-insertion-decorators"
             -- "--header-filter=."
         },
         init_options = {
@@ -382,4 +401,6 @@ require("clangd_extensions").setup {
         },
     },
 }
+
+
 

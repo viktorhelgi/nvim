@@ -433,18 +433,15 @@ snmap('la', 'lua vim.lsp.buf.code_action()')
 -- }}}
 
 -- {{{ [P] - Packer ...
-snmap('Pc', 'PackerClean')
-snmap('PC', 'PackerCompile')
+snmap('Pr', 'PackerClean')
+snmap('Pc', 'PackerCompile')
 snmap('Pi', 'PackerInstall')
 snmap('Pl', 'PackerLoad')
-snmap('PP', 'PackerProfile')
-snmap('Po', 'PackerStatus')
-snmap('Ps', 'PackerSync')
+snmap('Ps', 'PackerStatus')
+snmap('Pu', 'PackerSync')
 snmap('PSi', 'PackerSnapshot')
 snmap('PSd', 'PackerSnapshotDelete')
 snmap('PSr', 'PackerSnapshotRollback')
-snmap('Pu', 'PackerUpdate')
--- snmap('Pa', 'packadd ')
 snmap('Pa', 'packloadall')
 snmap('P\'', 'e C:/Users/Lenovo/AppData/Local/nvim/lua/plug.lua')
 -- }}}

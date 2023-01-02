@@ -80,6 +80,8 @@ vim.opt.termguicolors = true
 
 g.python3_host_prog = "/usr/bin/python3"
 
+g.syntastic_yaml_checkers = { "yamllint" }
+
 -- https://github.com/rcarriga/vim-ultest
 -- g.ultest_use_pty = 1
 cmd('let test#python#runner = \'pytest\'')

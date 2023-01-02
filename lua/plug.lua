@@ -325,6 +325,7 @@ require('packer').startup({
             'terror/chatgpt.nvim',
             run = 'pip3 install -r requirements.txt'
         })
+        use 'mfussenegger/nvim-lint'
     end,
 
 

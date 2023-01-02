@@ -39,24 +39,24 @@ require("formatter").setup {
             end
         },
         cpp = {
-            -- require('formatter.filetypes.cpp').clangformat
+            require('formatter.filetypes.cpp').clangformat
             -- require('formatter.filetypes.cpp').astyle
             --
             -- require('formatter.filetypes.cpp').uncrustify,
-            function()
-                return {
-                    exe = "uncrustify",
-                    args = {
-                        "-c ~/.config/uncrustify1.cfg",
-                        "-f",
-                        -- "--no-backup",
-                        -- "--replace",
-                        -- "--mtime",
-                        util.escape_path(util.get_current_buffer_file_path()),
-                    },
-                    stdin = true,
-                }
-            end
+            -- function()
+            --     return {
+            --         exe = "uncrustify",
+            --         args = {
+            --             "-c ~/.config/uncrustify1.cfg",
+            --             "-f",
+            --             -- "--no-backup",
+            --             -- "--replace",
+            --             -- "--mtime",
+            --             util.escape_path(util.get_current_buffer_file_path()),
+            --         },
+            --         stdin = true,
+            --     }
+            -- end
         },
 
         -- Use the special "*" filetype for defining formatter configurations on

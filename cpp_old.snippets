@@ -20,7 +20,7 @@ def write_docstring_args(arglist, snip):
 				snip.rv += arg
 				c = 1
 			else:
-				snip += '*       : %s' % arg.strip()
+				snip += ' *       : %s' % arg.strip()
 	else:
 		snip.rv = args[0]
 
@@ -47,30 +47,6 @@ snippet forc "general for loop (for)"
 for (${6:auto} ${1:i} = ${2:v.begin()}; `!p import re; snip.rv = re.split("[^\w]",t[1])[-1]` ${4:!=} ${3:`!p m = re.search(r'^(?:(.*)(\.|->)begin\(\)|((?:std|boost)::)?begin\((.*)\))$', t[2]); snip.rv = (((m.group(3) if m.group(3) else "") + "end(" + m.group(4) + ")") if m.group(4) else (m.group(1) + m.group(2) + "end()")) if m else ""`}; ${5:++`!p snip.rv = t[1].split(" ")[-1]`}) {
 	${VISUAL}$0
 }
-endsnippet
-
-snippet fora "general for loop (for)"
-for (${1:auto} ${2:item} : ${3:container}) {
-	${VISUAL}$0
-}
-endsnippet
-
-snippet fori "general for loop (for)"
-for (std::size_t i = 0; i < ${1:N}; i++) {
-	${VISUAL}$0
-}
-endsnippet
-
-
-snippet cout "print stuff"
-std::cout << ${1} << std::endl;
-endsnippet
-
-snippet accum "std::accumulate"
-std::accumulate(${1:v}.begin(), $1.end(), 0.0,
-				[inner_product](${2:double sum, double item}) {
-					return ${3:sum + item};
-				});
 endsnippet
 
 snippet beginend "$1.begin(), $1.end() (beginend)"
@@ -119,16 +95,8 @@ snippet map "std::map (map)"
 std::map<${1:key}, ${2:value}> map$0;
 endsnippet
 
-snippet #i "#include <lib>"
-#include 
-endsnippet
-
-
-snippet vec "std::vector"
-std::vector<${1}> ${2}
-endsnippet
-snippet arr "std::array"
-std::array<${1}> ${2}
+snippet vector "std::vector (v)"
+std::vector<${1:char}> v$0;
 endsnippet
 
 snippet tp "template <typename ..> (template)"
@@ -154,22 +122,22 @@ endsnippet
 
 snippet doc "Basic c++ doxygen function template" b
 /**
-* @brief: ${1:brief}
-*
-* @param: ${2:params}
-*
-* @return: ${3:return-val}
-*/
+ * @brief: ${2:Brief}
+ *
+ * @param: ${0:Param}
+ *
+ * @return: ${1:ReturnType}
+ */
 endsnippet
 
 snippet fnc "Basic c++ doxygen function template" b
 /**
-* @brief: ${4:brief}
-*
-* @param: `!p write_docstring_args(t[3],snip)`
-*
-* @return: `!p snip.rv = t[1]`
-*/
+ * @brief: ${4:brief}
+ *
+ * @param: `!p write_docstring_args(t[3],snip)`
+ *
+ * @return: `!p snip.rv = t[1]`
+ */
 ${1:ReturnType} ${2:FunctionName}(${3:param})
 {
 	${0:FunctionBody}
@@ -239,4 +207,3 @@ BOOST_AUTO_TEST_SUITE_END()
 
 endsnippet
 # vim:ft=snippets:
-

@@ -32,9 +32,9 @@ local lsp_signature_configs = {
     bind = true, -- This is mandatory, otherwise border config won't get registered.
     doc_lines = 1, -- will show two lines of comment/doc(if there are more than two lines in doc, will be truncated);
     floating_window = false, -- show hint in a floating window, set to false for virtual text only mode
-    floating_window_above_cur_line = true, -- try to place the floating above the current line when possible Note:
+    floating_window_above_cur_line = false, -- try to place the floating above the current line when possible Note:
     floating_window_off_x = 1, -- adjust float windows x position.
-    floating_window_off_y = 3, -- adjust float windows y position.
+    floating_window_off_y = -3, -- adjust float windows y position.
     fix_pos = false, -- set to true, the floating window will not auto-close until finish all parameters
     hint_enable = true, -- virtual hint enable
     hint_prefix = "🐼 ", -- Panda for parameter
@@ -62,6 +62,9 @@ local lsp_signature_configs = {
 local opts = { noremap = true, silent = false }
 local opt_sn = { noremap = true, silent = true }
 
+
+-- vim.api.nvim_buf_set_keymap(0, 'n', '<leader>rch', '<cmd>lua _G.run_xxx_in_nvim("cd build && cmake ..")<CR><CMD>copen<CR>', opts)
+
 local my_on_attach = function(client, bufnr)
     -- require("aerial").on_attach(client, bufnr)
 
@@ -72,9 +75,19 @@ local my_on_attach = function(client, bufnr)
         return commands
     end
 
+
+    local function harpoon_map2(mapping, term, commands)
+        local map = '<leader>'..mapping
+        local term_cmd = create_command(commands, "\\r")
+        local nvim_cmd = ':lua require("harpoon.'..term..'").sendCommand(1, "' .. term_cmd .. '".."\\r") <CR>'
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', map, nvim_cmd, opts)
+    end
+
     local function harpoon_map(mapping, commands)
         local command = create_command(commands, "\\r")
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>'..mapping, ':lua require("harpoon.term").sendCommand(1, ' .. command .. '.."\\r") <CR>', opts)
+        local cmd = ':lua require("harpoon.term").sendCommand(1, "' .. command .. '".."\\r") <CR>'
+        print(cmd)
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>'..mapping, cmd, opts)
     end
 
     -- local function terminal_map(mapping, command)
@@ -84,7 +97,11 @@ local my_on_attach = function(client, bufnr)
 
     require('lsp_signature').on_attach(lsp_signature_configs, bufnr) -- no need to specify bufnr if you don't use toggle_key
     ---------------------------------------------------------------------------------
-    harpoon_map('rb', {'cd build', 'cmake fog_program' , 'cd ..', 'build/fog_program'})
+    -- harpoon_map('rb', {'cd build', 'cmake fog_program' , 'cd ..', 'build/fog_program'})
+    -- harpoon_map("build_file", require(''))
+
+    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rch', '<cmd>lua _G.run_xxx_in_nvim("cd build && cmake ..")<CR><CMD>copen<CR>', opts)
+    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ct', '<cmd>lua _G.run_tests_in_nvim()<CR>vim.cmd("call setqflist(map(split(@h, "\\n"),{\"filename\": v:val }))")<CMD>copen<CR>', opts)
 
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
@@ -116,64 +133,17 @@ local my_on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rF', ':TestFile<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rl', ':TestLast<CR>', opts)
     -- TestNearest
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', ':lua _G.run_test(\'%\')<CR>', opts)
+    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', ':lua _G.run_test(\'%\')<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>r;', ':lua require(\'harpoon.tmux\').sendCommand("{last}", "cr\\n")<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>r,', ':lua require(\'harpoon.tmux\').sendCommand("{last}", "ct\\n")<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rt', ':lua _G.run_test(\'%\', true)<CR>', opts)
+    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rt', ':lua _G.run_test(\'%\', true)<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rS', ':TestSuit<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rV', ':TestVisit<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lf', '<cmd>Format<CR>', opts)
 
+    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>cb', "<cmd>lua vim.cmd('make -s -C build/'.._G.get_relative_dir('%')) <CR>", opts)
 
 
-    --[[
-    local prefix = '\\s*'
-    local suffix = '\\s\\zs\\w*'
-
-    local array_all = { 'impl', 'struct', 'fn', 'trait', 'enum', 'impl<T>' }
-    local array_impl = { 'impl', 'impl<T>' }
-    local array_struct = { 'struct', 'struct<T>' }
-    local array_fn = { 'fn', 'fn<T>' }
-    local array_trait = { 'trait', 'trait<T>' }
-    local array_enum = { 'enum', 'enum<T>' }
-    local array_mod_use = { 'mod', 'use' }
-
-    for i = 2, #array_all do table.insert(array_all, 'pub ' .. array_all[i]) end
-    for i = 2, #array_impl do table.insert(array_impl, 'pub ' .. array_impl[i]) end
-    for i = 2, #array_struct do table.insert(array_struct, 'pub ' .. array_struct[i]) end
-    for i = 2, #array_fn do table.insert(array_fn, 'pub ' .. array_fn[i]) end
-    for i = 2, #array_trait do table.insert(array_trait, 'pub ' .. array_trait[i]) end
-    for i = 2, #array_enum do table.insert(array_enum, 'pub ' .. array_enum[i]) end
-    for i = 2, #array_mod_use do table.insert(array_mod_use, 'pub ' .. array_mod_use[i]) end
-
-    local array_mod_pub = 'pub'
-
-    local sep            = suffix .. '|^' .. prefix
-    local string_all     = '/\\v^' .. prefix .. table.concat(array_all, sep) .. suffix .. '<CR>' .. ':set nohlsearch<CR>'
-    local string_impl    = '/\\v^' .. prefix .. table.concat(array_impl, sep) .. suffix .. '<CR>' .. ':set nohlsearch<CR>'
-    local string_struct  = '/\\v^' .. prefix .. table.concat(array_struct, sep) .. suffix .. '<CR>' .. ':set nohlsearch<CR>'
-    local string_fn      = '/\\v^' .. prefix .. table.concat(array_fn, sep) .. suffix .. '<CR>' .. ':set nohlsearch<CR>'
-    local string_trait   = '/\\v^' .. prefix .. table.concat(array_trait, sep) .. suffix .. '<CR>' .. ':set nohlsearch<CR>'
-    local string_enum    = '/\\v^' .. prefix .. table.concat(array_enum, sep) .. suffix .. '<CR>' .. ':set nohlsearch<CR>'
-    local string_mod_use = '/\\v^' .. prefix .. table.concat(array_mod_use, sep) .. suffix .. '<CR>' .. ':set nohlsearch<CR>'
-    local string_pub     = '/\\v^' .. prefix .. array_mod_pub .. suffix .. '<CR>' .. ':set nohlsearch<CR>'
-
-
-    vim.api.nvim_buf_set_keymap(bufnr, '', '<leader>na', string_all, opt_sn)
-    vim.api.nvim_buf_set_keymap(bufnr, '', '<leader>ni', string_impl, opt_sn)
-    vim.api.nvim_buf_set_keymap(bufnr, '', '<leader>ns', string_struct, opt_sn)
-
-    vim.api.nvim_buf_set_keymap(bufnr, '', '<leader>nf', string_fn, opt_sn)
-    vim.api.nvim_buf_set_keymap(bufnr, '', '<leader>nn', string_fn, opt_sn)
-
-    vim.api.nvim_buf_set_keymap(bufnr, '', '<leader>nt', string_trait, opt_sn)
-    vim.api.nvim_buf_set_keymap(bufnr, '', '<leader>ne', string_enum, opt_sn)
-    vim.api.nvim_buf_set_keymap(bufnr, '', '<leader>nm', string_mod_use, opt_sn)
-    vim.api.nvim_buf_set_keymap(bufnr, '', '<leader>np', string_pub, opt_sn)
-
-    vim.api.nvim_buf_set_keymap(bufnr, '', '<leader>cu', '<cmd>Task start cmake build_all<cr>', opt_sn)
-    vim.api.nvim_buf_set_keymap(bufnr, '', '<leader>ce', '/Error<CR>', opt_sn)
-    --]]
 
 
 
@@ -206,9 +176,9 @@ local my_on_attach = function(client, bufnr)
     local send_r = ':lua require("harpoon.term").sendCommand(2, "\\r")<CR>'
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>TestNearest<CR>' .. send_r, opt_sn)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rl', '<cmd>TestLast<CR>' .. send_r, opt_sn)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rN', '<cmd>lua require("harpoon.term").sendCommand(2, "cargo test " .. split( vim.fn.expand(\'%\'):match(\'[^\\\\]*.cpp$\'), \'.cpp\')[1] .. "\\r") <CR>', opt_sn)
+    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rN', '<cmd>lua require("harpoon.term").sendCommand(2, "cargo test " .. split( vim.fn.expand(\'%\'):match(\'[^\\\\]*.cpp$\'), \'.cpp\')[1] .. "\\r") <CR>', opt_sn)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>M', ':lua vim.fn.expand(\'%\'):match(\'[\\^\\]*.cpp$\')', opt_sn)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rb', '<cmd>lua require("harpoon.term").sendCommand(2, "cargo test " .. split( vim.fn.expand(\'%\'):match(\'[^\\\\]*.cpp$\'), \'.cpp\')[1] .. "\\r") <CR>', opt_sn)
+    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rb', '<cmd>lua require("harpoon.term").sendCommand(2, "cargo test " .. split( vim.fn.expand(\'%\'):match(\'[^\\\\]*.cpp$\'), \'.cpp\')[1] .. "\\r") <CR>', opt_sn)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rs', '<cmd>TestSuite<CR>' .. send_r, opt_sn)
     ---------------------------------------------------------------------------------
 
@@ -240,6 +210,52 @@ local my_on_attach = function(client, bufnr)
             { border = "single" }
         )
     end
+
+    local cmp = require('cmp.init')
+    local CmpWindow = require('cmp.config.window')
+    local CmpConfigSources = require("cmp.config.sources")
+    local lspkind = require('lspkind')
+    cmp.setup({
+        snippet = {
+            -- REQUIRED - you must specify a snippet engine
+            expand = function(args)
+                -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+                -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+                -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+                vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+            end,
+        },
+        window = {
+            completion = {
+                border = '', --opts.border or 'rounded',
+
+                -- winhighlight = opts.winhighlight or 'Normal:Normal,FloatBorder:Normal,CursorLine:Visual,Search:None',
+                -- zindex = opts.zindex or 1001,
+                -- col_offset = opts.col_offset or 0,
+                -- side_padding = 0 -- opts.side_padding or 0
+            },
+            documentation = {
+                border = 'rounded',
+                max_width = 90,
+            }
+        },
+        mapping = cmp.mapping.preset.insert({
+            ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+            ['<C-d>'] = cmp.mapping.scroll_docs(4),
+            ['<C-Space>'] = cmp.mapping.complete(),
+            ['<C-e>'] = cmp.mapping.abort(),
+            ['<C-i>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+        }),
+        sources = CmpConfigSources({
+            { name = 'nvim_lsp' },
+            -- { name = 'vsnip' }, -- For vsnip users.
+            -- { name = 'luasnip' }, -- For luasnip users.
+            { name = 'ultisnips' }, -- For ultisnips users.
+            -- { name = 'snippy' }, -- For snippy users.
+        }, {
+            { name = 'buffer' },
+        })
+    })
 
 
     require('lint').linters_by_ft = {

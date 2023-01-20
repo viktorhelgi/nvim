@@ -228,11 +228,17 @@ add("/home/viktor/.local/share/nvim/site/pack/packer/start/*")
 
 -- require('nvim')
 
+-- local exe = "~/.local/share/nvim/mason/packages/lua-language-server/extension/server/bin/lua-language-server"
+-- local exe = "~/.local/share/nvim/mason/bin/lua-language-server"
+local exe = "lua-language-server"
+local main = "~/.local/share/nvim/mason/packages/lua-language-server/extension/server/main.lua"
 -- require('trou')
 -- require('float')
 -- require('trou')
 --@type
 local cfg = {
+    -- cmd = { exe.." -E "..main },
+    -- cmd = { exe.." -E "..main },
     on_attach = on_attach,
     capabilities = capabilities,
     filetypes = { "lua" },
@@ -249,7 +255,7 @@ local cfg = {
                 -- version = 'Lua 5.4',
                 version = "LuaJIT",
                 -- Setup your lua path
-                path = path;
+                -- path = path;
             },
             diagnostics = {
                 -- Get the language server to recognize the `vim` global
@@ -282,5 +288,6 @@ local cfg = {
 -- end
 
 
+require("nvim-lsp-installer").setup {}
 require('lspconfig').sumneko_lua.setup(cfg)
 

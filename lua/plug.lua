@@ -23,6 +23,7 @@ require('packer').startup({
         use({ 'hrsh7th/cmp-nvim-lua' })
         --}}}
         use({ 'SirVer/ultisnips' })
+        use({ 'quangnguyen30192/cmp-nvim-ultisnips' })
         -- cmp-nvim-ultisnips{{{
         -- use({ 'quangnguyen30192/cmp-nvim-ultisnips', commit = 'c6ace8c' })--}}}
         -- UTILITY PLUGINS
@@ -46,6 +47,8 @@ require('packer').startup({
             },
             -- commit = '6e7ed1b',
         }) --}}}
+        -- use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
+        -- Packer
         -- telescope-fzf-native{{{
         use({ 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }) --}}}
         -- nvim-autopairs* {{{
@@ -64,9 +67,11 @@ require('packer').startup({
         -- IMPORVED SYNTAX PLUGINS
         -- nvim-treesitter*{{{
         -- use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate', commit = '9425591' }) --}}}
-        use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate', commit = '4cccb6f494eb255b32a290d37c35ca12584c74d0' }) --}}}
+        use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }) --}}}
         -- nvim-treesitter-textobjects{{{
         use({ 'nvim-treesitter/nvim-treesitter-textobjects' }) --}}}
+        use 'nvim-treesitter/playground'
+        use 'kevinhwang91/nvim-bqf'
         -- dashboard {{{
         use({ 'glepnir/dashboard-nvim' }) --}}}
         -- nvim-colorizer.lua{{{
@@ -97,23 +102,20 @@ require('packer').startup({
         use({ "ChristianChiarulli/nvcode-color-schemes.vim" }) --}}}
         -- monokai.nvim{{{
         use({ "tanvirtin/monokai.nvim" }) --}}}
-        -- use {
-        --     "catppuccin/nvim",
-        --     as = "catppuccin",
-        --     tag = "v0.2.4",
-        --     config = function()
-        --         require("catppuccin").setup {
-        --             flavour = "frappe" -- mocha, macchiato, frappe, latte
-        --         }
-        --         vim.api.nvim_command "colorscheme catppuccin"
-        --     end
-        -- }
+        use { "catppuccin/nvim", as = "catppuccin" }
         use({
             'rose-pine/neovim',
             as = 'rose-pine',
         })
         use "EdenEast/nightfox.nvim" -- Packer
+        use "marko-cerovac/material.nvim"
+        use "folke/tokyonight.nvim"
+        -- use "yunlingz/equinusocio-material.vim"
+        -- use "w0ng/vim-hybrid"
+        -- use "voidekh/kyotonight.vim"
+
         -- }}}
+        --
 
         -- aerial.nvim{{{
         use({ 'stevearc/aerial.nvim' }) --}}}
@@ -300,6 +302,7 @@ require('packer').startup({
                 vim.keymap.set("n", "gK", require("hover").hover_select, { desc = "hover.nvim (select)" })
             end
         }
+        use { 'stevearc/overseer.nvim', config = function() require('overseer').setup() end }
 
         use 'Shatur/neovim-tasks'
         use {
@@ -326,6 +329,16 @@ require('packer').startup({
             run = 'pip3 install -r requirements.txt'
         })
         use 'mfussenegger/nvim-lint'
+
+        -- use 'ThePrimeagen/refactoring.nvim'
+        use { "ThePrimeagen/refactoring.nvim",
+            requires = {
+                { "nvim-lua/plenary.nvim" },
+                { "nvim-treesitter/nvim-treesitter" }
+            }
+        }
+	use { "axkirillov/telescope-changed-files" }
+
     end,
 
 
@@ -338,7 +351,9 @@ require('packer').startup({
 })
 
 
-require("mason").setup()
+require("mason").setup({
+    PATH = "prepend", -- "skip" seems to cause the spawning error
+})
 require("mason-lspconfig").setup()
 
 -- # vim foldmethod=marker

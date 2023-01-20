@@ -65,6 +65,7 @@ return {
     -- }}}
     -- {{{ [O] - *one-small-step-for-vimkind
 	-- require('config.plug.one-small-step-for-vimkind'),
+	require('config.plug._overseer_'),
     -- }}}
     -- {{{ [P] - pretty-fold
 	-- require('config.plug.pretty-fold'),
@@ -72,6 +73,7 @@ return {
     -- {{{ [Q]
     -- }}}
     -- {{{ [R]
+    require('config.plug.refactoring'),
     -- }}}
     -- {{{ [S]
     -- }}}

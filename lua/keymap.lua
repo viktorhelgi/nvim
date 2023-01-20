@@ -217,7 +217,7 @@ vim.api.nvim_set_keymap('n', 'gk', 'K', {})
 -- snmap('cn', 'lua _G._open_qfl()')
 snmap('cp', 'cp')
 snmap('cn', 'cn')
-snmap('ca', 'CodeActionMenu')
+snmap('la', 'CodeActionMenu')
 map('n', 'g,', '<cmd> cp <cr>', opt_sn)
 map('n', 'g.', '<cmd> cn <cr>', opt_sn)
 map('n', 'cp', '<cmd> cp <cr>', opt_sn)
@@ -263,9 +263,8 @@ snmap('df', 'DiffviewFileHistory')
 snmap('ea', { 'AerialToggle', 'winc l' })
 snmap('ee', { 'winc v', 'winc h', '60 winc |', 'enew', 'set nonu', 'set nornu' }) -- toggle relative line numbers
 snmap('ej', 'lua _G.create_header()') -- toggle relative line numbers
-amap('ec', 'CommentToggle') -- toggle comment on current line or selection
-snmap('edc', 'cd %:p:h')
-snmap('ed-', 'cd ..')
+amap('ec', 'cd %:p:h') -- toggle comment on current line or selection
+snmap('e-', 'cd ..')
 -- snmap('es', {'so %', "echo 'source -> '..expand('%')"})
 snmap('es', 'so %')
 snmap('eSb', { 'profile start profile.log', 'profile file *', 'profile func *', 'echo "profiling has started"' })
@@ -419,7 +418,7 @@ snmap('LX', 'LspStop')
 snmap('Ll', 'LspLog')
 
 snmap('lf', 'lua vim.lsp.buf.format()')
-snmap('la', 'lua vim.lsp.buf.code_action()')
+-- snmap('la', 'lua vim.lsp.buf.code_action()')
 -- snmap('lr', 'lua vim.lsp.buf.rename()')
 
 -- }}}
@@ -605,9 +604,11 @@ snmap('}', 'bn')
 snmap('{', 'bp')
 snmap('!', 's/<c-r>///g<left><left>')
 snmap('|', "let @/=\"<C-R>=expand(\"<CWORD>\")<CR>\"<CR>:set hls")
+map('n', '<leader>|', '<cmd>lua vim.cmd(\'let @/="\'..vim.fn.expand("<cword>")..\'"\')<CR>', opt_sn)
 
 -- vim.api.nvim_set_keymap('n', "<leader>|", ":<C-u>let @/=\"<C-R>=expand(\"<CWORD>\")<CR>\"<CR>:set hls<CR>", opt_sn)
 -- vim.cmd('nnoremap <expr> <leader>| ":let @/=\"<C-R>=expand(\"<CWORD>\")<CR>\"<CR>:set hls<CR>"')
+
 
 map('n', '<leader>,', '<cmd>w<cr>', opt_sn)
 
@@ -756,6 +757,8 @@ map('n', "<leader>Dq", ":call vimspector#Reset()<cr>", opt_sn)
 map('n', "<leader>Dc", ":call vimspector#Continue()<cr>", opt_sn)
 map('n', "<leader>Dr", ":call vimspector#Reset()<cr>", opt_sn)
 map('n', "<leader>DR", ":call vimspector#Restart()<cr>", opt_sn)
+-- map('n', "<leader>cd", ':vimgrep /\\.<C-r>l/g %<CR>:Trouble quickfix<CR>', opt_sn)
+-- map('n', '<leader>cb', '<cmd>lua _G.build_file_in_nvim(vim.fn.expand("%:p"))<CR>', opt_sn)
 
 
 map('n', '<leader>[', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opt_sn)
@@ -851,5 +854,82 @@ nmap(',', 'Telescope file_browser theme=dropdown path=%:p:h')
 map('n', '<c-u>', '<c-u>zz', opt_sn)
 map('n', '<c-d>', '<c-d>zz', opt_sn)
 
+-- map('i', '|', "<esc>", opt_sn)
 
+-- map('n', '<leader>1', "<cmd>lua vim.g.material_style=\"darker\"<CR><cmd>colorscheme material<CR>", opt_sn)
+-- map('n', '<leader>2', "<cmd>lua vim.g.material_style=\"lighter\"<CR><cmd>colorscheme material<CR>", opt_sn)
+-- map('n', '<leader>3', "<cmd>lua vim.g.material_style=\"oceanic\"<CR><cmd>colorscheme material<CR>", opt_sn)
+-- map('n', '<leader>4', "<cmd>lua vim.g.material_style=\"palenight\"<CR><cmd>colorscheme material<CR>", opt_sn)
+-- map('n', '<leader>5', "<cmd>lua vim.g.material_style=\"deep ocean\"<CR><cmd>colorscheme material<CR>", opt_sn)
+
+map('n', '<leader>1', "<cmd>lua vim.g.gruvbox_material_foreground=\"material\"<CR><cmd>colorscheme gruvbox-material<CR>", opt_sn)
+map('n', '<leader>2', "<cmd>lua vim.g.gruvbox_material_foreground=\"mix\"<CR><cmd>colorscheme gruvbox-material<CR>", opt_sn)
+map('n', '<leader>3', "<cmd>lua vim.g.gruvbox_material_foreground=\"original\"<CR><cmd>colorscheme gruvbox-material<CR>", opt_sn)
+
+require('lib.qf_cpp')
+
+vim.api.nvim_buf_set_keymap(0, 'n', '<leader>bb', '<cmd>w<cr><cmd>so %<cr><cmd>lua _G.run_xxx_in_nvim("cd build && cmake ..")<CR><CMD>copen<CR>', opt_sn)
+-- map('n', '<leader>rbl', '<cmd>lua _G.build_file(vim.fn.expand("%:p"))<CR>', opt_sn)
+-- map('n', '<leader>rfl', '<cmd>lua _G.run_file_left(vim.fn.expand("%:p"))<CR>', opt_sn)
+
+-- map('n', '<leader>rbf', '<cmd>lua _G.build_file_in_nvim(vim.fn.expand("%:p"))<CR><CMD>copen<CR>', opt_sn)
+-- map('n', '<leader>rf', '<cmd>lua _G.run_file_here(vim.fn.expand("%:p"))<CR>', opt_sn)
+map('n', '<leader>rfa', '<cmd>lua _G.build_file_in_nvim(vim.fn.expand("%:p"))<CR>', opt_sn)
+map('n', '<leader>rtl', '<cmd>lua _G.make_file_right(vim.fn.expand("%:p"))<CR>', opt_sn)
+
+map('n', '<leader>rmh', '<cmd>lua _G.run_make_in_nvim(vim.fn.expand("%:p"))<CR>', opt_sn)
+map('n', '<leader>rbh', '<cmd>lua _G.run_cmake_in_nvim(vim.fn.expand("%:p"))<CR>', opt_sn)
+
+
+
+-- map('n', '<leader>rah', '<cmd>lua _G.run_file_here(vim.fn.expand("%:p"))<CR>', opt_sn)
+map('n', '<leader>rml', '<cmd>lua _G.run_make_left(vim.fn.expand("%:p"))<CR>', opt_sn)
+map('n', '<leader>rbl', '<cmd>lua _G.build_configure_left(vim.fn.expand("%:p"))<CR>', opt_sn)
+
+map('n', '<leader>rp', '<cmd>lua _G.run_plot(vim.fn.expand("%:p"))<CR>', opt_sn)
+-- map('n', '<leader>rt', '<cmd>lua _G.new_run_test_file(vim.fn.expand("%:p"))<CR>', opt_sn)
+
+map('n', '<leader>ct', '<cmd>lua _G.run_xxx_in_nvim("ctest")<CR><CMD>copen<CR>', opt_sn)
+
+map('n', '<leader>rch', '<cmd>lua _G.run_xxx_in_nvim("cd build && cmake .. && echo Done")<CR><CMD>copen<CR>', opt_sn)
+map('n', '<leader>rdl', '<cmd>lua _G.clear_build(vim.fn.expand("%:p"))<CR>', opt_sn)
+map('n', '<leader>rcl', '<cmd>lua _G.build_file(vim.fn.expand("%:p"))<CR>', opt_sn)
+
+map('n', '<leader>1', '<cmd>so ~/.config/nvim/lua/lib/qf_cpp.lua<CR>', opt_sn)
+
+
+
+
+--  %s/\,\"\"gyr_1_x.*timestamp"":""/
+local comma = "\\,"
+local colon = ":"
+local g = '\\"'
+local until_ = '.*'
+
+map('n', '<leader>at1', ':%s/'..comma..g..g.."gyr_1_x"..until_.."//g", opt_sn)
+map('n', '<leader>at\'', '<cmd>%s/'..g.."//g<cr>", opt_sn)
+map('n', '<leader>atx', '<cmd>%s/acc_x//g<cr>', opt_sn)
+map('n', '<leader>aty', '<cmd>%s/acc_y//g<cr>', opt_sn)
+map('n', '<leader>atz', '<cmd>%s/acc_z//g<cr>', opt_sn)
+map('n', '<leader>at:', '<cmd>%s/'..colon..'//g<cr>', opt_sn)
+map('n', '<leader>at,', '<cmd>%s/'..comma..'//g<cr>', opt_sn)
+map('n', '<leader>at{', '<cmd>%s/{//g<cr>', opt_sn)
+map('n', '<leader>at}', '<cmd>%s/}//g<cr>', opt_sn)
+
+map('n', '<leader>at2', '<cmd>%s/'..until_.."timestamp//g<CR>", opt_sn)
+
+-- map('n', '<leader>rbu', '<cmd>lua _G.run_cmake_in_nvim(vim.fn.expand("%:p"))<CR>', opt_sn)
+map('n', '<leader>rmu', "<cmd>lua require('overseer').run_template({name='Build lib'})<CR>", opt_sn)
+map('n', '<leader>rme', "<cmd>lua require('overseer').run_template({name='Build project'})<CR>", opt_sn)
+map('n', '<leader>ot', "<cmd>OverseerToggle<CR>", opt_sn)
+
+map('n', '<leader>rtl', '<cmd>lua _G.run_make_left_and_run(vim.fn.expand("%:p"))<CR>', opt_sn)
+
+map('n', '<leader>on', '<cmd>lua require("harpoon.tmux").sendCommand(2, "nvim "..vim.fn.expand("%").."\\r")<CR>', opt_sn)
+map('n', '<leader>cP', '<cmd>colder<CR>', opt_sn)
+map('n', '<leader>cN', '<cmd>cnewer<CR>', opt_sn)
+
+
+-- map('n', '<leader>rch', '<cmd>lua _G.run_xxx_in_nvim("cd build && cmake ..")<CR><CMD>copen<CR>', opt_sn)
+-- map('n', '<leader>rcl', '<cmd>lua _G.build_file(vim.fn.expand("%:p"))<CR>', opt_sn)
 return M

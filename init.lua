@@ -9,6 +9,7 @@ require('autocmds') -- ~/AppData/Local/nvim/lua/autocmds.lua
 
 require('config.lsp')
 require('config.plug')
+require('config.plug.cmp')
 require('config.modules') -- ~/AppData/Local/nvim/lua/autocmds.lua
 
 if vim.g.neovide ~= nil then --{{{
@@ -30,12 +31,20 @@ require('lib.cmake_testing')
 
 
 
+vim.g.material_style="palenight"
+vim.g.gruvbox_material_foreground="mix"
 -- local scheme = require('lib.scheme')
 -- scheme.load_scheme('rose-pine')
-vim.cmd('colorscheme duskfox')
+-- vim.cmd('colorscheme duskfox')
+-- vim.cmd('colorscheme material')
+-- vim.cmd('colorscheme gruvbox-material')
+vim.cmd('colorscheme catppuccin-frappe')
 
 
+local find = require('viktor.lib.find')
 
+-- local out = find.root("/home/viktor/hm/research/wbv-analysis/external/MK2-embedded/device/wbv/include/commons/CMakeLists.txt", {"README.md"})
+-- print("out "..out)
 
 -- vim.cmd('let g:test#cpp#catch2#bin_dir = "tests"')
 -- vim.cmd('let g:test#cpp#catch2#bin_dir = "./tests"')
@@ -45,3 +54,6 @@ vim.cmd('colorscheme duskfox')
 -- %:~:.:h
 
 -- vim.call("remote#host#RegisterPlugin('python3', '$HOME/.vim/plugged/chatgpt.nvim/rplugin/python3/chatgpt_nvim.py', [{'sync': v:false, 'name': 'ChatGPT', 'type': 'command', 'opts': {'nargs': '1'}}])")
+
+local fold_snippets = require'foldmethods.snippets'
+fold_snippets.setup_folding()

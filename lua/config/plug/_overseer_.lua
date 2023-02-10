@@ -1,8 +1,11 @@
 
 local overseer = require('overseer')
 overseer.setup({
-    templates = { "user.cpp_build_lib", "user.cpp_build_project" }
+    -- templates = { "cpp.run_cmake", "cpp.run_make", "cpp.run_make_on_file" }
 })
+overseer.load_template("cpp.run_cmake")
+overseer.load_template("cpp.run_make")
+overseer.load_template("cpp.run_make_on_file")
 -- overseer.register_template({
 --     name = "piobuild",
 --     builder = function(params)

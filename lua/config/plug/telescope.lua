@@ -38,10 +38,12 @@ require('telescope').setup({
                 ["<C-l>"] = actions.cycle_previewers_prev,
                 ["<C-n"] = actions.move_selection_next,
                 ["<C-p"] = actions.move_selection_previous,
+                ["q"] = actions.send_selected_to_qflist
             },
             i = {
                 ["<C-n"] = actions.move_selection_next,
                 ["<C-p"] = actions.move_selection_previous,
+                ["<C-c>"] = actions.send_selected_to_qflist
             },
         },
         layout_strategy = 'horizontal',

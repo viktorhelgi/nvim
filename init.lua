@@ -26,11 +26,11 @@ require('matchparen').setup({})
 
 require('lib.cmake_testing')
 
--- require('themes.rose-pine')
--- require('themes.nightfox')
-
-
-
+-- -- require('themes.rose-pine')
+-- -- require('themes.nightfox')
+--
+--
+--
 vim.g.material_style="palenight"
 vim.g.gruvbox_material_foreground="mix"
 -- local scheme = require('lib.scheme')
@@ -38,7 +38,8 @@ vim.g.gruvbox_material_foreground="mix"
 -- vim.cmd('colorscheme duskfox')
 -- vim.cmd('colorscheme material')
 -- vim.cmd('colorscheme gruvbox-material')
-vim.cmd('colorscheme catppuccin-frappe')
+-- vim.cmd('colorscheme catppuccin-frappe')
+require("catppuccin").load("frappe")
 
 
 local find = require('viktor.lib.find')
@@ -55,5 +56,5 @@ local find = require('viktor.lib.find')
 
 -- vim.call("remote#host#RegisterPlugin('python3', '$HOME/.vim/plugged/chatgpt.nvim/rplugin/python3/chatgpt_nvim.py', [{'sync': v:false, 'name': 'ChatGPT', 'type': 'command', 'opts': {'nargs': '1'}}])")
 
-local fold_snippets = require'foldmethods.snippets'
-fold_snippets.setup_folding()
+-- local fold_snippets = require'foldmethods.snippets'
+-- fold_snippets.setup_folding()

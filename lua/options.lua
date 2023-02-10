@@ -60,7 +60,7 @@ o.shiftwidth = 4
 o.expandtab = true    	-- tabs -> spaces
 -- o.smartindent = true    -- nice indenting
 
-o.foldmethod = 'marker' -- set fold method to marker
+-- o.foldmethod = 'marker' -- set fold method to marker
 
 -- backup/swap files
 opt.swapfile = false  	-- have files saved to swap
@@ -78,9 +78,11 @@ vim.opt.termguicolors = true
 
 -- # vim foldmethod=marker
 
-g.python3_host_prog = "/usr/bin/python3"
+g.python3_host_prog = "/usr/bin/python3.8"
 
 g.syntastic_yaml_checkers = { "yamllint" }
+
+vim.api.nvim_set_var('_previous_command', 'echo "No command has been executed"')
 
 -- https://github.com/rcarriga/vim-ultest
 -- g.ultest_use_pty = 1

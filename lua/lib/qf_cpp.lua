@@ -1,7 +1,6 @@
 _G.cmake_errorformat = ' %#%f:%l %#(%m)' .. ',%E' .. 'CMake Error at %f:%l (%m):'..',%Z'..'Call Stack (most recent call first):'..',%C'..' %m'
 _G.set_qflist_what = '"efm":"'.._G.cmake_errorformat..'"'
 _G.set_qflist_what = _G.set_qflist_what .. ', "title":"cmake-build"'
--- print(_G.set_qflist_what)
 -- _G.cmake_errorformat .= 
 -- let &efm .= ',%Z' . 'Call Stack (most recent call first):'
 -- _G.cmake_errorformat .= ',%E' .. 'CMake Error at %f:%l (%m):'
@@ -11,10 +10,7 @@ _G.set_qflist_what = _G.set_qflist_what .. ', "title":"cmake-build"'
 
 _G.get_relative_dir = function(file)
     -- local project_dir = "/home/viktor/hm/MK2-embedded/device/wbv/"
-    -- print(file)
     local project_dir = require('viktor.lib.find').root(file, {"build"})
-    -- print(project_dir)
-    -- print(project_dir)
     if type(file)=='string' then
         local curr_dir = vim.fn.fnamemodify(file, ":p:h")
         local curr_dir_rel = string.sub(curr_dir, string.len(project_dir)+1, -1)
@@ -25,19 +21,15 @@ end
 
 _G.build_file = function(file)
     -- local project_dir = "/home/viktor/hm/MK2-embedded/device/wbv/"
-    print("file: "..file)
     local project_dir = require('viktor.lib.find').root(file, {"build"})
-    print("project_dir: "..project_dir)
     local rel_dir = get_relative_dir(file)
-    print("rel_dir: "..rel_dir)
     local bin_dir = project_dir .. "/build" .. rel_dir
-    print("bin_dir: "..bin_dir)
 
     local cr = "\r"
     local clear = "clear -x"..cr
     local goto_dir = 'cd '..bin_dir..cr
-    local run_make = "make -j12"..cr
-    require('harpoon.tmux').sendCommand('1', cr..clear..goto_dir..run_make)
+    local run_make = "make -j17"..cr
+    require('harpoon.tmux').sendCommand('!', cr..clear..goto_dir..run_make)
 end
 
 _G.clear_build = function(file)
@@ -48,7 +40,7 @@ _G.clear_build = function(file)
     local cr = "\r"
     local goto_dir = 'cd '..bin_dir..cr
     local remove_build = "remb"..cr
-    require('harpoon.tmux').sendCommand('1', cr..goto_dir..cr..remove_build)
+    require('harpoon.tmux').sendCommand('!', cr..goto_dir..cr..remove_build)
 end
 
 _G.build_configure_left = function(file)
@@ -61,7 +53,8 @@ _G.build_configure_left = function(file)
     local clear = "clear -x"..cr
     local goto_dir = 'cd '..bin_dir..cr
     local run_make = "cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .."..cr
-    require('harpoon.tmux').sendCommand('1', cr..clear..goto_dir..run_make)
+    vim.api.nvim_set_var("_previous_command", cr..clear..goto_dir..run_make)
+    require('harpoon.tmux').sendCommand('!', vim.g._previous_command)
 end
 
 _G.run_make_left = function(file)
@@ -73,8 +66,16 @@ _G.run_make_left = function(file)
     local cr = "\r"
     local clear = "clear -x"..cr
     local goto_dir = 'cd '..bin_dir..cr
-    local run_make = "make -j12"..cr
-    require('harpoon.tmux').sendCommand('1', cr..clear..goto_dir..run_make)
+    local run_make = "make -j17"..cr
+    vim.api.nvim_set_var("_previous_command", cr..clear..goto_dir..run_make)
+    require('harpoon.tmux').sendCommand('!', vim.g._previous_command)
+end
+
+
+_G.run_again = function()
+    local command = vim.api.nvim_get_var("_previous_command")
+    print(command)
+    require('harpoon.tmux').sendCommand('!', command)
 end
 
 _G.run_make_left_and_run = function(file)
@@ -83,12 +84,30 @@ _G.run_make_left_and_run = function(file)
     local rel_dir = get_relative_dir(file)
     local bin_dir = project_dir .. "/build"
 
+    local exe_directory = bin_dir..rel_dir
+
+
+    local parent_dir = vim.fn.fnamemodify(file, ":p:h:t")
+    local filename = vim.fn.fnamemodify(file, ":t:r")
+
+    local filename_without_test_prefix = string.sub(filename, string.len("test_"), string.len(filename))
+    local filename_potential = "test_"..parent_dir..filename_without_test_prefix
+
+    local exe_name
+    if (vim.fn.executable(exe_directory .. "/" .. filename) == 1) then
+        print("tsahtnh")
+        exe_name = filename
+    elseif (vim.fn.executable(exe_directory .. "/" .. filename_potential) == 1) then
+        print("letsgo")
+        exe_name = filename_potential
+    end
+
     local cr = "\r"
     local clear = "clear -x"..cr
-    local goto_dir = 'cd '..bin_dir..cr
-    local run_make = "make -j12"..cr
-    local run_exe  = "./"..vim.fn.fnamemodify(file, ":t:r") .. cr
-    require('harpoon.tmux').sendCommand('1', cr..clear..goto_dir..run_make..run_exe)
+    local goto_dir = 'cd '..exe_directory..cr
+    local run_make = "make -j17"..cr
+    local run_exe  = "./"..exe_name.. cr
+    require('harpoon.tmux').sendCommand('!', cr..clear..goto_dir..run_make..run_exe)
 end
 
 _G.run_file_left = function(file)
@@ -102,11 +121,10 @@ _G.run_file_left = function(file)
     local goto_dir = 'cd '..bin_dir..cr
     -- local run_make = "make"..cr
     local run_exe  = "./"..vim.fn.fnamemodify(file, ":t:r") .. cr
-    require('harpoon.tmux').sendCommand('1', cr..clear..goto_dir..run_exe)
+    require('harpoon.tmux').sendCommand('!', cr..clear..goto_dir..run_exe)
 end
 
 _G.run_plot = function(file)
-    print("--")
     -- local project_dir = "/home/viktor/hm/MK2-embedded/device/wbv/"
     local project_dir = require('viktor.lib.find').root(file, {"build"})
     local rel_dir = get_relative_dir(file)
@@ -120,22 +138,20 @@ _G.run_plot = function(file)
 
     local other_file_path = project_dir .. "/build" .. string.gsub(rel_dir, "include", "tests") .. "/test_".. filename
 
-    print(file_path)
     if (vim.fn.file_readable(file_path) == 1) then
         local clear = "clear -x"..cr
         local goto_dir = 'cd '..bin_dir..cr
         local run_exe  = "./"..filename.. cr
-        require('harpoon.tmux').sendCommand('1', cr..clear..goto_dir..run_exe)
+        require('harpoon.tmux').sendCommand('!', cr..clear..goto_dir..run_exe)
     elseif (vim.fn.file_readable(other_file_path) == 1) then
         local clear = "clear -x"..cr
         local goto_dir = 'cd '..project_dir .. "/build" .. string.gsub(rel_dir, "include", "tests")..cr
         local run_exe  = "./test_"..filename.. cr
-        require('harpoon.tmux').sendCommand('1', cr..clear..goto_dir..run_exe)
+        require('harpoon.tmux').sendCommand('!', cr..clear..goto_dir..run_exe)
     end
 end
 
 _G.make_file_right = function(file)
-    print("--")
     -- local project_dir = "/home/viktor/hm/MK2-embedded/device/wbv/"
     local project_dir = require('viktor.lib.find').root(file, {"build"})
     local rel_dir = get_relative_dir(file)
@@ -148,20 +164,19 @@ _G.make_file_right = function(file)
     local file_path = bin_dir .. "/" .. filename
 
     local other_file_path = project_dir .. "/build" .. string.gsub(rel_dir, "include", "tests") .. "/test_".. filename
-    print(file_path)
     if (vim.fn.file_readable(file_path) == 1) then
         local clear = "clear -x"..cr
         local goto_dir = 'cd '..bin_dir..cr
-        local make_file = "make -j12 "..filename..cr
+        local make_file = "make -j17 "..filename..cr
         local run_exe  = "./"..filename.. cr
-        require('harpoon.tmux').sendCommand('1', cr..clear..goto_dir..make_file..run_exe)
+        require('harpoon.tmux').sendCommand('!', cr..clear..goto_dir..make_file..run_exe)
     elseif (vim.fn.file_readable(other_file_path) == 1) then
         local clear = "clear -x"..cr
         local goto_dir = 'cd '..project_dir .. "/build" .. string.gsub(rel_dir, "include", "tests")..cr
         local test_filename = "./test_"..filename
-        local make_file = "make -j12 "..test_filename..cr
+        local make_file = "make -j17 "..test_filename..cr
         local run_exe  = test_filename.. cr
-        require('harpoon.tmux').sendCommand('1', cr..clear..goto_dir..make_file..run_exe)
+        require('harpoon.tmux').sendCommand('!', cr..clear..goto_dir..make_file..run_exe)
     end
 end
 
@@ -187,11 +202,10 @@ _G.build_file_in_nvim = function(file)
     local project_dir = require('viktor.lib.find').root(file, {"build"})
     local rel_dir = get_relative_dir(file)
     -- vim.cmd('cd '..project_dir..'&& make -s -C build/'..rel_dir)
-    print(rel_dir)
     -- vim.cmd('make -s -C build/'..rel_dir)
 
     vim.cmd('redir @h')
-    vim.cmd('silent! exec "cd '..project_dir..'&& !make -j12 -s -C build/ && echo Done'..rel_dir..'"')
+    vim.cmd('silent! exec "cd '..project_dir..'&& !make -j17 -s -C build/ && echo Done'..rel_dir..'"')
     vim.cmd('redir END')
 
     local lines_buffer = vim.fn.getreg("h")
@@ -221,7 +235,6 @@ _G.new_run_test_file = function(file)
     local filename  = "./" .. vim.fn.fnamemodify(file, ":t:r")
     -- local filename = "ctest"
     local bin_dir = project_dir .. "/build" .. rel_dir
-    print("bin_dir: "..bin_dir)
 
 
     vim.cmd('redir @h')
@@ -229,9 +242,9 @@ _G.new_run_test_file = function(file)
     vim.cmd('silent! exec "!'..filename..'"')
     -- vim.cmd('silent! exec "cd '..bin_dir..' && !'..filename..'"')
     -- vim.cmd('silent! exec "ls"')
-    -- vim.cmd('silent! exec "make -j12 '..filename..'"')
+    -- vim.cmd('silent! exec "make -j17 '..filename..'"')
     -- vim.cmd('silent! exec "./'..filename..'"')
--- ..cr..'!make -j12 -s '..filename..cr.."./"..filename..cr..' echo Done'..rel_dir..'"
+-- ..cr..'!make -j17 -s '..filename..cr.."./"..filename..cr..' echo Done'..rel_dir..'"
     vim.cmd('redir END')
 
     local lines_buffer = vim.fn.getreg("h")
@@ -254,11 +267,10 @@ end
 
 _G.run_make_in_nvim = function(file)
     local project_dir = require('viktor.lib.find').root(file, {"build"})
-    print(project_dir)
 
     vim.cmd('redir @h')
     vim.cmd('silent! exec "cd '..project_dir..'/build"')
-    vim.cmd('silent! exec "!make -j12"')
+    vim.cmd('silent! exec "!make -j17"')
     vim.cmd('redir END')
 
     local lines_buffer = vim.fn.getreg("h")
@@ -309,7 +321,6 @@ end
 
 _G.run_cmake_in_nvim = function(file)
     local project_dir = require('viktor.lib.find').root(file, {"build"})
-    print(project_dir)
 
     vim.cmd('redir @h')
     vim.cmd('silent! exec "cd '..project_dir..'/build"')
@@ -400,7 +411,6 @@ end
 
 vim.keymap.set('n', '<leader>bb', '<cmd>w<cr><cmd>so %<cr><cmd>lua _G.build_all_in_nvim(vim.fn.expand("%:p"))<CR><CMD>copen<CR>')
 _G.run_xxx_in_nvim = function(cmd)
-    print("start")
     vim.cmd('redir @h')
     vim.cmd('silent! exec "!'..cmd..'"')
     vim.cmd('redir END')

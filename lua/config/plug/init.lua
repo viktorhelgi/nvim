@@ -22,7 +22,7 @@ return {
     -- {{{ [E]
     -- }}}
     -- {{{ [F] - fterm
-	-- require('config.plug.fterm'),
+	-- require('config.plug._filetype_'),
     require('config.plug.formatter'),
     -- }}}
     -- {{{ [G] - gitsigns
@@ -53,6 +53,7 @@ return {
 	require('config.plug.nvimcolorizer'),
 	-- require('config.plug.nvimcomment'),
     require('config.plug._comment_'),
+    require('config.plug._nvim-tmux-navigation_'),
 	-- require('config.plug.neotest'),
 
     -- require('config.plug._klen-nvim-test'),

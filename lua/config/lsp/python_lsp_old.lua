@@ -39,8 +39,8 @@ local lsp_signature_configs = {
                    -- to view the hiding contents
   max_width = 76, -- max_width of signature floating_window, line will be wrapped if exceed max_width
   handler_opts = {
-    -- border = "rounded"   -- double, rounded, single, shadow, none
-    border = none
+    border = "none"   -- double, rounded, single, shadow, none
+    -- border = none
   },
 
   always_trigger = true, -- sometime show signature on new line or in middle of parameter can be confusing, set it to false for #58
@@ -68,22 +68,26 @@ local lsp_signature_configs = {
 local opts = { noremap=true, silent=false }
 local opts_silent = { noremap=true, silent=true }
 local on_attach = function(client, bufnr)
+    -- local status, err = pcall(require('config.lsp._efm_').setup_server, client, bufnr)
+    -- if status then
+    --     print("setup efm-server Success")
+    -- else
+    --     print("Error setting up efm-server\n"..err)
+    -- end
 
-    o.foldmethod = 'indent' -- set fold method to marker
-    vim.cmd('set nofoldenable')
+    -- o.foldmethod = 'indent' -- set fold method to marker
+    -- vim.cmd('set nofoldenable')
     -- local fd_exe = ""
     require'lsp_signature'.on_attach(lsp_signature_configs, bufnr) -- no need to specify bufnr if you don't use toggle_key
-    -- require("aerial").on_attach(client, bufnr)
 	vim.o.wrap=false
 
 	-- vim.cmd('TSBufEnable indent')
-	vim.opt.colorcolumn = '80'
+	vim.opt.colorcolumn = '100'
 	-- unmap('n', ']]')
 	-- unmap('n', '[[')
 
 	-- vim.g.CondaEnv = os.getenv("CONDA_DEFAULT_ENV")
 	-- vim.g.python3_host_prog = 'C:/Users/Lenovo/miniconda3/envs/' .. vim.g.CondaEnv .. '/python'
-    require("aerial").on_attach(client, bufnr)
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>[', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>]', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
@@ -118,7 +122,6 @@ local on_attach = function(client, bufnr)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi',       '<cmd>lua require("lvim.lsp.peek").Peek("implementation")<CR>', opts)
 	-- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-p>',    '<cmd>RustRun<CR>', opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>p',    '<cmd>RustRun<CR>', opts)
-    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>o', '<cmd>AerialToggle<CR>', opts)
 	--
 	-- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>nn',    '/\\v^\\s*def\\s\\zs\\w*|^\\s*class\\s\\zs\\w*\\ze[:(]<CR>', opts)
 	-- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ns',    '/\\v^\\s*\\zsclass\\ze\\s|^\\s*\\zsdef\\ze\\s|^\\s*\\zsif\\ze\\s|^\\s*\\zsfor\\ze\\s|^\\s*\\zselif\\ze\\s|^\\s*\\zselse\\ze:|^\\s*\\zswhile\\ze\\s<CR>', opts)
@@ -219,29 +222,32 @@ local on_attach = function(client, bufnr)
 
     end
 
-    require('which-key').register({
-        r = {
-            name = 'Test',
-            F = 'TestFile',
-            L = 'TestLast',
-            N = 'TestNearest',
-            S = 'TestSuit',
-            v = 'TestVisit',
-            t = 'pytest %',
-            a = 'pytest all',
-            p = 'python %',
-            f = {
-                name = 'Fixtures',
-                l = 'list fixtures',
-                n = 'create new file',
-                g = 'goto tests/fixtures/',
-                c = 'goto tests/conftest.py',
-            },
-        },
+    -- require('which-key').register({
+    --     r = {
+    --         name = 'Test',
+    --         F = 'TestFile',
+    --         L = 'TestLast',
+    --         N = 'TestNearest',
+    --         S = 'TestSuit',
+    --         v = 'TestVisit',
+    --         t = 'pytest %',
+    --         a = 'pytest all',
+    --         p = 'python %',
+    --         f = {
+    --             name = 'Fixtures',
+    --             l = 'list fixtures',
+    --             n = 'create new file',
+    --             g = 'goto tests/fixtures/',
+    --             c = 'goto tests/conftest.py',
+    --         },
+    --     },
+    --
+    -- }, {
+    --     prefix = '<leader>',
+    -- })
 
-    }, {
-        prefix = '<leader>',
-    })
+    vim.o.rnu = true         	-- relative line numbers
+    vim.o.nu = true         	-- line numbers
 end
 
 
@@ -271,7 +277,6 @@ local root_files = {
   -- 'requirements.txt',
   'requirements.yml',
   'pyrightconfig.json',
-  
 }
 
 
@@ -323,7 +328,7 @@ lspconfig.pyright.setup({
     -- root_dir = lspconfig.util.find_git_ancestor or lspconfig.util.find_package_pipfile_ancestor or lspconfig.util.find_package_pyproject_ancestor,
     -- root_dir = find_package_pipfile_ancestor,
 	root_dir = lspconfig.util.root_pattern(unpack(root_files)),
-    filetypes = {'python'},
+    filetypes = {'python', 'py'},
     settings = {
         pyright = {
             --disableLanguageServices = false,

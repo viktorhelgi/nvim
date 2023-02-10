@@ -22,9 +22,9 @@ M.HOME_PATTERN = M.parent_dir(os.getenv('HOME'))
 
 M.root = function(path, patterns)
     if type(path)~='string' then
-        error("path argument in rooter.find_root_dir() should be a string")
+        error("'path' argument in rooter.find_root_dir() should be a string")
     elseif type(patterns) ~='table' then
-        error("path argument in rooter.find_root_dir() should be a string")
+        error("'pattern' argument in rooter.find_root_dir() should be a table")
     elseif #patterns == 0 then
         error("'patterns' argument is of len 0")
     end

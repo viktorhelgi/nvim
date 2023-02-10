@@ -15,30 +15,8 @@
 -- -- tabline seperator
 -- scheme.tabline_seperator_left = ''
 -- scheme.tabline_seperator_right = ''
-
-require('lualine').setup({
-    options = {
-        icons_enabled = true,
-        theme = 'auto',
-        component_separators = { left = '', right = '' },
-        section_separators = { left = '', right = '' },
-        disabled_filetypes = {
-            statusline = {},
-            winbar = {},
-        },
-        ignore_focus = {},
-        always_divide_middle = true,
-        globalstatus = false,
-        refresh = {
-            statusline = 1000,
-            tabline = 1000,
-            winbar = 1000,
-        }
-    },
-    sections = {
-        lualine_a = { 'mode' },
-        -- lualine_b = { 'diagnostics' },
-        lualine_b = {
+local section_b = {
+            'branch',
             {
                 'diagnostics',
 
@@ -63,7 +41,31 @@ require('lualine').setup({
                 update_in_insert = false, -- Update diagnostics in insert mode.
                 always_visible = false, -- Show diagnostics even if there are none.
             }
+        }
+
+require('lualine').setup({
+    options = {
+        icons_enabled = true,
+        theme = 'auto',
+        component_separators = { left = '', right = '' },
+        section_separators = { left = '', right = '' },
+        disabled_filetypes = {
+            statusline = {},
+            winbar = {},
         },
+        ignore_focus = {},
+        always_divide_middle = true,
+        globalstatus = false,
+        refresh = {
+            statusline = 1000,
+            tabline = 1000,
+            winbar = 1000,
+        }
+    },
+    sections = {
+        lualine_a = { 'mode' },
+        -- lualine_b = { 'diagnostics' },
+        lualine_b = section_b,
         lualine_c = {
             { 'filename', path = 1 }
         },

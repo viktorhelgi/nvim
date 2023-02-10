@@ -1,1 +1,1 @@
-vim.cmd("setlocal foldmethod=indent")
+-- vim.cmd("setlocal foldmethod=indent")

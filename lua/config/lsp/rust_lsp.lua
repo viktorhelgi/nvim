@@ -68,11 +68,14 @@ local opt_sn = { noremap = true, silent = true }
 
 local my_on_attach = function(client, bufnr)
     local function harpoon_map(mapping, command)
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>'..mapping, ':lua require("harpoon.term").sendCommand(1, ' .. command .. '.."\\r") <CR>', opts)
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>' .. mapping,
+            ':lua require("harpoon.term").sendCommand(1, ' .. command .. '.."\\r") <CR>', opts)
     end
+
     local function terminal_map(mapping, command)
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>'..mapping, '<cmd>' .. command .. '<CR>' .. send_r, opts)
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>' .. mapping, '<cmd>' .. command .. '<CR>' .. send_r, opts)
     end
+
     vim.cmd("set colorcolumn=101")
     ---------------------------------------------------------------------------------
     ---------------------------------------------------------------------------------
@@ -96,15 +99,20 @@ local my_on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-s>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-p>',    '<cmd>winc l<CR><cmd>icargo', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>p', ':lua require("harpoon.term").sendCommand(1, "cargo run " .. vim.fn.expand(\'%\') .. "\\r") <CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>p',
+        ':lua require("harpoon.term").sendCommand(1, "cargo run " .. vim.fn.expand(\'%\') .. "\\r") <CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>o', '<cmd>AerialToggle<CR>', opts)
 
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-g>', ':lua require(\'telescope.builtin\').lsp_definitions()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gt', ':lua require(\'telescope.builtin\').lsp_type_definitions()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-t>', ':lua require(\'telescope.builtin\').lsp_type_definitions()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gI', ':lua require(\'telescope.builtin\').lsp_implementations({ignore_filenames=false, path_display=hidden})<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-t>', ':lua require(\'telescope.builtin\').lsp_type_definitions()<CR>',
+        opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gI',
+        ':lua require(\'telescope.builtin\').lsp_implementations({ignore_filenames=false, path_display=hidden})<CR>',
+        opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gc', ':lua require(\'telescope.builtin\').lsp_workspace_symbols({query="def"})<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gC', ':lua require(\'telescope.builtin\').lsp_document_symbols({query="def"})<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gC',
+        ':lua require(\'telescope.builtin\').lsp_document_symbols({query="def"})<CR>', opts)
 
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
@@ -140,12 +148,17 @@ local my_on_attach = function(client, bufnr)
 
     local sep            = suffix .. '|^' .. prefix
     local string_all     = '/\\v^' .. prefix .. table.concat(array_all, sep) .. suffix .. '<CR>' .. ':set nohlsearch<CR>'
-    local string_impl    = '/\\v^' .. prefix .. table.concat(array_impl, sep) .. suffix .. '<CR>' .. ':set nohlsearch<CR>'
-    local string_struct  = '/\\v^' .. prefix .. table.concat(array_struct, sep) .. suffix .. '<CR>' .. ':set nohlsearch<CR>'
+    local string_impl    = '/\\v^' ..
+        prefix .. table.concat(array_impl, sep) .. suffix .. '<CR>' .. ':set nohlsearch<CR>'
+    local string_struct  = '/\\v^' ..
+        prefix .. table.concat(array_struct, sep) .. suffix .. '<CR>' .. ':set nohlsearch<CR>'
     local string_fn      = '/\\v^' .. prefix .. table.concat(array_fn, sep) .. suffix .. '<CR>' .. ':set nohlsearch<CR>'
-    local string_trait   = '/\\v^' .. prefix .. table.concat(array_trait, sep) .. suffix .. '<CR>' .. ':set nohlsearch<CR>'
-    local string_enum    = '/\\v^' .. prefix .. table.concat(array_enum, sep) .. suffix .. '<CR>' .. ':set nohlsearch<CR>'
-    local string_mod_use = '/\\v^' .. prefix .. table.concat(array_mod_use, sep) .. suffix .. '<CR>' .. ':set nohlsearch<CR>'
+    local string_trait   = '/\\v^' ..
+        prefix .. table.concat(array_trait, sep) .. suffix .. '<CR>' .. ':set nohlsearch<CR>'
+    local string_enum    = '/\\v^' ..
+        prefix .. table.concat(array_enum, sep) .. suffix .. '<CR>' .. ':set nohlsearch<CR>'
+    local string_mod_use = '/\\v^' ..
+        prefix .. table.concat(array_mod_use, sep) .. suffix .. '<CR>' .. ':set nohlsearch<CR>'
     local string_pub     = '/\\v^' .. prefix .. array_mod_pub .. suffix .. '<CR>' .. ':set nohlsearch<CR>'
 
 
@@ -167,12 +180,16 @@ local my_on_attach = function(client, bufnr)
     ---------------------------------------------------------------------------------
 
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', ':lua require("harpoon.term").sendCommand(1, "cargo test \\r") <CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ra', ':lua require("harpoon.term").sendCommand(1, "cargo test \\r") <CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ra',
+        ':lua require("harpoon.term").sendCommand(1, "cargo test \\r") <CR>', opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', ':lua require("harpoon.term").sendCommand(1, "cargo test \\r") <CR>', opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rp', ':lua require("harpoon.term").sendCommand(1, "cargo run \\r") <CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>r1', ':lua require("harpoon.term").sendCommand(1, "cargo run To poem.txt\\r") <CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rt', ':lua require("harpoon.term").sendCommand(1, "cargo run\\r") <CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rs', ':lua _G.split_term()<CR>:lua require("harpoon.term").sendCommand(3, "cargo run\\r") <CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>r1',
+        ':lua require("harpoon.term").sendCommand(1, "cargo run To poem.txt\\r") <CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rt',
+        ':lua require("harpoon.term").sendCommand(1, "cargo run\\r") <CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rs',
+        ':lua _G.split_term()<CR>:lua require("harpoon.term").sendCommand(3, "cargo run\\r") <CR>', opts)
 
     -- Rust
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rc', ':RustCodeAction<CR>', opts)
@@ -188,14 +205,16 @@ local my_on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rHt', ':RustToggleInlayHints<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rha', ':RustHoverActions<CR>', opts)
 
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', ':AerialPrev<CR>W:RustHoverActions<CR>:RustHoverActions<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', ':AerialPrev<CR>W:RustHoverActions<CR>:RustHoverActions<CR>',
+        opts)
 
 
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rhr', ':RustHoverRange<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rj', ':RustJoinLines<CR>', opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rmu', ':RustMoveItemUp<CR>', opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rmd', ':RustMoveItemDown<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rm', ':lua require("harpoon.term").sendCommand(1, "pipenv run maturin develop --release \\r") <CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rm',
+        ':lua require("harpoon.term").sendCommand(1, "pipenv run maturin develop --release \\r") <CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>roC', ':RustOpenCargo<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>roc', ':e Cargo.toml<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>roe', ':RustOpenExternalDocs<CR>', opts)
@@ -220,30 +239,44 @@ local my_on_attach = function(client, bufnr)
 
     if vim.loop.os_uname().sysname == "Linux" then
         local python_exe = '/usr/bin/python3.8'
-        vim.g.python3_host_prog = python_exe
+        -- vim.g.python3_host_prog = python_exe
         -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rp', ':lua require("harpoon.term").sendCommand(1, "cargo run " .. vim.fn.expand(\'%\') .. "\\r")<CR>', opts)
 
         local fd_exe = '/usr/bin/fdfind'
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tt', ':lua require(\'telescope.builtin\').find_files({find_command={"' .. fd_exe .. '", "test_",     "--type", "f",  "--extension", "rs"                         }})<CR>', opts)
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tn', ':lua require(\'telescope.builtin\').find_files({find_command={"' .. fd_exe .. '",             "--type", "f",  "--extension", "rs",    "--exclude", "tests"}})<CR>', opts)
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tt',
+            ':lua require(\'telescope.builtin\').find_files({find_command={"' ..
+            fd_exe .. '", "test_",     "--type", "f",  "--extension", "rs"                         }})<CR>', opts)
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tn',
+            ':lua require(\'telescope.builtin\').find_files({find_command={"' ..
+            fd_exe .. '",             "--type", "f",  "--extension", "rs",    "--exclude", "tests"}})<CR>', opts)
 
     else
         local python_exe = 'C:/Users/Lenovo/miniconda3/envs/LSPenv/python'
-        vim.g.python3_host_prog = python_exe
+        -- vim.g.python3_host_prog = python_exe
         -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rp', ':lua require("harpoon.term").sendCommand(1, "'..python_exe..' " .. vim.fn.expand(\'%\') .. "\\r")<CR>', opts)
 
         local fd_exe = "C:/Users/Lenovo/scoop/shims/fd.exe"
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tt', ':lua require(\'telescope.builtin\').find_files({find_command={"' .. fd_exe .. '", "test_",     "--type", "f",  "--extension", "rs"                         }})<CR>', opts)
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tn', ':lua require(\'telescope.builtin\').find_files({find_command={"' .. fd_exe .. '",             "--type", "f",  "--extension", "rs",    "--exclude", "tests"}})<CR>', opts)
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tt',
+            ':lua require(\'telescope.builtin\').find_files({find_command={"' ..
+            fd_exe .. '", "test_",     "--type", "f",  "--extension", "rs"                         }})<CR>', opts)
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tn',
+            ':lua require(\'telescope.builtin\').find_files({find_command={"' ..
+            fd_exe .. '",             "--type", "f",  "--extension", "rs",    "--exclude", "tests"}})<CR>', opts)
 
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tit', ':lua require(\'telescope.builtin\').find_files({find_command={"' .. fd_exe .. '", "--full-path", "tests", "--extension", ".rs"}})<CR>', opts)
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tis', ':lua require(\'telescope.builtin\').find_files({find_command={"' .. fd_exe .. '", "--full-path", "src", "--extension", ".rs"}})<CR>', opts)
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tit',
+            ':lua require(\'telescope.builtin\').find_files({find_command={"' ..
+            fd_exe .. '", "--full-path", "tests", "--extension", ".rs"}})<CR>', opts)
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tis',
+            ':lua require(\'telescope.builtin\').find_files({find_command={"' ..
+            fd_exe .. '", "--full-path", "src", "--extension", ".rs"}})<CR>', opts)
     end
 
     local send_r = ':lua require("harpoon.term").sendCommand(1, "\\r")<CR>'
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>TestNearest<CR>' .. send_r, opt_sn)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rl', '<cmd>TestLast<CR>' .. send_r, opt_sn)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rN', '<cmd>lua require("harpoon.term").sendCommand(1, "cargo test " .. split( vim.fn.expand(\'%\'):match(\'[^\\\\]*.rs$\'), \'.rs\')[1] .. "\\r") <CR>', opt_sn)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rN',
+        '<cmd>lua require("harpoon.term").sendCommand(1, "cargo test " .. split( vim.fn.expand(\'%\'):match(\'[^\\\\]*.rs$\'), \'.rs\')[1] .. "\\r") <CR>'
+        , opt_sn)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>M', ':lua vim.fn.expand(\'%\'):match(\'[\\^\\]*.rs$\')', opt_sn)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rs', '<cmd>TestSuite<CR>' .. send_r, opt_sn)
 
@@ -482,38 +515,6 @@ capabilities.textDocument.completion.completionItem.snippetSupport = false
 --         },
 --     }
 -- })
-local rust_analyzer_config = {
-    capabilities = capabilities,
-    on_attach = my_on_attach,
-    settings = {
-        ["rust-analyzer"] = {
-            procMacro = {
-                enable = false
-            },
-            diagnostics = {
-                enable = true,
-                disabled = {"unresolved-proc-macro"}
-            }
-        }
-    },
-    filetypes = { 'rust', 'rs' },
-    checkOnSave = {
-        enable = true,
-    },
-    server = {
-        path = "C:/Users/Lenovo/AppData/Local/nvim-data/lsp_servers/rust/rust-analyzer.exe"
-    },
-    handlers = {
-        ["textDocument/hover"] = require('vim.lsp').with(
-            vim.lsp.handlers.hover, {
-            -- Use a sharp border with `FloatBorder` highlights
-            border = "single",
-            width = 80
-        })
-    }
-}
--- local lspconfig = require('lspconfig')
---
 --
 -- lspconfig.rust_analyzer.setup(rust_analyzer_config)
 
@@ -536,8 +537,37 @@ local rust_analyzer_config = {
 --     },
 -- }
 require("rust-tools").setup({
-    server = rust_analyzer_config,
-    -- dap = dap
+    server = {
+        capabilities = capabilities,
+        on_attach = my_on_attach,
+        settings = {
+            ["rust-analyzer"] = {
+                procMacro = {
+                    enable = false
+                },
+                diagnostics = {
+                    enable = true,
+                    disabled = { "unresolved-proc-macro" }
+                }
+            }
+        },
+        filetypes = { 'rust', 'rs' },
+        checkOnSave = {
+            enable = true,
+        },
+        server = {
+            path = "C:/Users/Lenovo/AppData/Local/nvim-data/lsp_servers/rust/rust-analyzer.exe"
+        },
+        handlers = {
+            ["textDocument/hover"] = require('vim.lsp').with(
+                vim.lsp.handlers.hover, {
+                -- Use a sharp border with `FloatBorder` highlights
+                border = "single",
+                width = 80
+            })
+        }
+    }
+    ,
 })
 
 -- require('rust-tools.inlay_hints').set_inlay_hints()

@@ -213,6 +213,11 @@ require('packer').startup({
         -- diffview.nvim [plenary]{{{
         use({ 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }) --}}}
         -- pretty-fold.nvim {{{
+        -- use { 'anuvyklack/pretty-fold.nvim',
+        --     config = function()
+        --         require('pretty-fold').setup()
+        --     end
+        -- }
         -- use({ 'anuvyklack/pretty-fold.nvim',
         --     -- requires = 'anuvyklack/nvim-keymap-amend', -- only for preview
         --     config = function()
@@ -302,7 +307,8 @@ require('packer').startup({
                 vim.keymap.set("n", "gK", require("hover").hover_select, { desc = "hover.nvim (select)" })
             end
         }
-        use { 'stevearc/overseer.nvim', config = function() require('overseer').setup() end }
+        use { 'stevearc/overseer.nvim', -- commit = "82ed207195b58a73b9f7d013d6eb3c7d78674ac9",
+            config = function() require('overseer').setup() end }
 
         use 'Shatur/neovim-tasks'
         use {
@@ -337,8 +343,28 @@ require('packer').startup({
                 { "nvim-treesitter/nvim-treesitter" }
             }
         }
-	use { "axkirillov/telescope-changed-files" }
+        use { "axkirillov/telescope-changed-files" }
 
+        -- use { "alexghergh/nvim-tmux-navigation" }
+        -- use({
+        --     "aserowy/tmux.nvim",
+        --     config = function() return require("tmux").setup() end
+        -- })
+        -- use { 'alexghergh/nvim-tmux-navigation', config = function()
+        --     require 'nvim-tmux-navigation'.setup {
+        --         disable_when_zoomed = true, -- defaults to false
+        --         keybindings = {
+        --             left = "<C-h>",
+        --             down = "<C-j>",
+        --             up = "<C-k>",
+        --             right = "<C-l>",
+        --             last_active = "<C-\\>",
+        --             next = "<C-Space>",
+        --         }
+        --     }
+        -- end
+        -- }
+        -- use("nathom/filetype.nvim")
     end,
 
 

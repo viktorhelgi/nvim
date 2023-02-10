@@ -803,7 +803,8 @@ gs_map({ 'n', 'v' }, '<leader>uh', ':Gitsigns stage_hunk<CR>')
 gs_map({ 'n', 'v' }, '<leader>ur', ':Gitsigns reset_hunk<CR>')
 gs_map({ 'o', 'x' }, 'uh', ':<c-u>gitsigns select_hunk<cr>')
 gs_map('n', '<leader>ub', require('gitsigns').toggle_current_line_blame)
-gs_map('n', '<leader>us', require('gitsigns').stage_buffer)
+gs_map('n', '<leader>us', require('gitsigns').stage_hunk)
+gs_map('n', '<leader>uS', require('gitsigns').stage_buffer)
 gs_map('n', '<leader>uu', require('gitsigns').undo_stage_hunk)
 gs_map('n', '<leader>ur', require('gitsigns').reset_buffer)
 gs_map('n', '<leader>up', require('gitsigns').preview_hunk)
@@ -875,10 +876,10 @@ vim.api.nvim_buf_set_keymap(0, 'n', '<leader>bb', '<cmd>w<cr><cmd>so %<cr><cmd>l
 -- map('n', '<leader>rbf', '<cmd>lua _G.build_file_in_nvim(vim.fn.expand("%:p"))<CR><CMD>copen<CR>', opt_sn)
 -- map('n', '<leader>rf', '<cmd>lua _G.run_file_here(vim.fn.expand("%:p"))<CR>', opt_sn)
 map('n', '<leader>rfa', '<cmd>lua _G.build_file_in_nvim(vim.fn.expand("%:p"))<CR>', opt_sn)
-map('n', '<leader>rtl', '<cmd>lua _G.make_file_right(vim.fn.expand("%:p"))<CR>', opt_sn)
+-- map('n', '<leader>rtl', '<cmd>lua _G.make_file_right(vim.fn.expand("%:p"))<CR>', opt_sn)
 
 map('n', '<leader>rmh', '<cmd>lua _G.run_make_in_nvim(vim.fn.expand("%:p"))<CR>', opt_sn)
-map('n', '<leader>rbh', '<cmd>lua _G.run_cmake_in_nvim(vim.fn.expand("%:p"))<CR>', opt_sn)
+-- map('n', '<leader>rbl', '<cmd>lua _G.run_cmake_in_nvim(vim.fn.expand("%:p"))<CR>', opt_sn)
 
 
 
@@ -919,15 +920,38 @@ map('n', '<leader>at}', '<cmd>%s/}//g<cr>', opt_sn)
 map('n', '<leader>at2', '<cmd>%s/'..until_.."timestamp//g<CR>", opt_sn)
 
 -- map('n', '<leader>rbu', '<cmd>lua _G.run_cmake_in_nvim(vim.fn.expand("%:p"))<CR>', opt_sn)
-map('n', '<leader>rmu', "<cmd>lua require('overseer').run_template({name='Build lib'})<CR>", opt_sn)
-map('n', '<leader>rme', "<cmd>lua require('overseer').run_template({name='Build project'})<CR>", opt_sn)
+map('n', '<leader>rbp', "<cmd>lua require('overseer').run_template({name='Run CMake'})<CR>", opt_sn)
+map('n', '<leader>rmf', "<cmd>lua require('overseer').run_template({name='Run Make (on file)'})<CR>", opt_sn)
+map('n', '<leader>rmp', "<cmd>lua require('overseer').run_template({name='Run Make'})<CR>", opt_sn)
 map('n', '<leader>ot', "<cmd>OverseerToggle<CR>", opt_sn)
 
-map('n', '<leader>rtl', '<cmd>lua _G.run_make_left_and_run(vim.fn.expand("%:p"))<CR>', opt_sn)
+map('n', '<leader>rt', '<cmd>lua _G.run_make_left_and_run(vim.fn.expand("%:p"))<CR>', opt_sn)
+map('n', '<leader>ra', '<cmd>lua _G.run_again()<CR>', opt_sn)
 
 map('n', '<leader>on', '<cmd>lua require("harpoon.tmux").sendCommand(2, "nvim "..vim.fn.expand("%").."\\r")<CR>', opt_sn)
 map('n', '<leader>cP', '<cmd>colder<CR>', opt_sn)
 map('n', '<leader>cN', '<cmd>cnewer<CR>', opt_sn)
+
+map('n', '<leader>wl', '<cmd>wincmd l<CR>', opt_sn)
+map('n', '<leader>wh', '<cmd>wincmd h<CR>', opt_sn)
+map('n', '<leader>wj', '<cmd>wincmd j<CR>', opt_sn)
+map('n', '<leader>wk', '<cmd>wincmd k<CR>', opt_sn)
+
+map('n', '<C-l>', '<cmd>wincmd l<CR>', opt_sn)
+map('n', '<C-h>', '<cmd>wincmd h<CR>', opt_sn)
+map('n', '<C-j>', '<cmd>wincmd j<CR>', opt_sn)
+map('n', '<C-k>', '<cmd>wincmd k<CR>', opt_sn)
+
+
+_G.run_python_file = function(file)
+
+    print(file)
+    require('harpoon.term').sendCommand(1, "python3 "..file.."\r")
+end
+
+map('n', '<leader>rp', ':lua _G.run_python_file(vim.fn.expand("%:p"))<CR>', opt_sn)
+-- require('lib.goto_parent')
+-- map('n', 'gp', '<cmd>lua _G.goto_parent(vim.fn.expand("%:p"), "CMakeLists.txt")<CR>')
 
 
 -- map('n', '<leader>rch', '<cmd>lua _G.run_xxx_in_nvim("cd build && cmake ..")<CR><CMD>copen<CR>', opt_sn)

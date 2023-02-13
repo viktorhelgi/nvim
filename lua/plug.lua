@@ -344,6 +344,7 @@ require('packer').startup({
             }
         }
         use { "axkirillov/telescope-changed-files" }
+        use { "untitled-ai/jupyter_ascending.vim"}
 
         -- use { "alexghergh/nvim-tmux-navigation" }
         -- use({

@@ -43,6 +43,10 @@ local on_attach = function(_, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rt', '<CMD>TestFile --disable-warnings<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<CMD>TestNearest --disable-warnings<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rl', '<CMD>TestLast<CR>', opts)
+
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>jr', ':call jupyter_ascending#restart()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>je', ':call jupyter_ascending#execute()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ja', ':call jupyter_ascending#execute_all()<CR>', opts)
 end
 
 lspconfig.pyright.setup({

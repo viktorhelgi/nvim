@@ -233,14 +233,7 @@ local my_on_attach = function(client, bufnr)
     ---------------------------------------------------------------------------------
 
 
-    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rt', ':lua require("harpoon.term").sendCommand(1, "pytest --no-header -v -rP " .. vim.fn.expand(\'%\') .. "\\r") <CR>', opts)
-    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rp', ':lua require("harpoon.term").sendCommand(1, "python " .. vim.fn.expand(\'%\') .. "\\r")<CR>', opts)
-
-
     if vim.loop.os_uname().sysname == "Linux" then
-        local python_exe = '/usr/bin/python3.8'
-        -- vim.g.python3_host_prog = python_exe
-        -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rp', ':lua require("harpoon.term").sendCommand(1, "cargo run " .. vim.fn.expand(\'%\') .. "\\r")<CR>', opts)
 
         local fd_exe = '/usr/bin/fdfind'
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tt',
@@ -251,9 +244,6 @@ local my_on_attach = function(client, bufnr)
             fd_exe .. '",             "--type", "f",  "--extension", "rs",    "--exclude", "tests"}})<CR>', opts)
 
     else
-        local python_exe = 'C:/Users/Lenovo/miniconda3/envs/LSPenv/python'
-        -- vim.g.python3_host_prog = python_exe
-        -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rp', ':lua require("harpoon.term").sendCommand(1, "'..python_exe..' " .. vim.fn.expand(\'%\') .. "\\r")<CR>', opts)
 
         local fd_exe = "C:/Users/Lenovo/scoop/shims/fd.exe"
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tt',

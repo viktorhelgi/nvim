@@ -1,9 +1,11 @@
 local ts_config = require('nvim-treesitter.configs')
 
 
+vim.keymap.set('n', 'ga', ":TSTextobjectRepeatLastMove<CR>", {})
+
 ts_config.setup({
 	-- A list of parser names, or "all"
-	ensure_installed = { 'lua', 'python', 'cpp'},
+	ensure_installed = { 'lua', 'python', 'cpp', 'fish'},
 
 	-- Install languages synchronously (only applied to `ensure_installed`)
 	sync_install = true,
@@ -27,32 +29,53 @@ ts_config.setup({
 	-- #########################################
 	-- Viktor Configs
 	textobjects = {
+        move = {
+            enable = true,
+            set_jumps = true,
+            goto_next_start = {
+              ["]n"] = "@number.inner",
+              ["]ah"] = "@assignment.lhs",
+              ["]al"] = "@assignment.rhs",
+              ["]r"] = "@return.inner",
+              ["]p"] = "@parameter.inner",
+              ["]m"] = "@function.outer",
+              ["]c"] = "@class.outer",
+              ["]im"] = "@function.inner",
+              ["]ic"] = "@class.inner",
+            },
+            goto_next_end = {
+              ["]R"] = "@return.inner",
+              ["]M"] = "@function.outer",
+              ["]C"] = "@class.outer",
+              ["]iM"] = "@function.inner",
+              ["]iC"] = "@class.inner",
+            },
+            goto_previous_start = {
+              ["[n"] = "@number.inner",
+              ["[ah"] = "@assignment.lhs",
+              ["[al"] = "@assignment.rhs",
+              ["[r"] = "@return.inner",
+              ["[p"] = "@parameter.inner",
+              ["[m"] = "@function.outer",
+              ["[c"] = "@class.outer",
+              ["[im"] = "@function.inner",
+              ["[ic"] = "@class.inner",
+            },
+            goto_previous_end = {
+              ["[R"] = "@return.inner",
+              ["[M"] = "@function.outer",
+              ["[C"] = "@class.outer",
+              ["[iM"] = "@function.inner",
+              ["[iC"] = "@class.inner",
+            },
+        },
 		lsp_interop = {
 			enable = true,
 			border = 'none',
 			peek_definition_code = {
 				-- ["<leader>pd"] = "@function.outer",
-				["gp"] = "@function.outer",
-				-- ["<leader>po"] = "@class.outer",
-				-- ["g1"] = "@block.inner",
-				-- ["g2"] = "@block.outer",
-				-- ["g3"] = "@call.inner",
-				-- ["g4"] = "@call.outer",
-				-- ["g6"] = "@class.inner",
-				-- ["g7"] = "@class.outer",
-				-- ["g8"] = "@comment.outer",
-				-- ["g9"] = "@conditional.inner",
-				["g1"] = "@conditional.outer",
-				["g2"] = "@frame.inner",
-				["g3"] = "@frame.outer",
-				["g4"] = "@function.inner",
-				["g6"] = "@function.outer",
-				["g7"] = "@loop.inner",
-				["g8"] = "@loop.outer",
-				["g9"] = "@parameter.inner",
-				-- ["gx"] = "@parameter.outer",
-				-- ["gx"] = "@scopename.inner",
-				-- ["gx"] = "@statement.outer",
+				["<leader>pm"] = "@function.outer",
+				["<leader>pc"] = "@class.outer"
 			}
 		}
 	},

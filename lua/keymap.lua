@@ -187,10 +187,10 @@ _G.set_trouble_mappigs = function()
     set_jump_mappings("lua require('trouble').previous(" .. opts .. ")", "lua require('trouble').next(" .. opts .. ")")
 end
 
-snmap('cse', 'lua _G.set_jump_mappings(\'cp\', \'cn\')')
+-- snmap('cse', 'lua _G.set_jump_mappings(\'cp\', \'cn\')')
 snmap('cj', 'lua _G.set_jump_mappings(\'cp\', \'cn\')')
 snmap('cx', 'lua _G.set_trouble_mappigs()')
-snmap('csl', 'lua _G.set_jump_mappings(\'lprev\', \'lnext\')')
+-- snmap('csl', 'lua _G.set_jump_mappings(\'lprev\', \'lnext\')')
 vim.api.nvim_set_keymap('n', '<leader>cu', '<cmd>Task start cmake build_all<cr>', opt_sn)
 
 -- vim.api.nvim_set_keymap('n', '<leader>ce', '<cmd>cex! execute(\'!cd build && ctest --output-on-failure\')<cr>', opt_sn)
@@ -205,8 +205,8 @@ snmap('lR', 'lua vim.lsp.buf.rename()')
 snmap('ld', 'Trouble lsp_definitions')
 snmap('lt', 'Trouble lsp_type_definitions')
 
-snmap('pf', 'TSTextobjectPeekDefinitionCode @function.outer')
-snmap('pc', 'TSTextobjectPeekDefinitionCode @class.outer')
+-- snmap('pf', 'TSTextobjectPeekDefinitionCode @function.outer')
+-- snmap('pc', 'TSTextobjectPeekDefinitionCode @class.outer')
 
 vim.api.nvim_set_keymap('n', 'gk', 'K', {})
 
@@ -215,8 +215,8 @@ vim.api.nvim_set_keymap('n', 'gk', 'K', {})
 
 -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>k',    aa_a()   , opts_silent)
 -- snmap('cn', 'lua _G._open_qfl()')
-snmap('cp', 'cp')
-snmap('cn', 'cn')
+-- snmap('cp', 'cp')
+-- snmap('cn', 'cn')
 snmap('la', 'CodeActionMenu')
 map('n', 'g,', '<cmd> cp <cr>', opt_sn)
 map('n', 'g.', '<cmd> cn <cr>', opt_sn)
@@ -226,7 +226,104 @@ map('n', 'c,', '<cmd> cp <cr>', opt_sn)
 map('n', 'c.', '<cmd> cn <cr>', opt_sn)
 
 snmap('co', { 'cope', 'lua _G._open_qfl()' })
-snmap('cl', { 'cope', 'lua _G._open_qfl()', 'winc L' })
+
+_G.get_qflist_dir = function()
+    local pwd = vim.fn.getcwd()
+    pwd = pwd:gsub("/", "__")
+    local qflist_dir = vim.fn.expand("~/.config/nvim/.qflists/") .. pwd
+
+    local path = require('plenary.path'):new(qflist_dir)
+    return path
+end
+_G.create_qflist_filename = function(dir)
+    vim.cmd(':silent !mkdir -p '..dir)
+    local files = require('plenary.scandir').scan_dir(dir, {})
+    local n_files = #files
+    local filename = dir .. "/" .. "list" .. n_files+1 ..".qf"
+    return filename
+end
+
+_G.open_qflist_from_filename = function(quickfix_list)
+    quickfix_list = quickfix_list:gsub("|1|", "")
+    quickfix_list = quickfix_list:gsub("|| ", "")
+    local path = require('plenary.path'):new(quickfix_list)
+    print("letsgo")
+    if path:exists() then
+        print("file exists")
+        vim.cmd('cfile '..quickfix_list..'')
+    end
+    vim.keymap.del('n', "<f3>")
+end
+_G.read_qf_filename = function(filename)
+    local file_reader = io.open(filename)
+    if file_reader == nil then
+        print("file is empty")
+        return
+    end
+    vim.cmd("call setqflist([], 'f', {'title':'" .. filename .. "', 'id':'qflist_'.. '"..filename.."'})")
+    for line in file_reader:lines() do
+        line = line:sub(0, line:find('|')-1)
+        vim.cmd("call setqflist([{'filename':'"..line.."'}], 'a')")
+    end
+end
+
+_G.load_qflist = function()
+    local pwd = vim.fn.getcwd()
+    local dir = _G.get_qflist_dir()
+    local files = require('plenary.scandir').scan_dir(dir.filename, {})
+    local n_files = #files
+    if n_files == 0 then
+        print("no quickfix list has been saved corresponding to the directory\n  "..pwd)
+    elseif n_files == 1 then
+        _G.read_qf_filename(files[1])
+    else
+        vim.cmd("call setqflist([], 'f', {'title':'available qflists', 'id':'available_qflists'})")
+
+
+        for _,file in pairs(files) do
+            vim.cmd("call setqflist([{'filename':'"..file.."', 'lnum':1}], 'a')")
+        end
+        vim.keymap.set('n', "<f3>", function() _G.open_qflist_from_filename(vim.fn.expand("<cWORD>")) end, { noremap = true, silent = false })
+        -- require('telescope.builtin').find_files({ cwd = dir.filename })
+        -- require('telescope.builtin').find_files({ cwd = dir.filename })
+        -- TSmap('te', 'find_files', '')
+    end
+end
+
+-- _G.get_ = function(pwd)
+--     pwd = pwd:gsub("/", "__")
+--     local qflist_dir = vim.fn.expand("~/.config/nvim/.qflists/") .. pwd
+--     vim.cmd(':silent !mkdir -p '..qflist_dir)
+--
+--     local filename = _G.create_qflist_filename(pwd)
+--     -- vim.cmd(':w "'..filename..'"')
+--     vim.api.nvim_command('write "'..filename..'"')
+-- end
+
+-- _G.save_qflist = 
+-- snmap('cl', { 'lua _G.save_qflist(vim.fn.expand("%:p:h"))'})
+-- snmap('cl', { "lua vim.cmd(\"echo '\".._G.save_qflist(vim.fn.getcwd()) )..\"'\""})
+
+vim.keymap.set('n', "<leader>cs",  function()
+    if "qf" ~= vim.bo.filetype then
+        print("not a qflist file")
+        return
+    end
+    local pwd = vim.fn.getcwd()
+    pwd = pwd:gsub("/", "__")
+    local qflist_dir = vim.fn.expand("~/.config/nvim/.qflists/") .. pwd
+    local filename = _G.create_qflist_filename(qflist_dir)
+    vim.cmd('w '..filename)
+    print("File saved: "..filename)
+end, { noremap = true, silent = false })
+-- vim.keymap.set('n', "<leader>cs",  "<cmd>lua vim.cmd('echo \"'.._G.save_qflist()..'\"')<cr>", { noremap = true, silent = false })
+-- vim.keymap.set('n', "<leader>cs",  "<cmd>lua vim.cmd('echo \"'.._G.save_qflist()..'\"')<cr><cmd>echo 'quickfix-list saved'<cr>", { noremap = true, silent = false })
+-- vim.keymap.set('n', "<leader>cl",  "<cmd>lua vim.cmd('cfile '.._G.save_qflist(vim.fn.getcwd()))<cr>", { noremap = true, silent = false })
+vim.keymap.set('n', "<leader>cl",  "<cmd>lua _G.load_qflist()<cr>", { noremap = true, silent = false })
+-- vim.keymap.set('n', "<leader>cL",  "<cmd>lua _G.load_qflist()<cr>", { noremap = true, silent = false })
+-- _G.open_qflist_from_filename
+-- snmap('cl', { 'cope', 'lua _G._open_qfl()', 'winc L' })
+
 snmap('cb', { 'lua require(\'diaglist\').open_buffer_diagnostics()', 'lua _G._open_ll()' })
 -- snmap('ca', {'lua require(\'diaglist\').open_all_diagnostics()', 'lua _G._open_ll()'})
 snmap('cd', { 'lua vim.diagnostic.setqflist()', 'lua _G._open_qfl()' })
@@ -354,8 +451,8 @@ nmap('gP', 'Git pull ')
 -- {{{ [H] - Harpoon
 
 local send_r = ':lua require("harpoon.term").sendCommand(1, "\\r")<CR>'
-map('n', '<leader>rl', '<cmd>TestLast<CR>' .. send_r, opt_sn)
-map('n', '<leader>rs', '<cmd>TestSuite<CR>' .. send_r, opt_sn)
+-- map('n', '<leader>rl', '<cmd>TestLast<CR>' .. send_r, opt_sn)
+-- map('n', '<leader>rs', '<cmd>TestSuite<CR>' .. send_r, opt_sn)
 
 local function require_map(bind, path, func, args)
     if args == nil then
@@ -369,36 +466,6 @@ require_map('h\'', 'harpoon.mark', 'add_file')
 require_map('ht', 'harpoon.ui', 'toggle_quick_menu')
 require_map('hn', 'harpoon.ui', 'nav_next')
 require_map('hp', 'harpoon.ui', 'nav_prev')
-
---map('n', '<leader>h\'', ':lua require("harpoon.mark").add_file()<CR>', opt_sn)
---map('n', '<leader>ht', ':lua require("harpoon.ui").toggle_quick_menu()<CR>', opt_sn)
---map('n', '<leader>hn', ':lua require("harpoon.ui").nav_next()<CR>', opt_sn)
---map('n', '<leader>hp', ':lua require("harpoon.ui").nav_prev()<CR>', opt_sn)
-
--- -- {{{ related
-
--- map('n', '<leader>1', ':lua require("harpoon.term").sendCommand(1, "python main.py\\r")<CR>', opt_sn)
--- map('n', '<leader>2', ':lua require("harpoon.term").sendCommand(1, "python run.py\\r")<CR>', opt_sn)
--- map('n', '<leader>p', ':lua require("harpoon.term").sendCommand(1, "pytest -v " .. vim.fn.expand(\'%\') .. "\\r") <CR>', opt_sn)
-
--- local harpoon = require("harpoon.").
-
--- map('n', '\'w', ':lua require("harpoon.term").gotoTerminal(2)<CR>', opt_sn)
--- map('n', '<F9>', ':lua require("harpoon.term").sendCommand(1, "python main.py\\r")<CR>', opt_sn)
--- map('n', '<leader>r', ':lua require("harpoon.term").sendCommand(1, "python test_route_guidance.py\\r")<CR>', opt_sn)
-
--- -- }}}
--- -- {{{ hop.nvim
--- map('n', '<leader>hh', ':HopWord<CR>', opt_sn)
--- map('n', '<leader>hk', ':HopWordBC<CR>', opt_sn)
--- map('n', '<leader>hj', ':HopWordAC<CR>', opt_sn)
--- map('n', '<leader>hl', ':HopWordMW<CR>', opt_sn)
--- map('n', '<leader>hc', ':HopChar1<CR>', opt_sn)
--- map('n', '<leader>hC', ':HopChar2<CR>', opt_sn)
--- map('n', '<leader>hg', ':HopPattern<CR>', opt_sn)
--- map('n', '<leader>hn', ':HopLineStart<CR>', opt_sn)
--- map('n', '<leader>hf', ':HopWordCurrentLine<CR>', opt_sn)
--- -- }}}
 
 -- }}}
 -- {{{ [I] - ???
@@ -459,14 +526,6 @@ snmap('q', 'q')
 snmap('s', 'w')
 -- }}}
 -- {{{ [T] - Telescope
--- local function TSmap(mapping, func, inputs)
---     if inputs==nil then
---         map('n', '<leader>'..mapping, ':'..func..'<CR>', {noremap = true})
---     else
--- 	local st = ':lua require(\'telescope.builtin\').'
--- 	map('n', '<leader>'..mapping, st..func..'('..inputs..')<CR>', { noremap = true })
---     end
--- end
 local function TSmap(bind, func, args)
     require_map(bind, 'telescope.builtin', func, args)
 end
@@ -493,6 +552,7 @@ nmap('tj', 'Telescope file_browser path=%:p:h')
 
 nmap('tgs', 'Telescope git_status')
 nmap('tgf', 'Telescope git_files')
+nmap('tq', 'Telescope quickfixhistory')
 
 -- TSmap('tg', 'find_files', '{ cwd = vim.fn.expand(\'%:p:h\') }')
 
@@ -525,43 +585,33 @@ snmap('vk', 'TSTextobjectGotoNextStart @block.inner')
 snmap('ve', 'TSTextobjectGotoPreviousEnd @block.outer')
 snmap('vu', 'TSTextobjectGotoPreviousEnd @block.inner')
 
--- function
-map('n', '[mi', ':TSTextobjectGotoPreviousStart @function.inner<CR>', opt_sn)
-map('n', '[mo', ':TSTextobjectGotoPreviousStart @function.outer<CR>', opt_sn)
-map('n', ']mi', ':TSTextobjectGotoNextStart @function.inner<CR>', opt_sn)
-map('n', ']mo', ':TSTextobjectGotoNextStart @function.outer<CR>', opt_sn)
-
--- class
-map('n', '[ci', ':TSTextobjectGotoPreviousStart @class.inner<CR>', opt_sn)
-map('n', '[co', ':TSTextobjectGotoPreviousStart @class.outer<CR>', opt_sn)
-map('n', ']ci', ':TSTextobjectGotoNextStart @class.inner<CR>', opt_sn)
-map('n', ']co', ':TSTextobjectGotoNextStart @class.outer<CR>', opt_sn)
-
--- loop
-map('n', '[li', ':TSTextobjectGotoPreviousStart @loop.inner<CR>', opt_sn)
-map('n', '[lo', ':TSTextobjectGotoPreviousStart @loop.outer<CR>', opt_sn)
-map('n', ']li', ':TSTextobjectGotoNextStart @loop.inner<CR>', opt_sn)
-map('n', ']lo', ':TSTextobjectGotoNextStart @loop.outer<CR>', opt_sn)
-
--- [if] conditional
-map('n', '[ii', ':TSTextobjectGotoPreviousStart @loop.inner<CR>', opt_sn)
-map('n', '[io', ':TSTextobjectGotoPreviousStart @loop.outer<CR>', opt_sn)
-map('n', ']ii', ':TSTextobjectGotoNextStart @loop.inner<CR>', opt_sn)
-map('n', ']io', ':TSTextobjectGotoNextStart @loop.outer<CR>', opt_sn)
-
--- [if] conditional
-map('n', '[ti', ':TSTextobjectGotoPreviousStart @call.inner<CR>', opt_sn)
-map('n', '[to', ':TSTextobjectGotoPreviousStart @call.outer<CR>', opt_sn)
-map('n', ']ti', ':TSTextobjectGotoNextStart @call.inner<CR>', opt_sn)
-map('n', ']to', ':TSTextobjectGotoNextStart @call.outer<CR>', opt_sn)
-
-
--- statement
-map('n', '[s', ':TSTextobjectGotoPreviousStart @statement.outer<CR>', opt_sn)
-map('n', ']s', ':TSTextobjectGotoNextStart @statement.outer<CR>', opt_sn)
--- parameter
-map('n', '[p', ':TSTextobjectGotoPreviousStart @parameter.inner<CR>', opt_sn)
-map('n', ']p', ':TSTextobjectGotoNextStart @parameter.inner<CR>', opt_sn)
+-- -- function
+-- map('n', '[m', ':TSTextobjectGotoPreviousStart @function.outer<CR>', opt_sn)
+-- map('n', ']m', ':TSTextobjectGotoNextStart @function.outer<CR>', opt_sn)
+--
+-- -- class
+-- map('n', '[c', ':TSTextobjectGotoPreviousStart @class.inner<CR>', opt_sn)
+-- map('n', ']c', ':TSTextobjectGotoNextStart @class.inner<CR>', opt_sn)
+--
+-- -- loop
+-- map('n', '[l', ':TSTextobjectGotoPreviousStart @loop.outer<CR>', opt_sn)
+-- map('n', ']l', ':TSTextobjectGotoNextStart @loop.outer<CR>', opt_sn)
+--
+-- -- [if] conditional
+-- map('n', '[i', ':TSTextobjectGotoPreviousStart @loop.outer<CR>', opt_sn)
+-- map('n', ']i', ':TSTextobjectGotoNextStart @loop.outer<CR>', opt_sn)
+--
+-- -- [if] conditional
+-- map('n', '[ti', ':TSTextobjectGotoPreviousStart @call.outer<CR>', opt_sn)
+-- map('n', ']ti', ':TSTextobjectGotoNextStart @call.outer<CR>', opt_sn)
+--
+--
+-- -- statement
+-- map('n', '[s', ':TSTextobjectGotoPreviousStart @statement.outer<CR>', opt_sn)
+-- map('n', ']s', ':TSTextobjectGotoNextStart @statement.outer<CR>', opt_sn)
+-- -- parameter
+-- map('n', '[p', ':TSTextobjectGotoPreviousStart @parameter.inner<CR>', opt_sn)
+-- map('n', ']p', ':TSTextobjectGotoNextStart @parameter.inner<CR>', opt_sn)
 
 -- }}}
 -- {{{ [W] -
@@ -630,7 +680,7 @@ map('n', 'g{', ':AerialPrev<CR>', opt_sn)
 -- map('n', 'g]', ':TSTextobjectGotoNextStart @function.inner<CR>:TSTextobjectGotoNextStart @function.inner<CR>', opt_sn)
 map('n', 'g[', ':AerialPrevUp<CR>', opt_sn)
 map('n', 'g]', ':AerialNextUp<CR>', opt_sn)
-map('', 'gF', ':lua _G.print_thing(vim.fn.expand("<CWORD>"))<CR>', opt_e)
+map('', 'gF', ':lua _G.print_stuff(vim.fn.expand("<cWORD>"))<CR>', opt_sn)
 -- map('', 'gF', ':expand("<cWORD>")<CR>', opt_e)
 -- }}}
 -- }}}
@@ -649,10 +699,6 @@ map('', 'gF', ':lua _G.print_thing(vim.fn.expand("<CWORD>"))<CR>', opt_e)
 map('n', '\'/', '<cmd>A<CR>', opt_sn)
 -- map('n', '\'\\', '<cmd>AV<CR>', opt_sn)
 
-map('n', '\'c', '<cmd>FSHere<CR>', opt_sn)
-map('n', '\'\\h', '<cmd>FSHere<CR>', opt_sn)
-map('n', '\'\\v', '<cmd>FSSplitRight<CR>', opt_sn)
-map('n', '\'\\s', '<cmd>FSSplitBelow<CR>', opt_sn)
 
 map('n', '<leader>\'', ':lua require("harpoon.mark").add_file()<CR>', opt_sn)
 -- require_map('h\'', 'harpoon.mark', 'add_file')
@@ -869,32 +915,21 @@ map('n', '<leader>3', "<cmd>lua vim.g.gruvbox_material_foreground=\"original\"<C
 
 require('lib.qf_cpp')
 
-vim.api.nvim_buf_set_keymap(0, 'n', '<leader>bb', '<cmd>w<cr><cmd>so %<cr><cmd>lua _G.run_xxx_in_nvim("cd build && cmake ..")<CR><CMD>copen<CR>', opt_sn)
 -- map('n', '<leader>rbl', '<cmd>lua _G.build_file(vim.fn.expand("%:p"))<CR>', opt_sn)
 -- map('n', '<leader>rfl', '<cmd>lua _G.run_file_left(vim.fn.expand("%:p"))<CR>', opt_sn)
 
 -- map('n', '<leader>rbf', '<cmd>lua _G.build_file_in_nvim(vim.fn.expand("%:p"))<CR><CMD>copen<CR>', opt_sn)
 -- map('n', '<leader>rf', '<cmd>lua _G.run_file_here(vim.fn.expand("%:p"))<CR>', opt_sn)
-map('n', '<leader>rfa', '<cmd>lua _G.build_file_in_nvim(vim.fn.expand("%:p"))<CR>', opt_sn)
 -- map('n', '<leader>rtl', '<cmd>lua _G.make_file_right(vim.fn.expand("%:p"))<CR>', opt_sn)
 
-map('n', '<leader>rmh', '<cmd>lua _G.run_make_in_nvim(vim.fn.expand("%:p"))<CR>', opt_sn)
 -- map('n', '<leader>rbl', '<cmd>lua _G.run_cmake_in_nvim(vim.fn.expand("%:p"))<CR>', opt_sn)
 
 
 
 -- map('n', '<leader>rah', '<cmd>lua _G.run_file_here(vim.fn.expand("%:p"))<CR>', opt_sn)
-map('n', '<leader>rml', '<cmd>lua _G.run_make_left(vim.fn.expand("%:p"))<CR>', opt_sn)
-map('n', '<leader>rbl', '<cmd>lua _G.build_configure_left(vim.fn.expand("%:p"))<CR>', opt_sn)
 
-map('n', '<leader>rp', '<cmd>lua _G.run_plot(vim.fn.expand("%:p"))<CR>', opt_sn)
 -- map('n', '<leader>rt', '<cmd>lua _G.new_run_test_file(vim.fn.expand("%:p"))<CR>', opt_sn)
 
-map('n', '<leader>ct', '<cmd>lua _G.run_xxx_in_nvim("ctest")<CR><CMD>copen<CR>', opt_sn)
-
-map('n', '<leader>rch', '<cmd>lua _G.run_xxx_in_nvim("cd build && cmake .. && echo Done")<CR><CMD>copen<CR>', opt_sn)
-map('n', '<leader>rdl', '<cmd>lua _G.clear_build(vim.fn.expand("%:p"))<CR>', opt_sn)
-map('n', '<leader>rcl', '<cmd>lua _G.build_file(vim.fn.expand("%:p"))<CR>', opt_sn)
 
 map('n', '<leader>1', '<cmd>so ~/.config/nvim/lua/lib/qf_cpp.lua<CR>', opt_sn)
 
@@ -902,33 +937,26 @@ map('n', '<leader>1', '<cmd>so ~/.config/nvim/lua/lib/qf_cpp.lua<CR>', opt_sn)
 
 
 --  %s/\,\"\"gyr_1_x.*timestamp"":""/
-local comma = "\\,"
-local colon = ":"
-local g = '\\"'
-local until_ = '.*'
+-- local comma = "\\,"
+-- local colon = ":"
+-- local g = '\\"'
+-- local until_ = '.*'
+--
+-- map('n', '<leader>at1', ':%s/'..comma..g..g.."gyr_1_x"..until_.."//g", opt_sn)
+-- map('n', '<leader>at\'', '<cmd>%s/'..g.."//g<cr>", opt_sn)
+-- map('n', '<leader>atx', '<cmd>%s/acc_x//g<cr>', opt_sn)
+-- map('n', '<leader>aty', '<cmd>%s/acc_y//g<cr>', opt_sn)
+-- map('n', '<leader>atz', '<cmd>%s/acc_z//g<cr>', opt_sn)
+-- map('n', '<leader>at:', '<cmd>%s/'..colon..'//g<cr>', opt_sn)
+-- map('n', '<leader>at,', '<cmd>%s/'..comma..'//g<cr>', opt_sn)
+-- map('n', '<leader>at{', '<cmd>%s/{//g<cr>', opt_sn)
+-- map('n', '<leader>at}', '<cmd>%s/}//g<cr>', opt_sn)
+-- map('n', '<leader>at2', '<cmd>%s/'..until_.."timestamp//g<CR>", opt_sn)
 
-map('n', '<leader>at1', ':%s/'..comma..g..g.."gyr_1_x"..until_.."//g", opt_sn)
-map('n', '<leader>at\'', '<cmd>%s/'..g.."//g<cr>", opt_sn)
-map('n', '<leader>atx', '<cmd>%s/acc_x//g<cr>', opt_sn)
-map('n', '<leader>aty', '<cmd>%s/acc_y//g<cr>', opt_sn)
-map('n', '<leader>atz', '<cmd>%s/acc_z//g<cr>', opt_sn)
-map('n', '<leader>at:', '<cmd>%s/'..colon..'//g<cr>', opt_sn)
-map('n', '<leader>at,', '<cmd>%s/'..comma..'//g<cr>', opt_sn)
-map('n', '<leader>at{', '<cmd>%s/{//g<cr>', opt_sn)
-map('n', '<leader>at}', '<cmd>%s/}//g<cr>', opt_sn)
-
-map('n', '<leader>at2', '<cmd>%s/'..until_.."timestamp//g<CR>", opt_sn)
 
 -- map('n', '<leader>rbu', '<cmd>lua _G.run_cmake_in_nvim(vim.fn.expand("%:p"))<CR>', opt_sn)
-map('n', '<leader>rbp', "<cmd>lua require('overseer').run_template({name='Run CMake'})<CR>", opt_sn)
-map('n', '<leader>rmf', "<cmd>lua require('overseer').run_template({name='Run Make (on file)'})<CR>", opt_sn)
-map('n', '<leader>rmp', "<cmd>lua require('overseer').run_template({name='Run Make'})<CR>", opt_sn)
-map('n', '<leader>ot', "<cmd>OverseerToggle<CR>", opt_sn)
 
-map('n', '<leader>rt', '<cmd>lua _G.run_make_left_and_run(vim.fn.expand("%:p"))<CR>', opt_sn)
-map('n', '<leader>ra', '<cmd>lua _G.run_again()<CR>', opt_sn)
-
-map('n', '<leader>on', '<cmd>lua require("harpoon.tmux").sendCommand(2, "nvim "..vim.fn.expand("%").."\\r")<CR>', opt_sn)
+-- map('n', '<leader>on', '<cmd>lua require("harpoon.tmux").sendCommand(2, "nvim "..vim.fn.expand("%").."\\r")<CR>', opt_sn)
 map('n', '<leader>cP', '<cmd>colder<CR>', opt_sn)
 map('n', '<leader>cN', '<cmd>cnewer<CR>', opt_sn)
 

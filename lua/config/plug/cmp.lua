@@ -30,11 +30,20 @@ local cmp_setup_global = {
         }
     },
     mapping = cmp.mapping.preset.insert({
-        ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-u>'] = cmp.mapping.scroll_docs( -4),
         ['<C-d>'] = cmp.mapping.scroll_docs(4),
-        ['<C-Space>'] = cmp.mapping.complete(),
+        ['<C-o>'] = cmp.mapping.complete(),
         ['<C-e>'] = cmp.mapping.abort(),
-        ['<C-i>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+        -- ['<C-i>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+        -- ['<Tab>'] = cmp.mapping({
+        --     i = function()
+        --         if cmp.visible() then
+        --             cmp.mapping.confirm({ select = true })
+        --         else
+        --             vim.fn.feedkeys('<C-z>', 'nt')
+        --             -- vim.fn.feedkeys('    ', 'nt')
+        --         end
+        --     end }),
     }),
     sources = CmpConfigSources({
         { name = 'nvim_lsp' },
@@ -57,9 +66,9 @@ local cmp_setup_global = {
 ---@type cmp.ConfigSchema
 local cmp_setup_rust = {
     mapping = cmp.mapping.preset.insert({
-        ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-u>'] = cmp.mapping.scroll_docs( -4),
         ['<C-d>'] = cmp.mapping.scroll_docs(4),
-        ['<C-Space>'] = cmp.mapping.complete({}),
+        ['<C-Space>'] = cmp.mapping.complete(),
         ['<C-e>'] = cmp.mapping.abort(),
         ['<Tab>'] = cmp.mapping.confirm({
             behavior = cmp.ConfirmBehavior.Insert,
@@ -83,10 +92,10 @@ local cmp_setup_rust = {
             vim_item.kind = require("lspkind.init").presets.default[vim_item.kind] .. " " .. vim_item.kind
             -- set a name for each source
             vim_item.menu = ({
-                buffer = "「Buffer」",
-                nvim_lsp = "「Lsp」",
-                luasnip = "「luasnip」",
-            })[entry.source.name]
+                    buffer = "「Buffer」",
+                    nvim_lsp = "「Lsp」",
+                    luasnip = "「luasnip」",
+                })[entry.source.name]
 
             vim_item.menu = entry:get_completion_item().detail
             return vim_item
@@ -106,12 +115,26 @@ local cmp_setup_git_commit = {
 local cmp_setup_cmdline_slash = {
     mapping = cmp.mapping.preset.cmdline(),
     sources = CmpConfigSources({
+        { name = 'nvim_lsp_document_symbol' },
         { name = 'buffer' }
     })
 }
+-- local mapping_colon = cmp.mapping.preset.cmdline()
+
+-- mappingt_colon
+
 ---@type cmp.ConfigSchema
 local cmp_setup_cmdline_colon = {
-    mapping = cmp.mapping.preset.cmdline(),
+    mapping = {
+        ['<Tab>'] = function()
+            cmp.select.next_item()
+            -- if cmp.visible() then
+            --     cmp.select_next_item()
+            -- else
+            --     vim.fn.feedkeys('<C-z>', 'nt')
+            -- end
+        end,
+    },
     sources = CmpConfigSources({
         { name = 'path' }
     }, {
@@ -124,14 +147,12 @@ local lspkind_configs = {
     -- default: symbol
     -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
     mode = 'symbol_text',
-
     -- default symbol map
     -- can be either 'default' (requires nerd-fonts font) or
     -- 'codicons' for codicon preset (requires vscode-codicons font)
     --
     -- default: 'default'
     preset = 'codicons',
-
     -- override preset symbols
     --
     -- default: {}
@@ -153,6 +174,42 @@ cmp.setup.cmdline(':', cmp_setup_cmdline_colon)
 lspkind.init(lspkind)
 
 cmp.setup.filetype('rust', cmp_setup_rust)
+local cmp_lua_setup = cmp_setup_rust
+cmp_lua_setup.sources = CmpConfigSources({
+    { name = 'nvim_lsp' },
+    { name = 'path' },
+    { name = 'nvim_lua' }
+}, {
+    { name = 'buffer' }
+})
+cmp.setup.filetype('lua', cmp_lua_setup)
 cmp.setup.filetype('cpp', cmp_setup_rust)
 
 cmp.setup.filetype('julia', cmp_setup_rust)
+
+-- ---@type cmp.ConfigSchema
+-- local cmp_setup_sql = cmp_setup_rust
+-- cmp_setup_sql.sources = CmpConfigSources({
+--     { name = 'nvim_lsp' },
+--     { name = 'path' },
+--     { name = 'omni' }
+-- }, {
+--     { name = 'buffer' }
+-- }
+-- )
+-- cmp_setup_sql.mapping = {
+--     ['<C-u>'] = cmp.mapping.scroll_docs( -4),
+--     ['<C-d>'] = cmp.mapping.scroll_docs(4),
+--     ['<C-e>'] = cmp.mapping.abort(),
+--     ['<C-Space>'] = cmp.mapping.complete({
+--         config = {
+--             sources = {
+--                 { name = 'nvim_lsp' }
+--             }
+--         }
+--     }),
+--     ['<C-n>'] = cmp.mapping.complete({ config = { sources = { { name = 'omni' } } } }),
+--     ['<C-f>'] = cmp.mapping.complete({ config = { sources = { { name = 'path' } } } })
+-- }
+--
+-- cmp.setup.filetype('sql', cmp_setup_sql)

@@ -22,17 +22,6 @@ M.setup_server = function(client, bufnr)
                     { formatCommand = "lua-format -i", formatStdin = true }
                 },
                 python = { black, isort, flake8, mypy }
-                -- python = {
-                --     {
-                --         lintCommand = "mypy --show-column-numbers --ignore-missing-imports --show-error-codes",
-                --         lintFormats = {
-                --             "%f:%l:%c: %trror: %m",
-                --             "%f:%l:%c: %tarning: %m",
-                --             "%f:%l:%c: %tote: %m",
-                --         },
-                --         lintSource = "mypy",
-                --     }
-                -- }
             }
         }
     }

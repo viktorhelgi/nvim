@@ -67,6 +67,7 @@ local opt_sn = { noremap = true, silent = true }
 
 local my_on_attach = function(client, bufnr)
     -- require("aerial").on_attach(client, bufnr)
+    local optsb = {noremap = true, silent = false, buffer = bufnr}
 
     local function create_command(commands, delim)
         if type(commands)=="table" then
@@ -141,10 +142,41 @@ local my_on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rV', ':TestVisit<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lf', '<cmd>Format<CR>', opts)
 
+    vim.api.nvim_buf_set_keymap('n', '<leader>rch', '<cmd>lua _G.run_xxx_in_nvim("cd build && cmake .. && echo Done")<CR><CMD>copen<CR>', opts)
+    vim.api.nvim_buf_set_keymap('n', '<leader>rdl', '<cmd>lua _G.clear_build(vim.fn.expand("%:p"))<CR>', opts)
+    vim.api.nvim_buf_set_keymap('n', '<leader>rcl', '<cmd>lua _G.build_file(vim.fn.expand("%:p"))<CR>', opts)
+
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>cb', "<cmd>lua vim.cmd('make -s -C build/'.._G.get_relative_dir('%')) <CR>", opts)
 
+    vim.keymap.set('n', '<leader>rml', function() _G.run_make_left(vim.fn.expand("%:p")) end, optsb)
+    vim.keymap.set('n', '<leader>rbl', function() _G.build_configure_left(vim.fn.expand("%:p")) end, optsb)
+
+    vim.keymap.set('n', '<leader>rp', function() _G.run_plot(vim.fn.expand("%:p")) end, optsb)
+
+    vim.keymap.set('n', '<leader>rfa', function()
+        _G.build_file_in_nvim(vim.fn.expand("%:p"))
+    end, optsb)
+    vim.keymap.set('n', '<leader>rmh', function()
+        _G.run_make_in_nvim(vim.fn.expand("%:p"))
+    end, optsb)
+    vim.keymap.set('n', '<leader>ct', function()
+        _G.run_xxx_in_nvim("ctest")
+        vim.cmd('copen')
+    end, optsb)
+    vim.keymap.set('n', '<leader>bb', '<cmd>w<cr><cmd>so %<cr><cmd>lua _G.run_xxx_in_nvim("cd build && cmake ..")<CR><CMD>copen<CR>', optsb)
+
+    vim.keymap.set('n', '<leader>rbp', function() require('overseer').run_template({name='Run CMake'}) end, optsb)
+    vim.keymap.set('n', '<leader>rmf', function() require('overseer').run_template({name='Run Make (on file)'}) end, optsb)
+    vim.keymap.set('n', '<leader>rmp', function() require('overseer').run_template({name='Run Make'}) end, optsb)
+    vim.keymap.set('n', '<leader>ot', "<cmd>OverseerToggle<CR>", optsb)
+    vim.keymap.set('n', '<leader>rt', function() _G.run_make_left_and_run(vim.fn.expand("%:p")) end, optsb)
+    vim.keymap.set('n', '<leader>ra', function() _G.run_again() end, optsb)
 
 
+    vim.keymap.set('n', '\'c', function() vim.cmd('FSHere') end, opt_sn)
+    vim.keymap.set('n', '\'\\h', function() vim.cmd('FSHere') end, opt_sn)
+    vim.keymap.set('n', '\'\\v', function() vim.cmd('FSSplitRight') end, opt_sn)
+    vim.keymap.set('n', '\'\\s', function() vim.cmd('FSSplitBelow') end, opt_sn)
 
 
     ---------------------------------------------------------------------------------
@@ -152,19 +184,11 @@ local my_on_attach = function(client, bufnr)
 
 
     if vim.loop.os_uname().sysname == "Linux" then
-        local python_exe = '/usr/bin/python4.8'
-        vim.g.python4_host_prog = python_exe
-        -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rp', ':lua require("harpoon.term").sendCommand(2, "cargo run " .. vim.fn.expand(\'%\') .. "\\r")<CR>', opts)
-
         local fd_exe = '/usr/bin/fdfind'
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tt', ':lua require(\'telescope.builtin\').find_files({find_command={"' .. fd_exe .. '", "test_",     "--type", "f",  "--extension", "cpp"                         }})<CR>', opts)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tn', ':lua require(\'telescope.builtin\').find_files({find_command={"' .. fd_exe .. '",             "--type", "f",  "--extension", "cpp",    "--exclude", "tests"}})<CR>', opts)
 
     else
-        local python_exe = 'C:/Users/Lenovo/miniconda4/envs/LSPenv/python'
-        vim.g.python4_host_prog = python_exe
-        -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rp', ':lua require("harpoon.term").sendCommand(2, "'..python_exe..' " .. vim.fn.expand(\'%\') .. "\\r")<CR>', opts)
-
         local fd_exe = "C:/Users/Lenovo/scoop/shims/fd.exe"
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tt', ':lua require(\'telescope.builtin\').find_files({find_command={"' .. fd_exe .. '", "test_",     "--type", "f",  "--extension", "cpp"                         }})<CR>', opts)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>tn', ':lua require(\'telescope.builtin\').find_files({find_command={"' .. fd_exe .. '",             "--type", "f",  "--extension", "cpp",    "--exclude", "tests"}})<CR>', opts)

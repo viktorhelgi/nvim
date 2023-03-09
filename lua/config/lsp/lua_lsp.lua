@@ -289,5 +289,5 @@ local cfg = {
 
 
 require("nvim-lsp-installer").setup {}
-require('lspconfig').sumneko_lua.setup(cfg)
+require('lspconfig').lua_ls.setup(cfg)
 

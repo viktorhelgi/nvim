@@ -51,6 +51,15 @@ require('bqf').setup({
             extra_opts = {'--bind', 'ctrl-o:toggle-all,ctrl-e:preview-half-page-down,ctrl-y:preview-half-page-up', '--delimiter', '│'}
         }
     },
+    func_map = {
+        drop = 'o',
+        openc = 'O',
+        split = '<C-s>',
+        tabdrop = '<C-t>',
+        -- set to empty string to disable
+        tabc = '',
+        ptogglemode = 'z,',
+    },
     preview = {
         auto_preview = false,
         wrap = true

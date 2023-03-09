@@ -48,6 +48,7 @@ end
 _G.print_thing = function(word)
 
     local tab = split(word,':') 
+    print(tab)
 
     local count = 0
     for _ in pairs(tab) do
@@ -61,6 +62,7 @@ _G.print_thing = function(word)
 
     local file_split = split(tab[1], '\\')
     local file = table.concat(file_split, '/')
+    print(file)
 
 
     local row = tab[2]

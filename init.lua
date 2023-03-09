@@ -7,8 +7,8 @@ require('keymap') -- ~/AppData/Local/nvim/lua/keymap.lua
 require('options') -- ~/AppData/Local/nvim/lua/options.lua
 require('autocmds') -- ~/AppData/Local/nvim/lua/autocmds.lua
 
-require('config.lsp')
 require('config.plug')
+require('config.lsp')
 require('config.plug.cmp')
 require('config.modules') -- ~/AppData/Local/nvim/lua/autocmds.lua
 
@@ -39,8 +39,10 @@ vim.g.gruvbox_material_foreground="mix"
 -- vim.cmd('colorscheme material')
 -- vim.cmd('colorscheme gruvbox-material')
 -- vim.cmd('colorscheme catppuccin-frappe')
-require("catppuccin").load("frappe")
+-- require("catppuccin").load("frappe")
+require('themes.gruvbox-material-dark')
 
+-- vim.g.jupyter_ascending_python_executable = "python3"
 
 local find = require('viktor.lib.find')
 
@@ -54,7 +56,6 @@ local find = require('viktor.lib.find')
 
 -- %:~:.:h
 
--- vim.call("remote#host#RegisterPlugin('python3', '$HOME/.vim/plugged/chatgpt.nvim/rplugin/python3/chatgpt_nvim.py', [{'sync': v:false, 'name': 'ChatGPT', 'type': 'command', 'opts': {'nargs': '1'}}])")
 
 -- local fold_snippets = require'foldmethods.snippets'
 -- fold_snippets.setup_folding()

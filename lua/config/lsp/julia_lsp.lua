@@ -156,7 +156,7 @@ local my_on_attach = function(client, bufnr)
 
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', ':AerialPrev<CR>W:RustHoverActions<CR>:RustHoverActions<CR>', opts)
 
-    local python_exe = 'C:/Users/Lenovo/miniconda3/envs/LSPenv/python'
+    -- local python_exe = 'C:/Users/Lenovo/miniconda3/envs/LSPenv/python'
     -- vim.g.python3_host_prog = python_exe
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rp', ':lua require("harpoon.term").sendCommand(1, "'..python_exe..' " .. vim.fn.expand(\'%\') .. "\\r")<CR>', opts)
 

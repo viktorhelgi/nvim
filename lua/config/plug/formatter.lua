@@ -1,6 +1,7 @@
 -- Utilities for creating configurations
 local util = require "formatter.util"
 
+
 -- Provides the Format, FormatWrite, FormatLock, and FormatWriteLock commands
 require("formatter").setup {
     -- Enable or disable logging
@@ -58,13 +59,19 @@ require("formatter").setup {
             --     }
             -- end
         },
+        python = {
+            require('formatter.filetypes.python').black
+        },
+        sql = function() return { exe = "sql-formatter --config ~/.config/nvim/configs/sql-formatter.json", stdin = true } end,
+        -- sql = function() return { exe = "pg_format --config ~/.config/nvim/configs/pg_format.conf", stdin = true } end,
+        -- sql = require('formatter.filetypes.sql').pgformat,
 
         -- Use the special "*" filetype for defining formatter configurations on
         -- any filetype
-        ["*"] = {
-            -- "formatter.filetypes.any" defines default configurations for any
-            -- filetype
-            require("formatter.filetypes.any").remove_trailing_whitespace
-        }
+        -- ["*"] = {
+        --     -- "formatter.filetypes.any" defines default configurations for any
+        --     -- filetype
+        --     require("formatter.filetypes.any").remove_trailing_whitespace
+        -- }
     }
 }

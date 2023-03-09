@@ -78,7 +78,8 @@ vim.opt.termguicolors = true
 
 -- # vim foldmethod=marker
 
-g.python3_host_prog = "/usr/bin/python3.8"
+-- g.python3_host_prog = "/usr/bin/python3"
+g.python3_host_prog = "python3.8"
 
 g.syntastic_yaml_checkers = { "yamllint" }
 
@@ -88,9 +89,10 @@ vim.api.nvim_set_var('_previous_command', 'echo "No command has been executed"')
 -- g.ultest_use_pty = 1
 cmd('let test#python#runner = \'pytest\'')
 cmd('let g:test#preserve_screen = 1')
-cmd('let test#strategy = "harpoon"')
-cmd('let g:test#harpoon_term = 1')
-cmd('let g:test#harpoon#gototerminal = 0')
+-- cmd('let test#strategy = "harpoon"')
+-- cmd('let g:test#harpoon_term = 1')
+-- cmd('let g:test#harpoon#gototerminal = 0')
+cmd("let test#strategy = 'vimux'")
 
 
 

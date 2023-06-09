@@ -1,10 +1,29 @@
 
+local root_dir = require('lspconfig').util.root_pattern({
+	"Pipfile",
+	"pyproject.toml",
+	"setup.py",
+	"setup.cfg",
+	"venv",
+	"requirements.yml",
+	"pyrightconfig.json",
+    ".letsgo"
+})
+
 require('lspconfig').tsserver.setup({
+    root_dir = root_dir,
     single_file_support = true,
+    filetypes = { "javascript", "typescript", "typescriptreact", "typescript.tsx" },
     on_attach = function(client, bufnr)
 
-        local opts = {silent=true}
+        require('nvim-ts-autotag').setup()
 
+        local opts = {silent=true, bufnr=bufnr}
+
+        vim.cmd('setlocal shiftwidth=2')
+        vim.cmd('setlocal colorcolumn=81')
+
+        vim.keymap.set('n', "'L", "<CMD>e ~/.config/nvim/lua/viktor/lsp/tsserver.lua<CR>", opts)
         vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
         vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
         vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)

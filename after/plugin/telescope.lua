@@ -31,10 +31,14 @@ local options = {
                 -- actions.which_key shows the mappings for your picker,
                 -- e.g. git_{create, delete, ...}_branch for the git_branches picker
                 ["<C-h>"] = "which_key",
-                ["<C-t>"] = trouble.open_with_trouble,
                 ["<C-p>"] = actions.move_selection_previous,
                 ["<C-n>"] = actions.move_selection_next,
-                ["<C-o>"] = actions.smart_send_to_qflist
+                ["<C-o>"] = actions.toggle_selection,
+                ["<C-a>"] = actions.add_selected_to_qflist,
+                ["<C-s>"] = actions.send_selected_to_qflist + actions.open_qflist,
+                ["<C-j>"] = actions.toggle_selection + actions.move_selection_next,
+                ["<C-k>"] = actions.toggle_selection + actions.move_selection_previous,
+                -- ["<C-b>"] = actions.toggle_selection
             },
             n = {
                 -- ["<C-t"] = trouble.open_with_trouble,
@@ -53,48 +57,66 @@ local options = {
         -- Now the picker_config_key will be applied every time you call this
         -- builtin picker
     },
-    -- extensions_list = { "themes", "terms" },
-
-    extensions_list = { "aerial", "file_browser", "harpoon", "toggletasks" },
+    extensions_list = {
+        "aerial",
+        "file_browser",
+        -- "harpoon",
+        -- "toggletasks",
+        -- "fzf"
+    },
     extensions = {
-        aerial = {
-            -- Display symbols as <root>.<parent>.<symbol>
-            show_nesting = {
-                ['_'] = false, -- This key will be the default
-                json = true, -- You can set the option for specific filetypes
-                yaml = true,
-            }
-        },
-        -- You don't need to set any of these options.
-        -- IMPORTANT!: this is only a showcase of how you can set default options!
+    --     aerial = {
+    --         -- Display symbols as <root>.<parent>.<symbol>
+    --         show_nesting = {
+    --             ['_'] = false, -- This key will be the default
+    --             json = true, -- You can set the option for specific filetypes
+    --             yaml = true,
+    --         }
+    --     },
+    --     fzf = {
+    --       fuzzy = true,                    -- false will only do exact matching
+    --       override_generic_sorter = true,  -- override the generic sorter
+    --       override_file_sorter = true,     -- override the file sorter
+    --       case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+    --                                        -- the default case_mode is "smart_case"
+    --     },
+    --     -- You don't need to set any of these options.
+    --     -- IMPORTANT!: this is only a showcase of how you can set default options!
         file_browser = {
-            theme = "dropdown",
+            -- theme = "dropdown",
             -- disables netrw and use telescope-file-browser in its place
             hijack_netrw = true,
             mappings = {
                 ["i"] = {
                     -- your custom insert mode mappings
                     -- ["<c-h>"] = filebrowser_actions.toggle_hidden,
-                    ["<C-h>"] = filebrowser_actions.goto_parent_dir,
+                    ["<C-r>"] = filebrowser_actions.goto_cwd,
+                    ["<C-b>"] = filebrowser_actions.goto_parent_dir,
                     ["<C-l>"] = actions.select_default,
+                    ["<C-n>"] = actions.move_selection_next,
+                    ["<C-p>"] = actions.move_selection_previous,
+                    ["<C-x>"] = filebrowser_actions.toggle_hidden,
                 },
                 ["n"] = {
-                    ["c"] = filebrowser_actions.create,
+                    ["n"] = filebrowser_actions.create,
+                    ["<C-n>"] = actions.move_selection_next,
+                    ["<C-p>"] = actions.move_selection_previous,
                     ["<C-h>"] = filebrowser_actions.goto_parent_dir,
                     ["h"]     = filebrowser_actions.goto_parent_dir,
                     ["<C-l>"] = actions.select_default,
                     ["l"]     = actions.select_default,
                     ["H"] = filebrowser_actions.toggle_hidden,
+                    ["<C-x>"] = filebrowser_actions.toggle_hidden,
                     ["C"] = filebrowser_actions.goto_cwd,
 
                 },
             },
         },
-        -- Your extension configuration goes here:
-        -- extension_name = {
-        --   extension_config_key = value,
-        -- }
-        -- please take a look at the readme of the extension you want to configure
+    --     -- Your extension configuration goes here:
+    --     -- extension_name = {
+    --     --   extension_config_key = value,
+    --     -- }
+    --     -- please take a look at the readme of the extension you want to configure
     }
 }
 -- options = require("core.utils").load_override(options, "nvim-telescope/telescope.nvim")

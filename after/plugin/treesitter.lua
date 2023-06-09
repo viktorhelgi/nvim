@@ -1,16 +1,24 @@
-
 local ts_config = require('nvim-treesitter.configs')
+
+
+vim.keymap.set('n', ']t', ":TSTextobjectRepeatLastMoveNext<CR>zz", {})
+vim.keymap.set('n', '[t', ":TSTextobjectRepeatLastMovePrevious<CR>zz", {})
 
 
 ts_config.setup({
 	-- A list of parser names, or "all"
-	ensure_installed = { 'lua', 'python' },
+	ensure_installed = { 'lua', 'python', 'cpp', 'fish', 'rust', 'typescript', 'tsx'},
+    -- 
+    -- parser_install_dir = "/home/viktor/.config/treesitter/parsers",
 
 	-- Install languages synchronously (only applied to `ensure_installed`)
-	sync_install = false,
+	sync_install = true,
 
 	-- List of parsers to ignore installing
 	ignore_install = {},
+    autotag = {
+        enable = true
+    },
 
 	highlight = {
 		-- `false` will disable the whole extension
@@ -25,35 +33,65 @@ ts_config.setup({
 		-- Instead of true it can also be a list of languages
 		additional_vim_regex_highlighting = false,
 	},
+    indent = {
+        enable = {'tsx', 'typescript'}
+    },
 	-- #########################################
 	-- Viktor Configs
 	textobjects = {
+        move = {
+            enable = true,
+            set_jumps = true,
+            goto_next_start = {
+              ["]n"] = "@number.inner",
+              ["]a"] = "@assignment.lhs",
+              -- ["]al"] = "@assignment.rhs",
+              ["]r"] = "@return.inner",
+              ["]p"] = "@parameter.inner",
+              ["]h"] = "@function.outer",
+              ["]c"] = "@class.outer",
+              ["]im"] = "@function.inner",
+              ["]ic"] = "@class.inner",
+            },
+            goto_next_end = {
+              ["]R"] = "@return.inner",
+              ["]H"] = "@function.outer",
+              ["]C"] = "@class.outer",
+              ["]iM"] = "@function.inner",
+              ["]iC"] = "@class.inner",
+            },
+            goto_previous_start = {
+              ["[n"] = "@number.inner",
+              ["[a"] = "@assignment.lhs",
+              -- ["[al"] = "@assignment.rhs",
+              ["[r"] = "@return.inner",
+              ["[p"] = "@parameter.inner",
+              ["[h"] = "@function.outer",
+              ["[c"] = "@class.outer",
+              ["[im"] = "@function.inner",
+              ["[ic"] = "@class.inner",
+            },
+            goto_previous_end = {
+              ["[R"] = "@return.inner",
+              ["[H"] = "@function.outer",
+              ["[C"] = "@class.outer",
+              ["[iM"] = "@function.inner",
+              ["[iC"] = "@class.inner",
+            },
+        },
+        swap = {
+           enable = true,
+           swap_previous = {["[<leader>p"] = "@parameter.inner"},
+           swap_next = {["]<leader>p"] = "@parameter.inner"},
+        },
 		lsp_interop = {
 			enable = true,
-			border = 'none',
+			border = 'single',
 			peek_definition_code = {
 				-- ["<leader>pd"] = "@function.outer",
+				["<leader>lh"] = "@function.outer",
 				["gp"] = "@function.outer",
-				-- ["<leader>po"] = "@class.outer",
-				-- ["g1"] = "@block.inner",
-				-- ["g2"] = "@block.outer",
-				-- ["g3"] = "@call.inner",
-				-- ["g4"] = "@call.outer",
-				-- ["g6"] = "@class.inner",
-				-- ["g7"] = "@class.outer",
-				-- ["g8"] = "@comment.outer",
-				-- ["g9"] = "@conditional.inner",
-				["g1"] = "@conditional.outer",
-				["g2"] = "@frame.inner",
-				["g3"] = "@frame.outer",
-				["g4"] = "@function.inner",
-				["g6"] = "@function.outer",
-				["g7"] = "@loop.inner",
-				["g8"] = "@loop.outer",
-				["g9"] = "@parameter.inner",
-				-- ["gx"] = "@parameter.outer",
-				-- ["gx"] = "@scopename.inner",
-				-- ["gx"] = "@statement.outer",
+				["<leader>lc"] = "@class.outer"
 			}
 		}
 	},

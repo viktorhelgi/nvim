@@ -1,8 +1,13 @@
+vim.cmd[[
+autocmd BufRead,BufNewFile *.dockerfile set filetype=dockerfile
+]]
 
 local libs = require('viktor.vim.libs')
 
 vim.filetype.add({
   extension = {
+    mdx = 'markdown',
+    -- [".dockerfile"] = 'dockerfile'
     conf = function(path, _)
         local conf_pairs = {
             { filetype = "tmux", directory = "/home/viktorhg/.config/tmux" }
@@ -13,7 +18,7 @@ vim.filetype.add({
             end
         end
         return "conf"
-    end
+    end,
   },
   -- filename = {
   --   ['.foorc'] = 'toml',
@@ -34,3 +39,9 @@ vim.filetype.add({
   --   end,
   -- },
 })
+
+
+-- local ft_to_parser = require("nvim-treesitter.parsers").filetype_to_parsername
+-- ft_to_parser.mdx = "markdown"
+
+vim.treesitter.language.register("markdown", {"md", "mdx"})

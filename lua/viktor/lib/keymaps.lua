@@ -1,17 +1,16 @@
-
 M = {}
 
-local opt_e = { silent = false } --empty opt for maps with no extra options
+local opt_e = { silent = false }                 --empty opt for maps with no extra options
 local opt_n = { silent = false, noremap = true } --empty opt for maps with no extra options
-local opt_s = { silent = true } --empty opt for maps with no extra options
+local opt_s = { silent = true }                  --empty opt for maps with no extra options
 local opt_sn = { silent = true, noremap = true }
-vim.g.mapleader = ' ' -- Map leader key to space
+vim.g.mapleader = ' '                            -- Map leader key to space
 vim.g.maplocalleader = ','
 
 M.map = function(mode, bind, exec, opts)
     --[[
         inputs:
-            - mode: Type, whether in all, normal, insert etc. (reference: https://github.com/nanotee/nvim-lua-guide#defining-mappings) 
+            - mode: Type, whether in all, normal, insert etc. (reference: https://github.com/nanotee/nvim-lua-guide#defining-mappings)
             - bind: Keybind. Just like normal vim way
             - exec: command to execute
             - options: ...
@@ -24,39 +23,39 @@ M.map = function(mode, bind, exec, opts)
 end
 
 local function process_opts(opt)
-    if opt==nil then
+    if opt == nil then
         return opt_sn
     end
     return opt
 end
 local function process_func(func)
-    if type(func)=="table" then
+    if type(func) == "table" then
         return table.concat(func, '<CR>:')
     end
     return func
 end
 
-local function nmap(bind, func, opt)
-    -- print('nmap')
-    func = process_func(func)
-    opt = process_opts(opt)
-    local exec_func = ':'..func..'<CR>'
-    local echo_func = ':echo "'..func..'"<CR>'
-    -- print(echo_func)
-    map('n', '<leader>'..bind, exec_func .. echo_func , opt)
-    -- print('-------------------------------')
-end
+-- local function nmap(bind, func, opt)
+--     -- print('nmap')
+--     func = process_func(func)
+--     opt = process_opts(opt)
+--     local exec_func = ':' .. func .. '<CR>'
+--     local echo_func = ':echo "' .. func .. '"<CR>'
+--     -- print(echo_func)
+--     map('n', '<leader>' .. bind, exec_func .. echo_func, opt)
+--     -- print('-------------------------------')
+-- end
 local function snmap(bind, func, opt, mode)
-    if mode==nil then
-        mode='n'
+    if mode == nil then
+        mode = 'n'
     end
     -- print('snmap')
     local func_str = process_func(func)
-    local exec_func = ':'..func_str..'<CR>'
-    local echo_func = ':echo "'..func_str..'"<CR>'
+    local exec_func = ':' .. func_str .. '<CR>'
+    local echo_func = ':echo "' .. func_str .. '"<CR>'
     opt = process_opts(opt)
     --vim.pretty_print(func)
-    map(mode, '<leader>'..bind, exec_func .. echo_func , opt)
+    map(mode, '<leader>' .. bind, exec_func .. echo_func, opt)
     -- print('--------------------------')
 end
 

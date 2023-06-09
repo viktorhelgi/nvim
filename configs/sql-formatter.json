@@ -1,0 +1,11 @@
+{
+  "language": "bigquery",
+  "tabWidth": 4,
+  "keywordCase": "upper",
+  "linesBetweenQueries": 2,
+  "denseOperators":false,
+  "logicalOperatorNewline": "after",
+  "indentStyle": "tabularRight",
+  "tabulateAlias":true,
+  "expressionWidth":100
+}

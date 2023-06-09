@@ -1,0 +1,24 @@
+
+
+snippet pr
+println!("{${1::?}}", $2)
+endsnippet
+
+snippet #test
+#[cfg(test)]
+mod test_${1:} {
+	#[test]
+	fn test_${2}() {
+		${3}
+	}
+}
+endsnippet
+
+
+snippet #a
+#[allow(dead_code)]
+endsnippet
+
+snippet #d
+#[derive($1)]
+endsnippet

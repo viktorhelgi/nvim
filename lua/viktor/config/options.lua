@@ -36,6 +36,8 @@ vim.cmd('let g:test#echo_command = 0')
 vim.cmd('let g:test#preserve_screen = 1')
 vim.cmd("let test#strategy = 'vimux'")
 
+vim.cmd("let g:ftplugin_sql_omni_key = '<C-o>'")
+
 vim.g.python3_host_prog = "python3.8"
 
 vim.cmd('au TextYankPost * silent! lua vim.highlight.on_yank()')

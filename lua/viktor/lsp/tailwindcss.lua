@@ -1,6 +1,6 @@
 
 require('lspconfig').tailwindcss.setup({
-    filetypes = { 'css' },
+    -- filetypes = { 'css' },
     on_attach = function(_, _)
         -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
         local cmp = require('cmp.init')

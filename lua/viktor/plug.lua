@@ -63,7 +63,7 @@ return require("packer").startup(function(use)
 	use({ "hrsh7th/cmp-buffer" })
 	use({ "hrsh7th/cmp-path" })
 	use({ "hrsh7th/cmp-cmdline" })
-    use "SirVer/ultisnips"
+	use("SirVer/ultisnips")
 	use({
 		"hrsh7th/nvim-cmp",
 		requires = {
@@ -226,7 +226,7 @@ return require("packer").startup(function(use)
 
 	use("jose-elias-alvarez/null-ls.nvim")
 
-	use({ "j-hui/fidget.nvim" })
+	use({ "j-hui/fidget.nvim", tag = "legacy" })
 
 	use({
 		"mhartington/formatter.nvim",
@@ -252,15 +252,65 @@ return require("packer").startup(function(use)
 
 	use({
 		"nvim-neorg/neorg",
-		-- ft = "norg",
-		-- after = "nvim-treesitter", -- You may want to specify Telescope here as well
-		config = require('viktor.config.plugin.neorg').setup,
-		-- run = ":Neorg sync-parsers",
-		requires = "nvim-lua/plenary.nvim",
+		run = ":Neorg sync-parsers", -- This is the important bit!
+		config = function()
+			require("neorg").setup({
+				load = {
+					["core.keybinds"] = {
+						config = {
+							neorg_leader = "<Leader>",
+						},
+					},
+					["core.defaults"] = {
+						-- journal_folder = "~/neovim/neorg/journal",
+						-- config = {
+						-- 	workspace = "~/neovim/neorg/default/",
+						-- },
+					}, -- Loads default behaviour
+					["core.concealer"] = {}, -- Adds pretty icons to your documents
+					["core.esupports.hop"] = {}, -- "Hop" between Neorg links, following them with a single keypress.
+					["core.dirman"] = { -- Manages Neorg workspaces
+						config = {
+							-- default_workspace = "default",
+							open_last_workspace = false,
+							workspaces = {
+								default = "/home/viktor/neovim/neorg/default",
+								research = "/home/viktor/hm/research-notes",
+								["rust-main"] = "/home/viktor/hm/rust-main/notes",
+							},
+						},
+					},
+					["core.completion"] = {
+						config = {
+							engine = "nvim-cmp",
+						},
+					},
+				},
+			})
+		end,
 	})
-    use "stevearc/profile.nvim"
 
-    use "windwp/nvim-ts-autotag"
-    use 'ttibsi/pre-commit.nvim'
-    use 'tpope/vim-fugitive'
+	-- use({
+	-- 	"nvim-neorg/neorg",
+	-- 	-- ft = "norg",
+	-- 	-- after = "nvim-treesitter", -- You may want to specify Telescope here as well
+	-- 	config = require("viktor.config.plugin.neorg").setup,
+	-- 	run = ":Neorg sync-parsers",
+	-- 	requires = "nvim-lua/plenary.nvim",
+	-- })
+	use("stevearc/profile.nvim")
+
+	use("windwp/nvim-ts-autotag")
+	use("ttibsi/pre-commit.nvim")
+	use("tpope/vim-fugitive")
+
+	use({
+		"cseickel/diagnostic-window.nvim",
+		requires = { "MunifTanjim/nui.nvim" },
+	})
+
+	-- use 'shivamashtikar/tmuxjump.vim'
+	-- use 'junegunn/fzf.vim'
+	-- use 'dmmulroy/tsc.nvim'
+	-- use 'jose-elias-alvarez/typescript.nvim'
 end)

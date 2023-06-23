@@ -23,6 +23,7 @@ overseer.load_template("personal.rust-tools-runnables")
 
 overseer.load_template("rust.test_file")
 overseer.load_template("python.ruff_lint")
+overseer.load_template("npm.start")
 -- overseer.add_template_hook({ module = "^cargo$" }, function(task_defn, util)
 -- 	util.add_component(task_defn, { "on_output_quickfix", open = true, set_diagnostics = true })
 -- end)

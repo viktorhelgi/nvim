@@ -7,6 +7,8 @@ _G.NorgKeyBindings = function()
 
 	-- vim.cmd("set shiftwidth=2")
 	vim.cmd("set conceallevel=2")
+    vim.cmd("set shiftwidth=2")
+
 	-- vim.cmd("set textwidth=100")
 	-- vim.cmd("set wrap")
     -- vim.api.nvim_buf_set_option(bufnr, 'shiftwidth', 2)

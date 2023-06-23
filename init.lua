@@ -43,3 +43,41 @@ local function toggle_profile()
     end
 end
 vim.keymap.set("", "<f1>", toggle_profile)
+
+
+-- vim.cmd [[
+--   augroup strdr4605
+--     autocmd FileType typescript,typescriptreact compiler tsc | setlocal makeprg=npx\ tsc
+--   augroup END
+-- ]]
+
+-- local augroup = vim.api.nvim_create_augroup("strdr4605", { clear = true })
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "typescript,typescriptreact",
+--   group = augroup,
+--   command = "compiler tsc | setlocal makeprg=npx\\ tsc",
+-- })
+-- vim.cmd [[
+--   augroup strdr4605
+--     autocmd FileType typescript,typescriptreact set makeprg=./node_modules/.bin/tsc\ \\\|\ sed\ 's/(\\(.*\\),\\(.*\\)):/:\\1:\\2:/'
+--   augroup END
+-- ]]
+--
+
+-- vim.cmd('set makeprg=npm\\ start\\ --port\\ 3000')
+-- vim.cmd[[
+--     compiler tsc
+--     " set makeprg=./node_modules/.bin/tsc\ \\\|\ sed\ 's/(\\(.*\\),\\(.*\\)):/:\\1:\\2:/'
+--     " set efm=%-P%f,
+--     "         \%E%>\ #%n\ %m,%Z%.%#Line\ %l\\,\ Pos\ %c,
+--     "                     \%-G%f\ is\ OK.,%-Q
+-- ]]
+
+
+
+
+
+
+
+
+-- /home/viktor/repos/ex/rust_warp_api

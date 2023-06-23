@@ -5,7 +5,7 @@ local types = require("cmp.types")
 local cmp_ultisnips_mappings = require("cmp_nvim_ultisnips.mappings")
 local CmpConfigSources = require("cmp.config.sources")
 
-cmp.setup.filetype("rust", {
+cmp.setup.filetype("sql", {
 	snippet = {
 		expand = function(args)
 			vim.fn["UltiSnips#Anon"](args.body)
@@ -20,10 +20,10 @@ cmp.setup.filetype("rust", {
 		-- ["<C-a>"] = cmp.mapping.complete({config = {sources={name = "ultisnips"}}}),
 		["<C-s>"] = cmp.mapping.complete({
 			config = {
-                mapping = cmp.mapping.preset.insert({
-                    ["<C-n>"] = cmp.mapping.select_next_item(),
-                    ["<C-p>"] = cmp.mapping.select_prev_item(),
-                }),
+				mapping = cmp.mapping.preset.insert({
+					["<C-n>"] = cmp.mapping.select_next_item(),
+					["<C-p>"] = cmp.mapping.select_prev_item(),
+				}),
 				sources = CmpConfigSources({
 					{ name = "ultisnips" },
 				}),
@@ -33,32 +33,32 @@ cmp.setup.filetype("rust", {
 			behavior = types.cmp.ConfirmBehavior.Insert,
 			select = true,
 		}), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-        ["<Tab>"] = cmp.mapping(
-          function(fallback)
-            cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
-          end,
-          { "i", "s", --[[ "c" (to enable the mapping in command mode) ]] }
-        ),
-        ["<S-Tab>"] = cmp.mapping(
-          function(fallback)
-            cmp_ultisnips_mappings.jump_backwards(fallback)
-          end,
-          { "i", "s", --[[ "c" (to enable the mapping in command mode) ]] }
-        ),
+		["<Tab>"] = cmp.mapping(function(fallback)
+			cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
+		end, {
+			"i",
+			"s", --[[ "c" (to enable the mapping in command mode) ]]
+		}),
+		["<S-Tab>"] = cmp.mapping(function(fallback)
+			cmp_ultisnips_mappings.jump_backwards(fallback)
+		end, {
+			"i",
+			"s", --[[ "c" (to enable the mapping in command mode) ]]
+		}),
 		-- ["<Tab>"] = cmp.mapping(function(fallback)
-  --           if cmp.visible() then
+		--           if cmp.visible() then
 		-- 	    cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
-  --           end
-  --           fallback()
+		--           end
+		--           fallback()
 		-- end, {
 		-- 	"i",
 		-- 	"s", --[[ "c" (to enable the mapping in command mode) ]]
 		-- }),
 		-- ["<S-Tab>"] = cmp.mapping(function(fallback)
-  --           if cmp.visible() then
+		--           if cmp.visible() then
 		-- 	    cmp_ultisnips_mappings.jump_backwards(fallback)
-  --           end
-  --           fallback()
+		--           end
+		--           fallback()
 		-- end, {
 		-- 	"i",
 		-- 	"s", --[[ "c" (to enable the mapping in command mode) ]]

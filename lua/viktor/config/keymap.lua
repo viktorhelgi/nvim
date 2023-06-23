@@ -97,11 +97,13 @@ require("which-key").register({
 	["]"] = {
 		name = "Goto Next",
 		d = { vim.diagnostic.goto_next, "diagnostic" },
+        ["l"] = { require("harpoon.ui").nav_next, "goto next mark" }
 	},
 	["["] = {
 		name = "Goto Prev",
 		d = { vim.diagnostic.goto_prev, "diagnostic" },
-	},
+        ["l"] = { require("harpoon.ui").nav_prev, "goto prev mark" 	},
+    },
 	y = {
 		name = "yank",
 		s = { 'viw"ly' },
@@ -129,6 +131,11 @@ require("which-key").register({
 	["<leader>"] = {
 		[","] = { _cmd("Telescope file_browser path=%:p:h theme=dropdown"), "File Browser" },
 		["~"] = { _cmd("messages"), "messages" },
+		["-"] = { _cmd("b#"), "b#" },
+		q = { _cmd("q"), "quit" },
+        Q = { _cmd("confirm qa"), "quit-all"},
+		s = { _cmd("w"), "save" },
+		z = { _cmd("ZenMode"), "Zen mode" },
 		[";"] = {
 			name = "letsgo",
 			t = {
@@ -215,8 +222,20 @@ require("which-key").register({
 				end,
 				"dont know",
 			},
-			c = { _cmd("cd %:p:h"), "cd %:p:h" },
 			a = { _cmd("AerialToggle"), "Aerial Toggle" },
+            b = {
+                s = { function()
+                        vim.cmd("set scrollbind")
+                        vim.cmd("set cursorbind")
+                    end, "window bind"
+                },
+                x = { function()
+                        vim.cmd("set noscrollbind")
+                        vim.cmd("set nocursorbind")
+                    end, "window bind off"
+                }
+            },
+			c = { _cmd("cd %:p:h"), "cd %:p:h" },
 			f = {
 				name = "fold",
 				i = {
@@ -257,6 +276,10 @@ require("which-key").register({
 			name = "Git",
             o = { _cmd("Git"), ":Git"},
             c = { _cmd("Git commit"), "commit"},
+            q = { function()
+                require("keys").register_jump_mappings("qf")
+                vim.cmd("Git difftool")
+            end, "qflist"},
 			d = {
 				name = "git-diff",
 				h = { _cmd("DiffviewOpen"), "HEAD" },
@@ -367,6 +390,7 @@ require("which-key").register({
 			o = {
 				name = "Open",
 				r = { _cmd("Neorg workspace rust-main"), "rust-main" },
+				n = { _cmd("Neorg workspace research"), "research" },
 				d = { _cmd("Neorg workspace default"), "default" },
 			},
 			j = {
@@ -473,11 +497,6 @@ require("which-key").register({
 			u = { require("telescope.builtin").find_files, "files" },
 			w = { require("telescope.builtin").lsp_workspace_symbols, "ws symbols" },
 		},
-		q = { _cmd("q"), "quit" },
-        Q = { _cmd("confirm qa"), "quit-all"},
-		s = { _cmd("w"), "save" },
-		z = { _cmd("ZenMode"), "Zen mode" },
-		["/"] = { _cmd("b#"), "b#" },
 	},
 })
 

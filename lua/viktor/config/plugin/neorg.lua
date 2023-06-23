@@ -22,8 +22,9 @@ return {
 						-- default_workspace = "default",
 						open_last_workspace = false,
 						workspaces = {
-							default = "~/neovim/neorg/default",
-							["rust-main"] = "~/hm/rust-main/notes",
+							default = "/home/viktor/neovim/neorg/default",
+							research = "/home/viktor/hm/research-notes",
+							["rust-main"] = "/home/viktor/hm/rust-main/notes",
 						},
 					},
 				},

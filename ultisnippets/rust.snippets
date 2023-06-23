@@ -22,3 +22,18 @@ endsnippet
 snippet #d
 #[derive($1)]
 endsnippet
+
+
+snippet route
+pub fn ${1:route}(
+    ${2:client: BucketClient,}
+) -> impl Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone {
+    warp::path!(${3:"test" / "route1"})
+        ${4:.and(with_client(client))}
+        .and_then(|client: BucketClient| async move {
+
+            Message { msg: warp::reply::json("this is great")}.into()
+        })
+}
+endsnippet
+

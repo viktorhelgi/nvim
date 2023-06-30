@@ -34,6 +34,7 @@ cmp.setup.filetype({ "javascript", "typescript", "typescriptreact", "typescript.
 			select = true,
 		}), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
 		-- ["<Tab>"] = cmp.mapping(function(fallback)
+		-- 	cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
   --           if cmp.visible() then
 		-- 	    cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
   --           end
@@ -43,9 +44,11 @@ cmp.setup.filetype({ "javascript", "typescript", "typescriptreact", "typescript.
 		-- 	"s", --[[ "c" (to enable the mapping in command mode) ]]
 		-- }),
 		-- ["<S-Tab>"] = cmp.mapping(function(fallback)
-  --           if cmp.visible() then
-		-- 	    cmp_ultisnips_mappings.jump_backwards(fallback)
-  --           end
+		-- 	cmp_ultisnips_mappings.jump_backwards(fallback)
+		--
+  --      --      if cmp.visible() then
+		-- 	    -- cmp_ultisnips_mappings.jump_backwards(fallback)
+  --      --      end
   --           fallback()
 		-- end, {
 		-- 	"i",

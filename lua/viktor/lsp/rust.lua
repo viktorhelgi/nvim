@@ -44,91 +44,97 @@ local my_on_attach = function(client, bufnr)
 			r = { vim.lsp.buf.references, "ref" },
 			s = { vim.lsp.buf.signature_help, "sign" },
 		},
-		l = {
-			a = { _cmd("CodeActionMenu"), "code-action" },
-			r = { vim.lsp.buf.rename, "rename" },
-		},
+		-- l = {
+		-- 	a = { _cmd("CodeActionMenu"), "code-action" },
+		-- 	r = { vim.lsp.buf.rename, "rename" },
+		-- },
 		c = {
 			name = "Change/Cargo",
 			-- a = { _cmd("RustCodeAction"), "code-action" },
 			b = { _cmd("Task start cargo build"), "build" },
 			d = { vim.diagnostic.setqflist, "setqflist" },
-			q = { _cmd("cclose"), "close qflist" },
 			r = { rust_funcs.run.with_arguments, "run --" },
 			l = { rust_funcs.run.last_cmd, "run --" },
 			s = { _cmd("DiagWindowShow"), "show diagnostic" },
 			R = { rust_funcs.run.selected_binary, "run --bin <?>" },
+			q = { _cmd("cclose"), "close qflist" },
 		},
-		["<leader>"] = {
-			r = {
-				name = "Rust",
+		["<leader>r"] = {
+			name = "Rust",
 
-				-- e = { _cmd("RustEmitAsm") },
-				-- ei = { _cmd("RustEmitIr") },
-				-- ee = { _cmd("RustExpand") },
-				-- F = { _cmd("RustFmtRange") },
-				-- i = {_cmd("RustSetInlayHints")},
-				-- i = {_cmd("RustToggleInlayHints")},
-				-- hr = {_cmd("RustHoverRange")},
-				-- j = {_cmd("RustJoinLines")},
-				-- oc = {_cmd("e Cargo.toml")},
-				-- oe = {_cmd("RustOpenExternalDocs")},
-				-- P = {_cmd("RustPlay")},
-				-- rr = { _cmd("RustRun") },
-				-- rR = { _cmd("RustRunnables") },
-				-- C = {_cmd("RustViewCrateGraph")},
-				-- p = {_cmd("RustParentModule")},
-				b = {
-					function()
-						vim.cmd("copen")
-						vim.cmd("wincmd w")
-						vim.cmd("silent make build")
-					end,
-					"build with copen",
-				},
-				i = { require("rust_funcs").toggle_inlay_hints, "toggle inlay hints" },
-				C = { _cmd("RustOpenCargo") },
-				c = {
-					function()
-						vim.cmd("Task start cargo clippy --tests --examples")
-					end,
-					"clippy tests examples",
-				},
-				f = { _cmd("RustFmt") },
-				h = { _cmd("RustHoverActions") },
-				l = { rust_funcs.run.something_good, "something good" },
-				p = { require("rust_funcs").cargo_run, "cargo run" },
-				m = {
-					function()
-						require("harpoon.tmux").sendCommand(
-							"!",
-							'maturin develop --cargo-extra-args="--features python-bindings"\r' .. "python3 main.py\r"
-						)
-					end,
-					"maturin build",
-				},
-				r = { _cmd("CargoReload") },
-				-- r = {
-				-- 	w = { _cmd("RustReloadWorkspace") },
-				-- },
-				-- t = {
-				-- 	function()
-				-- 		vim.cmd("copen")
-				-- 		vim.cmd("wincmd w")
-				-- 		vim.cmd("silent make test " .. vim.fn.expand("%"))
-				-- 	end,
-				-- 	"make test file",
-				-- },
-				t = {
-					function()
-						vim.cmd("Task start cargo test")
-					end,
-					"cargo test",
-				},
-				-- T = { rust_funcs.tree.show, "module tree" },
-				T = { rust_funcs.tree.bin, "module tree" },
-				-- T = { rust_funcs.tree.lib, "module tree" },
+			-- e = { _cmd("RustEmitAsm") },
+			-- ei = { _cmd("RustEmitIr") },
+			-- ee = { _cmd("RustExpand") },
+			-- F = { _cmd("RustFmtRange") },
+			-- i = {_cmd("RustSetInlayHints")},
+			-- i = {_cmd("RustToggleInlayHints")},
+			-- hr = {_cmd("RustHoverRange")},
+			-- j = {_cmd("RustJoinLines")},
+			-- oc = {_cmd("e Cargo.toml")},
+			-- oe = {_cmd("RustOpenExternalDocs")},
+			-- P = {_cmd("RustPlay")},
+			-- rr = { _cmd("RustRun") },
+			-- rR = { _cmd("RustRunnables") },
+			-- C = {_cmd("RustViewCrateGraph")},
+			-- p = {_cmd("RustParentModule")},
+			b = {
+				function()
+					vim.cmd("copen")
+					vim.cmd("wincmd w")
+					vim.cmd("silent make build")
+				end,
+				"build with copen",
 			},
+			i = { require("rust_funcs").toggle_inlay_hints, "toggle inlay hints" },
+			C = { _cmd("RustOpenCargo") },
+			c = {
+				function()
+					vim.cmd("Task start cargo clippy --tests --examples")
+				end,
+				"clippy tests examples",
+			},
+			f = { _cmd("RustFmt") },
+			h = { _cmd("RustHoverActions") },
+			l = { rust_funcs.run.something_good, "something good" },
+			p = { require("rust_funcs").cargo_run, "cargo run" },
+			m = {
+				function()
+					require("harpoon.tmux").sendCommand(
+						"!",
+						'maturin develop --cargo-extra-args="--features python-bindings"\r' .. "python3 main.py\r"
+					)
+				end,
+				"maturin build",
+			},
+			r = { _cmd("CargoReload") },
+			-- r = {
+			-- 	w = { _cmd("RustReloadWorkspace") },
+			-- },
+			-- t = {
+			-- 	function()
+			-- 		vim.cmd("copen")
+			-- 		vim.cmd("wincmd w")
+			-- 		vim.cmd("silent make test " .. vim.fn.expand("%"))
+			-- 	end,
+			-- 	"make test file",
+			-- },
+			t = {
+				-- function()
+				--     vim.cmd("Task start cargo test")
+				-- end
+				function()
+					vim.cmd("TSTextobjectGotoPreviousStart @function.outer")
+					vim.cmd("normal t(")
+					vim.cmd("RustHoverActions")
+					vim.cmd("RustHoverActions")
+					-- require'rust-tools'.hover_actions.hover_actions()
+					-- require'rust-tools'.hover_actions.hover_actions()
+				end,
+				"cargo test",
+			},
+			-- T = { rust_funcs.tree.show, "module tree" },
+			T = { rust_funcs.tree.bin, "module tree" },
+			-- T = { rust_funcs.tree.lib, "module tree" },
 		},
 	})
 
@@ -151,8 +157,8 @@ rust_tools.setup({
 			-- automatically set inlay hints (type hints)
 			-- default: true
 			auto = true,
-            only_current_line = true,
-            highlight = "TelescopePreviewTitle"
+			only_current_line = true,
+			highlight = "TelescopePreviewTitle",
 		},
 	},
 	server = {
@@ -228,3 +234,11 @@ rust_tools.inlay_hints.unset()
 rust_tools.inlay_hints.enable()
 rust_tools.inlay_hints.disable()
 -- /home/viktor/repos/ex/rust_warp_api
+-- vim.keymap.set("n", "<leader>rT", function()
+-- 	vim.cmd("TSTextobjectGotoPreviousStart @function.outer")
+-- 	vim.cmd("normal t(")
+-- 	vim.cmd("RustHoverActions")
+-- 	vim.cmd("RustHoverActions")
+-- 	-- require'rust-tools'.hover_actions.hover_actions()
+-- 	-- require'rust-tools'.hover_actions.hover_actions()
+-- end)

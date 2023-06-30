@@ -2,15 +2,15 @@ local lspkind = require("lspkind")
 
 local cmp = require("cmp")
 local types = require("cmp.types")
-local cmp_ultisnips_mappings = require("cmp_nvim_ultisnips.mappings")
+-- local cmp_ultisnips_mappings = require("cmp_nvim_ultisnips.mappings")
 local CmpConfigSources = require("cmp.config.sources")
 
 cmp.setup.filetype("sql", {
-	snippet = {
-		expand = function(args)
-			vim.fn["UltiSnips#Anon"](args.body)
-		end,
-	},
+	-- snippet = {
+	-- 	expand = function(args)
+	-- 		vim.fn["UltiSnips#Anon"](args.body)
+	-- 	end,
+	-- },
 	mapping = cmp.mapping.preset.insert({
 		["<C-u>"] = cmp.mapping.scroll_docs(-4),
 		["<C-d>"] = cmp.mapping.scroll_docs(4),
@@ -33,18 +33,18 @@ cmp.setup.filetype("sql", {
 			behavior = types.cmp.ConfirmBehavior.Insert,
 			select = true,
 		}), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-		["<Tab>"] = cmp.mapping(function(fallback)
-			cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
-		end, {
-			"i",
-			"s", --[[ "c" (to enable the mapping in command mode) ]]
-		}),
-		["<S-Tab>"] = cmp.mapping(function(fallback)
-			cmp_ultisnips_mappings.jump_backwards(fallback)
-		end, {
-			"i",
-			"s", --[[ "c" (to enable the mapping in command mode) ]]
-		}),
+		-- ["<Tab>"] = cmp.mapping(function(fallback)
+		-- 	cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
+		-- end, {
+		-- 	"i",
+		-- 	"s", --[[ "c" (to enable the mapping in command mode) ]]
+		-- }),
+		-- ["<S-Tab>"] = cmp.mapping(function(fallback)
+		-- 	cmp_ultisnips_mappings.jump_backwards(fallback)
+		-- end, {
+		-- 	"i",
+		-- 	"s", --[[ "c" (to enable the mapping in command mode) ]]
+		-- }),
 		-- ["<Tab>"] = cmp.mapping(function(fallback)
 		--           if cmp.visible() then
 		-- 	    cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
@@ -68,7 +68,7 @@ cmp.setup.filetype("sql", {
 		{ name = "nvim_lsp" },
 		{ name = "nvim_lsp_signature_help" },
 		{ name = "path" },
-		{ name = "ultisnips" },
+		-- { name = "ultisnips" },
 	}),
 	formatting = {
 		---@param entry cmp.Entry

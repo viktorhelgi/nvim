@@ -10,5 +10,6 @@ return {
     require('viktor.lsp.lua_ls'),
     require('viktor.lsp.python'),
     require('viktor.lsp.tailwindcss'),
+    require('viktor.lsp.toml'),
     require('viktor.lsp.tsserver'),
 }

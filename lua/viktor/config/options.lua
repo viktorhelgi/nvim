@@ -38,13 +38,14 @@ vim.cmd("let test#strategy = 'vimux'")
 
 vim.cmd("let g:ftplugin_sql_omni_key = '<C-o>'")
 
-vim.g.python3_host_prog = "python3.8"
+-- vim.g.python3_host_prog = "/usr/bin/python"
+vim.g.python3_host_prog = "/usr/bin/python3.9"
 
 vim.cmd('au TextYankPost * silent! lua vim.highlight.on_yank()')
 
 vim.cmd("let g:cmake_root_markers=['build']")
 
-vim.g.UltiSnipsSnippetDirectories = { "~/.config/nvim/ultisnippets" }
+-- vim.g.UltiSnipsSnippetDirectories = { "~/.config/nvim/ultisnippets" }
 -- vim.g.UltiSnipsExpandTrigger = "<C-y>"
 -- vim.g.UltiSnipsJumpForwardTrigger="<c-l>"
 -- vim.g.UltiSnipsJumpBackwardTrigger="<c-b>"

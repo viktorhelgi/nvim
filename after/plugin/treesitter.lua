@@ -1,7 +1,5 @@
 local ts_config = require("nvim-treesitter.configs")
 
-vim.keymap.set("n", "]t", ":TSTextobjectRepeatLastMoveNext<CR>zz", {})
-vim.keymap.set("n", "[t", ":TSTextobjectRepeatLastMovePrevious<CR>zz", {})
 
 ts_config.setup({
 	-- A list of parser names, or "all"
@@ -51,14 +49,14 @@ ts_config.setup({
 				-- ["]al"] = "@assignment.rhs",
 				["]r"] = "@return.inner",
 				["]p"] = "@parameter.inner",
-				["]h"] = "@function.outer",
+				["]f"] = "@function.outer",
 				["]c"] = "@class.outer",
 				["]im"] = "@function.inner",
 				["]ic"] = "@class.inner",
 			},
 			goto_next_end = {
 				["]R"] = "@return.inner",
-				["]H"] = "@function.outer",
+				["]F"] = "@function.outer",
 				["]C"] = "@class.outer",
 				["]iM"] = "@function.inner",
 				["]iC"] = "@class.inner",
@@ -69,14 +67,14 @@ ts_config.setup({
 				-- ["[al"] = "@assignment.rhs",
 				["[r"] = "@return.inner",
 				["[p"] = "@parameter.inner",
-				["[h"] = "@function.outer",
+				["[f"] = "@function.outer",
 				["[c"] = "@class.outer",
 				["[im"] = "@function.inner",
 				["[ic"] = "@class.inner",
 			},
 			goto_previous_end = {
 				["[R"] = "@return.inner",
-				["[H"] = "@function.outer",
+				["[F"] = "@function.outer",
 				["[C"] = "@class.outer",
 				["[iM"] = "@function.inner",
 				["[iC"] = "@class.inner",
@@ -84,8 +82,8 @@ ts_config.setup({
 		},
 		swap = {
 			enable = true,
-			swap_previous = { ["[<leader>p"] = "@parameter.inner" },
-			swap_next = { ["]<leader>p"] = "@parameter.inner" },
+			swap_previous = { ["[m"] = "@parameter.inner" },
+			swap_next = { ["]m"] = "@parameter.inner" },
 		},
 		lsp_interop = {
 			enable = true,
@@ -104,16 +102,16 @@ local ts_repeat_move = require("nvim-treesitter.textobjects.repeatable_move")
 
 -- Repeat movement with ; and ,
 -- ensure ; goes forward and , goes backward regardless of the last direction
-vim.keymap.set({ "n", "x", "o" }, ";", function()
-	ts_repeat_move.repeat_last_move({forward=true, start=true})
-end)
-vim.keymap.set({ "n", "x", "o" }, ",", function()
-	ts_repeat_move.repeat_last_move({forward=false, start=true})
-end)
+-- vim.keymap.set({ "n", "x", "o" }, ";", function()
+-- 	ts_repeat_move.repeat_last_move({forward=true, start=true})
+-- end)
+-- vim.keymap.set({ "n", "x", "o" }, ",", function()
+-- 	ts_repeat_move.repeat_last_move({forward=false, start=true})
+-- end)
 
 -- vim way: ; goes to the direction you were moving.
--- vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move)
--- vim.keymap.set({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_opposite)
+vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move)
+vim.keymap.set({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_opposite)
 
 -- Optionally, make builtin f, F, t, T also repeatable with ; and ,
 vim.keymap.set({ "n", "x", "o" }, "f", ts_repeat_move.builtin_f)

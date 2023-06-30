@@ -97,12 +97,16 @@ require("which-key").register({
 	["]"] = {
 		name = "Goto Next",
 		d = { vim.diagnostic.goto_next, "diagnostic" },
-        ["l"] = { require("harpoon.ui").nav_next, "goto next mark" }
+        ["l"] = { require("harpoon.ui").nav_next, "goto next mark" },
+        h = { require('harpoon.ui').nav_next, "harpoon"},
+        t = { _cmd("TSTextobjectRepeatLastMoveNext"), "ts: repeat"},
 	},
 	["["] = {
 		name = "Goto Prev",
 		d = { vim.diagnostic.goto_prev, "diagnostic" },
         ["l"] = { require("harpoon.ui").nav_prev, "goto prev mark" 	},
+        h = { require('harpoon.ui').nav_prev, "harpoon"},
+        t = { _cmd("TSTextobjectRepeatLastMovePrevious"), "ts: repeat"},
     },
 	y = {
 		name = "yank",
@@ -110,6 +114,7 @@ require("which-key").register({
 	},
 	g = {
 		name = "+goto",
+        c = { _cmd("e Cargo.toml"), "Cargo.toml"},
 		d = {
 			function()
 				vim.lsp.buf.definition({
@@ -319,15 +324,11 @@ require("which-key").register({
 		--     d = { function() vim.cmd('Trouble document_diagnostics') end, "document_diagnostics" },
 		--     w = { function() vim.cmd('Trouble workspace_diagnostics') end, "workspace_diagnostics" },
 		-- },
+
 		l = {
 			name = "LSP",
 			-- a = { vim.lsp.buf.code_action, "code action" },
 			a = { require("code_action_menu").open_code_action_menu, "code action" },
-			-- ['c'] = {
-			--     ['r'] = '[cmd] lua vim.lsp.buf.clear_references()',
-			--     ['a'] = '[cmd] lua vim.lsp.buf.code_action()',
-			--     ['c'] = '[cmd] lua vim.lsp.buf.completion()',
-			-- },
 			d = {
 				name = "Document",
 				-- ['c'] = '[cmd] lua vim.lsp.buf.declaration()',
@@ -455,7 +456,8 @@ require("which-key").register({
 				"files in %:p:h",
 			},
 			o = { require("telescope.builtin").buffers, "buffers" },
-			k = { require("telescope.builtin").live_grep, "live grep" },
+			-- k = { require("telescope.builtin").live_grep, "live grep" },
+			k = { require('telescope').extensions.live_grep_args.live_grep_args, "live grep" },
 			j = {
 				function()
 					require("telescope.builtin").live_grep({ cwd = require("telescope.utils").buffer_dir() })
@@ -497,6 +499,11 @@ require("which-key").register({
 			u = { require("telescope.builtin").find_files, "files" },
 			w = { require("telescope.builtin").lsp_workspace_symbols, "ws symbols" },
 		},
+        w = {
+            name = "Window",
+            m = { _cmd("WindowsMaximize"), "maximize"},
+            e = { _cmd("WindowsEqualize"), "equalize"}
+        }
 	},
 })
 

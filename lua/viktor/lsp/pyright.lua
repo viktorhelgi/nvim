@@ -1,53 +1,12 @@
 local lspconfig = require("lspconfig")
-local function filter(arr, func)
-    -- Filter in place
-    -- https://stackoverflow.com/questions/49709998/how-to-filter-a-lua-array-inplace
-    local new_index = 1
-    local size_orig = #arr
-    for old_index, v in ipairs(arr) do
-        if func(v, old_index) then
-            arr[new_index] = v
-            new_index = new_index + 1
-        end
-    end
-    for i = new_index, size_orig do arr[i] = nil end
-end
-
-local function pyright_accessed_filter(diagnostic)
-    -- Allow kwargs to be unused, sometimes you want many functions to take the
-    -- same arguments but you don't use all the arguments in all the functions,
-    -- so kwargs is used to suck up all the extras
-    -- if diagnostic.message == '"kwargs" is not accessed' then
-    -- 	return false
-    -- end
-    --
-    -- Allow variables starting with an underscore
-    -- if string.match(diagnostic.message, '"_.+" is not accessed') then
-    -- 	return false
-    -- end
-
-
-    -- For all messages "is not accessed"
-    if string.match(diagnostic.message, '".+" is not accessed') then
-        return false
-    end
-
-    return true
-end
-
-local function custom_on_publish_diagnostics(a, params, client_id, c, config)
-    filter(params.diagnostics, pyright_accessed_filter)
-    vim.lsp.diagnostic.on_publish_diagnostics(a, params, client_id, c, config)
-end
-
 
 local on_attach = function(client, bufnr)
-    -- if client.name == "pyright" then
-    --     vim.keymap.set('n', '<Leader>o', '<CMD>PyrightOrganizeImports<CR>')
-    --     vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-    --         custom_on_publish_diagnostics, {})
-    --
-    -- end
+	-- if client.name == "pyright" then
+	--     vim.keymap.set('n', '<Leader>o', '<CMD>PyrightOrganizeImports<CR>')
+	--     vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+	--         custom_on_publish_diagnostics, {})
+	--
+	-- end
 
 	local opts = { noremap = true, silent = false }
 	local opt = { noremap = true, silent = false, buffer = bufnr }
@@ -124,93 +83,114 @@ lspconfig.pyright.setup({
 	-- before_init = function(_, config)
 	--     config.settings.python.pythonPath = get_python_path(config.root_dir)
 	-- end,
-	cmd = {
-		-- "/home/viktor/.local/share/nvim/mason/bin/pyright-langserver",
-		"/usr/bin/pyright-langserver",
-		"--stdio",
-	},
+	-- cmd = {
+	-- 	-- "/home/viktor/.local/share/nvim/mason/bin/pyright-langserver",
+	-- 	"/usr/bin/pyright-langserver",
+	-- 	"--stdio",
+	-- },
 	filetypes = { "python", "py" },
 	on_attach = function(client, bufnr)
 		client.server_capabilities = require("viktor.lsp.capabilities.pyright")
+
+		local handlers = require("viktor.lsp.handlers.pyright")
+		vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(handlers.textDocument.publishDiagnostics, {})
+
 		on_attach(client, bufnr)
 	end,
 	root_dir = root_dir,
-	-- capabilities = (function()
-	-- 	local capabilities = vim.lsp.protocol.make_client_capabilities()
-	--
-	-- 	capabilities.textDocument.publishDiagnostics.tagSupport.valueSet = { 2 }
-	--
-	-- 	return capabilities
-	-- end)(),
 	settings = {
 		pyright = {
-			-- disableLanguageServices = true,
-			disableOrganizeImports = true,
-			-- reportMissingModuleSource = "none",
-			-- reportMissingImports = "none",
-			reportUndefinedVariable = "none",
-
 			disableLanguageServices = false,
-
-			-- reportMissingImports = "none",
-			-- reportUnusedVariable = "none",
-			-- reportUnusedClass = "none",
-			--
-			--          reportUnknownMemberType = "none",
-			--          reportUnknownParameterType = "none",
-			--          reportUnknownVariableType = "none",
-			--          reportUnnecessaryCast = "none",
-			--          reportUnnecessaryComparison = "none",
-			--          reportUnnecessaryContains = "none",
-			--          reportUnnecessaryIsInstance = "none",
-			--          -- reportUnusedClass = "none",
-			--          reportUnusedImport = "none",
-			--          reportUnusedFunction = "none",
-			--          -- reportUnusedVariable = "none",
-			--          reportUntypedBaseClass = "none",
-			--          reportUntypedClassDecorator = "none",
-			--          reportUntypedFunctionDecorator = "none",
-			--          reportUntypedNamedTuple = "none",
-			--          reportCallInDefaultInitializer = "none",
-			--          reportImplicitOverride = "none",
-			--          reportImplicitStringConcatenation = "none",
-			--          reportImportCycles = "none",
-			--          reportMissingSuperCall = "none",
-			--          reportPropertyTypeMismatch = "none",
-			--          reportShadowedImports = "none",
-			--          reportUninitializedInstanceVariable = "none",
-			--          reportUnnecessaryTypeIgnoreComment = "none",
-			--          reportUnusedCallResult = "none",
-
-			reportMissingImports = false,
-			reportUnusedVariable = false,
-			reportUnusedClass = false,
-			reportMissingModuleSource = false,
-
+			disableOrganizeImports = false,
 			pythonVersion = "3.9",
 		},
 		python = {
 			analysis = {
-				-- useLibraryCodeForTypes = false,
-				-- autoImportCompletions = true,
+				autoImportCompletions = false,
 				autoSearchPaths = true,
-				-- typeshedPaths = {"/home/viktor/hm/rust-main/fetch-data/stubs"},
-				-- typeCheckingMode = "strict", --  ["off", "basic", "strict"]:
-				-- typeCheckingMode = "basic", --  ["off", "basic", "strict"]:
-				typeCheckingMode = "basic", --  ["off", "basic", "strict"]:
-                -- diagnosticSeverityOverrides = {
-                --     reportMissingImports = "none",
-                --     reportUnusedVariable = "none",
-                --     reportUnusedClass = "none",
-                --     reportMissingModuleSource = "none",
-                --     -- reportMissingImports = "none",
-                --     reportUndefinedVariable = "none",
-                -- },
+				diagnosticMode = true,
+				extraPaths = {},
+				logLevel = "Error",
+				diagnosticSeverityOverrides = {
+					reportAssertAlwaysTrue = "warning",
+					reportCallInDefaultInitializer = "information",
+					reportConstantRedefinition = "information",
+					reportDeprecated = "information",
+					reportDuplicateImport = "information",
+					reportFunctionMemberAccess = "information",
+					reportGeneralTypeIssues = "error",
+					reportImplicitOverride = "information",
+					reportImplicitStringConcatenation = "information",
+					reportImportCycles = "information",
+					reportIncompatibleMethodOverride = "information",
+					reportIncompatibleVariableOverride = "information",
+					reportIncompleteStub = "information",
+					reportInconsistentConstructor = "information",
+					reportInvalidStringEscapeSequence = "warning",
+					reportInvalidStubStatement = "information",
+					reportInvalidTypeVarUse = "warning",
+					reportMatchNotExhaustive = "information",
 
+					reportMissingImports = "error",
+
+					reportMissingModuleSource = "warning",
+					-- reportMissingModuleSource = "information",
+
+					reportMissingParameterType = "information",
+					reportMissingSuperCall = "information",
+					reportMissingTypeArgument = "none",
+					reportMissingTypeStubs = "none",
+					reportOptionalCall = "error",
+					reportOptionalContextManager = "error",
+					reportOptionalIterable = "error",
+					reportOptionalMemberAccess = "error",
+					reportOptionalOperand = "error",
+					reportOptionalSubscript = "error",
+					reportOverlappingOverload = "information",
+					reportPrivateImportUsage = "error",
+					reportPrivateUsage = "information",
+					reportPropertyTypeMismatch = "information",
+					reportSelfClsParameterName = "warning",
+					reportShadowedImports = "information",
+					reportTypeCommentUsage = "information",
+					reportTypedDictNotRequiredAccess = "error",
+					reportUnboundVariable = "error",
+
+					reportUndefinedVariable = "error",
+
+					reportUninitializedInstanceVariable = "information",
+					reportUnknownArgumentType = "none",
+					reportUnknownLambdaType = "none",
+					reportUnknownMemberType = "none",
+					reportUnknownParameterType = "none",
+					reportUnknownVariableType = "none",
+					reportUnnecessaryCast = "information",
+					reportUnnecessaryComparison = "information",
+					reportUnnecessaryContains = "information",
+					reportUnnecessaryIsInstance = "information",
+					reportUnnecessaryTypeIgnoreComment = "information",
+					reportUnsupportedDunderAll = "warning",
+					reportUntypedBaseClass = "information",
+					reportUntypedClassDecorator = "information",
+					reportUntypedFunctionDecorator = "information",
+					reportUntypedNamedTuple = "information",
+					reportUnusedCallResult = "information",
+					reportUnusedClass = "information",
+					reportUnusedCoroutine = "information",
+					reportUnusedExpression = "information",
+					reportUnusedFunction = "information",
+					reportUnusedImport = "information",
+					reportUnusedVariable = "information",
+					reportWildcardImportFromLibrary = "warning",
+				},
+				stubPath = "typings",
+				typeCheckingMode = "off", --  ["off", "basic", "strict"]:
+				typeshedPaths = {},
+				useLibraryCodeForTypes = true,
 				-- stubPath = "/home/viktor/hm/rust-main/fetch-data/stubs",
 				-- diagnosticMode = "workspace", -- ["openFilesOnly", "workspace"]
 				-- diagnosticMode = "openFilesOnly", -- ["openFilesOnly", "workspace"]
-				-- diagnosticSeverityOverrides = { -- "error," "warning," "information," "true," "false," or "none"
+				-- diagnosticSeverityOverrides = { -- "error", "warning", "information", "true," "false," or "none"
 				-- 	reportDuplicateImport = "warning",
 				-- 	reportImportCycles = "warning",
 				-- 	reportMissingImports = "error",

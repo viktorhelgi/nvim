@@ -93,8 +93,42 @@ vim.keymap.set("n", "<leader>Db", ":call vimspector#ToggleBreakpoint()<cr>")
 vim.keymap.set("n", "<leader>Dw", ":call vimspector#AddWatch()<cr>")
 vim.keymap.set("n", "<leader>De", ":call vimspector#Evaluate()<cr>")
 
+local regular_string = [[
+lorem impsum 
+some frog and a red fox
+lets go
+]]
+
+local query_template = [[
+;; letsgoman
+((function_call
+  name: [
+    (identifier) @_cdef_identifier
+    (_ _ (identifier) @_cdef_identifier)
+  ]
+  arguments: (arguments (string content: _ @c)))
+  (#eq? @_cdef_identifier "cdef"))
+
+((function_call
+  name: (_) @_vimcmd_identifier
+  arguments: (arguments . (string content: _ @vim)))
+  (#any-of? @_vimcmd_identifier "vim.cmd" "vim.api.nvim_command" "vim.api.nvim_exec" "vim.api.nvim_exec2"))
+]]
+
+local query_templat = [[
+;; rust 
+]]
+
+-- ```
+-- #[derive(Error, Debug)]
+-- pub enum ServerError {
+--     #[error("")]
+--     ClientInitialization(#[from] GCloudBucketError),
+--
+--     #[error("")]
+--     DownloadMetadata(#[from] metadata::DownloadError),
+-- }
+-- ```
+-- `
 
 
-
-
--- /home/viktor/repos/ex/rust_warp_api

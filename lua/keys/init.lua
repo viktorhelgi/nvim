@@ -67,7 +67,6 @@ function JumpMethods:register(file_type)
     elseif file_type == JUMP_METHOD.LOCATION_LIST then
         jump_prev_cmd = JumpMethods.loclist_prev
         jump_next_cmd = JumpMethods.loclist_next
-        opts.buffer = 0
     else
         error("the given filetype '" .. file_type .. "' does not work")
     end

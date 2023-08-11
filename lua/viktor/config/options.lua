@@ -15,6 +15,7 @@ vim.o.expandtab = true    	-- tabs -> spaces
 vim.o.swapfile = false
 vim.o.wrap = false
 vim.o.splitright = true
+vim.o.smartcase = true
 
 
 vim.opt.ignorecase = true
@@ -45,8 +46,4 @@ vim.cmd('au TextYankPost * silent! lua vim.highlight.on_yank()')
 
 vim.cmd("let g:cmake_root_markers=['build']")
 
--- vim.g.UltiSnipsSnippetDirectories = { "~/.config/nvim/ultisnippets" }
--- vim.g.UltiSnipsExpandTrigger = "<C-y>"
--- vim.g.UltiSnipsJumpForwardTrigger="<c-l>"
--- vim.g.UltiSnipsJumpBackwardTrigger="<c-b>"
 

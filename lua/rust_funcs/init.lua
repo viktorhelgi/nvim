@@ -5,6 +5,10 @@ local M = {
 	tree = require("rust_funcs.tree"),
 	run = require("rust_funcs.run"),
 	jump = require("rust_funcs.jump"),
+	explain_error = require("rust_funcs.explain_error"),
+	test_executor = {
+        tmux = require("rust_funcs.test_executor"),
+    }
 }
 
 M.cargo_run = function()
@@ -35,16 +39,34 @@ M.cargo_run_last = function()
 	require("harpoon.tmux").sendCommand("!", M.previous_cmd)
 end
 
-M.toggle_inlay_hints = function()
-	if M.inlay_hints_on then
+M.set_inlay_hints = function(v)
+    if v then
+        vim.cmd("RustEnableInlayHints")
+        vim.cmd("RustSetInlayHints")
+        M.inlay_hints_on = true
+    else
 		vim.cmd("RustDisableInlayHints")
 		vim.cmd("RustUnsetInlayHints")
 		M.inlay_hints_on = false
+    end
+end
+
+M.toggle_inlay_hints = function()
+	if M.inlay_hints_on then
+        M.set_inlay_hints(false)
 	else
-		vim.cmd("RustEnableInlayHints")
-		vim.cmd("RustSetInlayHints")
-		M.inlay_hints_on = true
+        M.set_inlay_hints(true)
 	end
+end
+
+M.toggle_inlay_hinst_all_lines = function()
+    local is_on = require("rust-tools").config.options.tools.inlay_hints.only_current_line
+	if is_on then
+		require("rust-tools").config.options.tools.inlay_hints.only_current_line = false
+	else
+		require("rust-tools").config.options.tools.inlay_hints.only_current_line = true
+	end
+    M.set_inlay_hints(true)
 end
 
 return M

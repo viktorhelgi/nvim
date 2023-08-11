@@ -26,6 +26,7 @@ return require("packer").startup(function(use)
 	-- }}}
 	-- {{{ Looks
 	use("nvim-tree/nvim-web-devicons")
+	use("nvim-treesitter/playground")
 	use({
 		"nvim-lualine/lualine.nvim",
 		requires = { "kyazdani42/nvim-web-devicons", opt = true },
@@ -63,61 +64,8 @@ return require("packer").startup(function(use)
 	use({ "hrsh7th/cmp-buffer" })
 	use({ "hrsh7th/cmp-path" })
 	use({ "hrsh7th/cmp-cmdline" })
-	-- use("SirVer/ultisnips")
 
-	-- use({
-	-- 	"quangnguyen30192/cmp-nvim-ultisnips",
-	-- 	config = function()
-	-- 		require("cmp_nvim_ultisnips").setup({})
-	-- 	end,
-	-- })
-	use({
-		"hrsh7th/nvim-cmp",
-		-- requires = {
-		-- 	"quangnguyen30192/cmp-nvim-ultisnips",
-		-- 	config = function()
-		-- 		-- optional call to setup (see customization section)
-		-- 		require("cmp_nvim_ultisnips").setup({})
-		-- 	end,
-		-- },
-		-- config = function()
-		-- 	local cmp_ultisnips_mappings = require("cmp_nvim_ultisnips.mappings")
-		-- 	local cmp = require("cmp.init")
-		-- 	require("cmp").setup({
-		-- 		snippet = {
-		-- 			expand = function(args)
-		-- 				vim.fn["UltiSnips#Anon"](args.body)
-		-- 			end,
-		-- 		},
-		-- 		sources = {
-		-- 			{ name = "ultisnips" },
-		-- 			-- more sources
-		-- 		},
-		-- 		-- recommended configuration for <Tab> people:
-		-- 		mapping = {
-		-- 			["<Tab>"] = cmp.mapping(function(fallback)
-		-- 				-- cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
-		-- 				if cmp.visible() then
-		-- 					cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
-		-- 				end
-		-- 				fallback()
-		-- 			end, {
-		-- 				"i",
-		-- 				"s", --[[ "c" (to enable the mapping in command mode) ]]
-		-- 			}),
-		-- 			["<S-Tab>"] = cmp.mapping(function(fallback)
-		-- 				if cmp.visible() then
-		-- 					cmp_ultisnips_mappings.jump_backwards(fallback)
-		-- 				end
-		-- 				fallback()
-		-- 			end, {
-		-- 				"i",
-		-- 				"s", --[[ "c" (to enable the mapping in command mode) ]]
-		-- 			}),
-		-- 		},
-		-- 	})
-		-- end,
-	})
+	use({ "hrsh7th/nvim-cmp" })
 	use({ "onsails/lspkind-nvim" }) --}}}
 	use({ "hrsh7th/cmp-nvim-lsp-document-symbol" })
 	use("hrsh7th/cmp-nvim-lsp-signature-help")
@@ -140,7 +88,7 @@ return require("packer").startup(function(use)
 			{ "nvim-lua/plenary.nvim" },
 		},
 	})
-    use "nvim-telescope/telescope-live-grep-args.nvim"
+	use("nvim-telescope/telescope-live-grep-args.nvim")
 	use({
 		"nvim-telescope/telescope-fzf-native.nvim",
 		run = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
@@ -319,9 +267,10 @@ return require("packer").startup(function(use)
 							-- default_workspace = "default",
 							open_last_workspace = false,
 							workspaces = {
-								default = "/home/viktor/neovim/neorg/default",
-								research = "/home/viktor/hm/research-notes",
-								["rust-main"] = "/home/viktor/hm/rust-main/notes",
+								general = "/home/viktorhg/notes/default",
+								research = "/home/viktorhg/notes/research",
+								rust = "/home/viktorhg/notes/rust",
+								linux = "/home/viktorhg/notes/linux/",
 							},
 						},
 					},
@@ -354,10 +303,23 @@ return require("packer").startup(function(use)
 		requires = { "MunifTanjim/nui.nvim" },
 	})
 
-    use "puremourning/vimspector"
+	use("puremourning/vimspector")
+
+	use({
+		"simrat39/inlay-hints.nvim",
+		config = function()
+			require("inlay-hints").setup()
+		end,
+	})
+
+	use("danymat/neogen")
 
 	-- use 'shivamashtikar/tmuxjump.vim'
 	-- use 'junegunn/fzf.vim'
 	-- use 'dmmulroy/tsc.nvim'
 	-- use 'jose-elias-alvarez/typescript.nvim'
+
+	-- MINIS
+	use({ "echasnovski/mini.cursorword", branch = "stable" })
+	use({ "echasnovski/mini.files", branch = "stable" })
 end)

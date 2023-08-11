@@ -3,43 +3,38 @@ local lspconfig = require("lspconfig")
 local cmp = require("cmp")
 
 local cmp_source = function(wanted_kind)
-    return {
-        config = {
-            sources = cmp.config.sources({
-                {
-                    name = "nvim_lsp",
-                    entry_filter = function(entry, _)
-                        local label = entry.completion_item.label
-                        local received_kind = require("cmp.types").lsp.CompletionItemKind[entry:get_kind()]
+	return {
+		config = {
+			sources = cmp.config.sources({
+				{
+					name = "nvim_lsp",
+					entry_filter = function(entry, _)
+						local label = entry.completion_item.label
+						local received_kind = require("cmp.types").lsp.CompletionItemKind[entry:get_kind()]
 
-                        if wanted_kind == "Property" then
-                            if string.sub(label, 0, 1) == "_" then
-                                return false
-                            end
-                            return received_kind == "Variable"
-                        end
-                        return received_kind == wanted_kind
-                    end,
-                },
-            }),
-        },
-    }
+						if wanted_kind == "Property" then
+							if string.sub(label, 0, 1) == "_" then
+								return false
+							end
+							return received_kind == "Variable"
+						end
+						return received_kind == wanted_kind
+					end,
+				},
+			}),
+		},
+	}
 end
 
 local on_attach = function(client, bufnr)
-
-
-
 	local opts = { noremap = true, silent = false }
 	local opt = { noremap = true, silent = false, buffer = bufnr }
 
-
-    vim.keymap.set("n", "<leader>fI", function()
-        require('harpoon.tmux').sendCommand('!', "isort "..vim.fn.expand('%').."\r")
-        vim.loop.sleep(10)
-        vim.cmd('e!')
-    end, opt)
-
+	vim.keymap.set("n", "<leader>fI", function()
+		require("harpoon.tmux").sendCommand("!", "isort " .. vim.fn.expand("%") .. "\r")
+		vim.loop.sleep(10)
+		vim.cmd("e!")
+	end, opt)
 
 	vim.keymap.set("i", "<C-X><C-v>", cmp.mapping.complete(cmp_source("Variable")), opt)
 	vim.keymap.set("i", "<C-X><C-p>", cmp.mapping.complete(cmp_source("Property")), opt)
@@ -82,10 +77,10 @@ local on_attach = function(client, bufnr)
 	require("viktor.config.plugin.neotest").on_attach(client, bufnr)
 
 	vim.keymap.set("n", "<leader>rj", function()
-		require('env_init.jupyter').set()
+		require("env_init.jupyter").set()
 	end, opt)
 	vim.keymap.set("n", "<leader>jx", function()
-		require('env_init.jupyter').del()
+		require("env_init.jupyter").del()
 	end, opt)
 
 	vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, opt)
@@ -101,33 +96,32 @@ local on_attach = function(client, bufnr)
 end
 
 local root_dir = lspconfig.util.root_pattern({
-    "Pipfile",
-    "pyproject.toml",
-    "setup.py",
-    "setup.cfg",
-    "venv",
-    -- 'requirements.txt',
-    "requirements.yml",
-    "pyrightconfig.json",
-    -- ".projections.json",
+	"Pipfile",
+	"pyproject.toml",
+	"setup.py",
+	"setup.cfg",
+	"venv",
+	-- 'requirements.txt',
+	"requirements.yml",
+	"pyrightconfig.json",
+	-- ".projections.json",
 })
-
 
 -- local capabilities = vim.lsp.protocol.make_client_capabilities()
 -- capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
 lspconfig.pylyzer.setup({
-    -- capabilities = require('cmp_nvim_lsp').default_capabilities(),
+	-- capabilities = require('cmp_nvim_lsp').default_capabilities(),
 	-- cmd = {
 	-- 	"/home/viktor/.local/share/nvim/mason/bin/pylsp",
 	-- 	"--stdio",
 	-- },
 	filetypes = { "python", "py" },
 	on_attach = function(client, bufnr)
-        on_attach(client, bufnr)
-        -- vim.pretty_print(client.server_capabilities)
-        -- client.server_capabilities.hoverProvider.workDoneProgress = false
-    end,
+		on_attach(client, bufnr)
+		-- vim.pretty_print(client.server_capabilities)
+		-- client.server_capabilities.hoverProvider.workDoneProgress = false
+	end,
 	-- root_dir = root_dir,
 	-- settings = {
 	-- 	python = {

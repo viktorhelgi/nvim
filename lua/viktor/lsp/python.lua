@@ -2,7 +2,7 @@ vim.cmd([[
     autocmd FileType python lua _G.PythonKeyBindings()
 ]])
 
-local cmp = require('cmp')
+local cmp = require("cmp")
 
 local cmp_source = function(wanted_kind)
 	return {
@@ -29,7 +29,6 @@ local cmp_source = function(wanted_kind)
 end
 
 _G.PythonKeyBindings = function()
-
 	require("viktor.config.plugin.neotest").on_attach("python", 0)
 
 	vim.cmd("set colorcolumn=88")
@@ -71,12 +70,12 @@ _G.PythonKeyBindings = function()
 					end,
 					"Run file",
 				},
-                n = {
-                    function()
-                        require('harpoon.tmux').sendCommand("!", "\rpytest -s --disable-warnings\r")
-                    end,
-                    "Pytest"
-                },
+				n = {
+					function()
+						require("harpoon.tmux").sendCommand("!", "\rpytest -s --disable-warnings\r")
+					end,
+					"Pytest",
+				},
 
 				H = {
 					function()
@@ -107,17 +106,17 @@ _G.PythonKeyBindings = function()
 				t = {
 					function()
 						local command = "pytest -s --disable-warnings " .. vim.fn.expand("%")
-                        _G.last_py_cmd = command .. " \r"
+						_G.last_py_cmd = command .. " \r"
 						require("harpoon.tmux").sendCommand("!", _G.last_py_cmd)
 					end,
 					"Run test",
 				},
-                a = {
-                    function()
-                        require("harpoon.tmux").sendCommand("!", _G.last_py_cmd)
-                    end,
-                    "Run last test"
-                }
+				a = {
+					function()
+						require("harpoon.tmux").sendCommand("!", _G.last_py_cmd)
+					end,
+					"Run last test",
+				},
 			},
 			f = {
 				I = {

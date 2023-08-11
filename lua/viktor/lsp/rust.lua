@@ -1,11 +1,37 @@
 local rust_tools = require("rust-tools")
 local rust_funcs = require("rust_funcs")
+local neotest = require("neotest")
 
 local function _cmd(input)
 	return "<CMD>" .. input .. "<CR>"
 end
 
 local my_on_attach = function(client, bufnr)
+
+    -- local ns_id = vim.api.nvim_create_namespace("cwd-namespace")
+
+    -- vim.diagnostic.handlers["my/notify"] = {
+    --   show = function(namespace, _, diagnostics, opts)
+    --     -- In our example, the opts table has a "log_level" option
+    --     local level = opts["my/notify"].log_level
+    --
+    --     local name = vim.diagnostic.get_namespace(namespace).name
+    --     local msg = string.format("%d diagnostics in buffer %d from %s",
+    --                               #diagnostics,
+    --                               bufnr,
+    --                               name)
+    --     vim.notify(msg, level)
+    --   end,
+    -- }
+    --
+    -- -- Users can configure the handler
+    -- vim.diagnostic.config({
+    --   ["my/notify"] = {
+    --     log_level = vim.log.levels.INFO
+    --   }
+    -- })
+
+
 	pcall(function()
 		vim.keymap.del("i", "<tab>")
 	end)
@@ -18,31 +44,62 @@ local my_on_attach = function(client, bufnr)
 
 	require("lsp_signature").on_attach(require("viktor.config.plugin.lsp_signature"), bufnr) -- no need to specify bufnr if you don't use toggle_key
 
-	require("viktor.config.plugin.neotest").on_attach(client, bufnr)
+	-- require("viktor.config.plugin.neotest").on_attach(client, bufnr)
 	require("viktor.config.plugin.tasks").on_attach(client, bufnr)
+
+    local ctrl = function(key)
+        return "<C-"..key..">"
+    end
 
 	require("which-key").register({
 		["["] = {
 			d = { vim.diagnostic.goto_prev, "diagnostic" },
+            t = { function() neotest.jump.prev({status='failed'}) end, "test"}
 		},
 		["]"] = {
 			d = { vim.diagnostic.goto_next, "diagnostic" },
+            t = { function() neotest.jump.next({status='failed'}) end, "test"}
 		},
 		["'"] = {
 			name = "goto",
 			L = { "<CMD>e ~/.config/nvim/lua/viktor/lsp/rust.lua<CR>", "lsp" },
 			C = { "<CMD>e ~/.config/nvim/after/plugin/cmp/rust.lua<CR>", "cmp" },
+            o = {
+                function()
+                    neotest.output.open({ enter = true, last_run = true, auto_close = false })
+                end,
+                "neotest-open",
+            },
+            l = {
+                function()
+                    neotest.output.open({
+                        enter = true,
+                        last_run = true,
+                        auto_close = false,
+                        open_win = function()
+                            vim.cmd('vertical split')
+                            return vim.api.nvim_get_current_win()
+                        end
+                    })
+                end,
+                "neotest-open-left"
+            },
+            d = { neotest.output_panel.toggle, "neotest-open-down" }
+
 		},
+
+
 		g = {
 			name = "goto",
 			c = { _cmd("RustOpenCargo"), "cargo" },
 			i = { vim.lsp.buf.implementation, "impl" },
 			D = { vim.lsp.buf.declaration, "decl" },
-			k = { _cmd("RustHoverActions"), "hover-action" },
+			h = { _cmd("RustHoverActions"), "hover-action" },
 			-- k = {"gk", "K" },
 			p = { _cmd("RustParentModule"), "parent" },
 			r = { vim.lsp.buf.references, "ref" },
 			s = { vim.lsp.buf.signature_help, "sign" },
+			k = { _cmd("TSTextobjectPeekDefinitionCode @function.inner"), "peek definition" },
 		},
 		-- l = {
 		-- 	a = { _cmd("CodeActionMenu"), "code-action" },
@@ -51,7 +108,9 @@ local my_on_attach = function(client, bufnr)
 		c = {
 			name = "Change/Cargo",
 			-- a = { _cmd("RustCodeAction"), "code-action" },
-			b = { _cmd("Task start cargo build"), "build" },
+			b = { _cmd("Task start cargo lbuild"), "build" },
+			["*"] = { _cmd("Task start cargo clippy --release"), "build" },
+			["|"] = { _cmd("Task start cargo bench"), "build" },
 			d = { vim.diagnostic.setqflist, "setqflist" },
 			r = { rust_funcs.run.with_arguments, "run --" },
 			l = { rust_funcs.run.last_cmd, "run --" },
@@ -59,6 +118,49 @@ local my_on_attach = function(client, bufnr)
 			R = { rust_funcs.run.selected_binary, "run --bin <?>" },
 			q = { _cmd("cclose"), "close qflist" },
 		},
+        ["<leader>c"] = {
+			["*"] = { _cmd("Task start cargo clippy --release"), "build" },
+        },
+		d = {
+			s = { rust_funcs.explain_error.open_popup_here, "explain error" },
+			o = { rust_funcs.explain_error.print_error_as_json, "print error as json" },
+		},
+		["<leader>d"] = {
+			e = {
+				function()
+					vim.ui.input({ prompt = "Error Code: " }, function(e)
+						rust_funcs.explain_error.open_popup(e)
+					end)
+				end,
+				"explain error",
+			},
+		},
+        ["<leader>"] = {
+            n = {
+                name = "Run",
+                a = {
+                    function()
+                        neotest.run.run(vim.fn.getcwd().."/src")
+                    end,
+                    "all tests",
+                },
+                f = {
+                    function()
+                        neotest.run.run(vim.fn.expand('%'))
+                    end,
+                    "all tests",
+                },
+                n = {
+                    function()
+                        neotest.run.run({extra_args = { "--success-output=immediate" }})
+                    end,
+                    "this test",
+                },
+                l = { neotest.run.run_last , "last test"},
+                m = { neotest.summary.run_marked, "marked tests"},
+                s = { neotest.summary.toggle, "open summary"}
+            },
+        },
 		["<leader>r"] = {
 			name = "Rust",
 
@@ -77,26 +179,29 @@ local my_on_attach = function(client, bufnr)
 			-- rR = { _cmd("RustRunnables") },
 			-- C = {_cmd("RustViewCrateGraph")},
 			-- p = {_cmd("RustParentModule")},
-			b = {
-				function()
-					vim.cmd("copen")
-					vim.cmd("wincmd w")
-					vim.cmd("silent make build")
-				end,
-				"build with copen",
-			},
-			i = { require("rust_funcs").toggle_inlay_hints, "toggle inlay hints" },
-			C = { _cmd("RustOpenCargo") },
+			-- b = {
+			-- 	function()
+			-- 		vim.cmd("copen")
+			-- 		vim.cmd("wincmd w")
+			-- 		vim.cmd("silent make build")
+			-- 	end,
+			-- 	"build with copen",
+			-- },
+			b = { _cmd("Task start cargo build --release"), "build" },
 			c = {
 				function()
 					vim.cmd("Task start cargo clippy --tests --examples")
 				end,
 				"clippy tests examples",
 			},
-			f = { _cmd("RustFmt") },
-			h = { _cmd("RustHoverActions") },
+			C = { _cmd("RustOpenCargo"), "Open Cargo.toml" },
+			d = { _cmd("RustOpenExternalDocs"), "Open Docs" },
+			e = { _cmd("RustExpandMacro"), "Expand Macro" },
+			f = { _cmd("RustFmt"), "format" },
+			h = { _cmd("RustHoverActions"), "hover-action" },
+			i = { require("rust_funcs").toggle_inlay_hints, "toggle inlay hints" },
+			o = { require("rust_funcs").toggle_inlay_hinst_all_lines, "toggle line inlay-hints" },
 			l = { rust_funcs.run.something_good, "something good" },
-			p = { require("rust_funcs").cargo_run, "cargo run" },
 			m = {
 				function()
 					require("harpoon.tmux").sendCommand(
@@ -106,7 +211,8 @@ local my_on_attach = function(client, bufnr)
 				end,
 				"maturin build",
 			},
-			r = { _cmd("CargoReload") },
+			p = { require("rust_funcs").cargo_run, "cargo run" },
+			r = { _cmd("CargoReload"), "cargo-reload" },
 			-- r = {
 			-- 	w = { _cmd("RustReloadWorkspace") },
 			-- },
@@ -133,8 +239,8 @@ local my_on_attach = function(client, bufnr)
 				"cargo test",
 			},
 			-- T = { rust_funcs.tree.show, "module tree" },
-			T = { rust_funcs.tree.bin, "module tree" },
 			-- T = { rust_funcs.tree.lib, "module tree" },
+			-- T = { rust_funcs.tree.bin, "module tree" },
 		},
 	})
 
@@ -153,6 +259,8 @@ end
 
 rust_tools.setup({
 	tools = {
+		-- executor = require("rust-tools.executors").toggleterm,
+		executor = require("rust_funcs").run.rust_tools_executor,
 		inlay_hints = {
 			-- automatically set inlay hints (type hints)
 			-- default: true
@@ -188,20 +296,20 @@ rust_tools.setup({
 				--     tests = true
 				-- },
 
-				-- procMacro = {
-				-- 	enable = false,
-				-- },
+				procMacro = {
+					enable = true,
+				},
 				diagnostics = {
 					enable = true,
 					disabled = { "unresolved-proc-macro" },
 				},
 				check = {
 					command = "clippy",
-					extraArgs = {
-						"--tests",
-						-- "--example temp",
-						-- "--features=all",
-					},
+					-- extraArgs = {
+					-- 	"--tests",
+					-- 	-- "--example temp",
+					-- 	-- "--features=all",
+					-- },
 				},
 				checkOnSave = {
 					command = "clippy",
@@ -212,10 +320,10 @@ rust_tools.setup({
 		checkOnSave = {
 			enable = true,
 		},
-		server = {
-			cmd = "rust-analyzer",
+        cmd = {"/home/viktorhg/git-repos/ra-multiplex/target/release/ra-multiplex", "client"},
+            -- cmd = {"clangd"}
+			-- cmd = "rust-analyzer",
 			-- cmd = "nice --10 rust-analyzer",
-		},
 		handlers = {
 			-- vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' })
 			-- vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })

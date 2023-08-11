@@ -55,6 +55,12 @@ end
 -- 	"pyrightconfig.json",
 -- 	-- ".projections.json",
 -- })
+local root_dir = lspconfig.util.root_pattern({
+	"ruff.toml",
+	".ruff.toml",
+    "pyproject.toml",
+    "Pipfile"
+})
 
 local configs = require("lspconfig.configs")
 if not configs.ruff_lsp then
@@ -62,7 +68,7 @@ if not configs.ruff_lsp then
 		default_config = {
 			cmd = { "ruff-lsp" },
 			filetypes = { "python" },
-			root_dir = require("lspconfig").util.find_git_ancestor,
+			root_dir = root_dir,
 			init_options = {
 				settings = {
 					args = {},
@@ -72,11 +78,6 @@ if not configs.ruff_lsp then
 	}
 end
 
-local root_dir = lspconfig.util.root_pattern({
-	"ruff.toml",
-	".ruff.toml",
-    "pyproject.toml"
-})
 lspconfig.ruff_lsp.setup({
 	root_dir = root_dir,
 	-- filetypes = { "python" },

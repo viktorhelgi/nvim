@@ -97,24 +97,23 @@ require("which-key").register({
 	["]"] = {
 		name = "Goto Next",
 		d = { vim.diagnostic.goto_next, "diagnostic" },
-        ["l"] = { require("harpoon.ui").nav_next, "goto next mark" },
-        h = { require('harpoon.ui').nav_next, "harpoon"},
-        t = { _cmd("TSTextobjectRepeatLastMoveNext"), "ts: repeat"},
+		["l"] = { require("harpoon.ui").nav_next, "goto next mark" },
+		h = { require("harpoon.ui").nav_next, "harpoon" },
+		t = { _cmd("TSTextobjectRepeatLastMoveNext"), "ts: repeat" },
 	},
 	["["] = {
 		name = "Goto Prev",
 		d = { vim.diagnostic.goto_prev, "diagnostic" },
-        ["l"] = { require("harpoon.ui").nav_prev, "goto prev mark" 	},
-        h = { require('harpoon.ui').nav_prev, "harpoon"},
-        t = { _cmd("TSTextobjectRepeatLastMovePrevious"), "ts: repeat"},
-    },
-	y = {
-		name = "yank",
-		s = { 'viw"ly' },
+		["l"] = { require("harpoon.ui").nav_prev, "goto prev mark" },
+		h = { require("harpoon.ui").nav_prev, "harpoon" },
+		t = { _cmd("TSTextobjectRepeatLastMovePrevious"), "ts: repeat" },
 	},
+    d = {
+        o = {vim.diagnostic.open_float, "show diagnostic"}
+    },
 	g = {
 		name = "+goto",
-        c = { _cmd("e Cargo.toml"), "Cargo.toml"},
+		c = { _cmd("e Cargo.toml"), "Cargo.toml" },
 		d = {
 			function()
 				vim.lsp.buf.definition({
@@ -126,6 +125,7 @@ require("which-key").register({
 			end,
 			"definition",
 		},
+		D = { vim.lsp.buf.declaration, "declaration"},
 		h = { vim.lsp.buf.hover, "hover" },
 		k = { vim.lsp.buf.hover, "hover" },
 		s = { vim.lsp.buf.signature_help, "signature_help" },
@@ -133,12 +133,16 @@ require("which-key").register({
 		t = { vim.lsp.buf.type_definition, "type-definition" },
 		r = { vim.lsp.buf.references, "references" },
 	},
+	y = {
+		name = "yank",
+		s = { 'viw"ly' },
+	},
 	["<leader>"] = {
 		[","] = { _cmd("Telescope file_browser path=%:p:h theme=dropdown"), "File Browser" },
 		["~"] = { _cmd("messages"), "messages" },
 		["-"] = { _cmd("b#"), "b#" },
 		q = { _cmd("q"), "quit" },
-        Q = { _cmd("confirm qa"), "quit-all"},
+		Q = { _cmd("confirm qa"), "quit-all" },
 		s = { _cmd("w"), "save" },
 		z = { _cmd("ZenMode"), "Zen mode" },
 		[";"] = {
@@ -181,9 +185,10 @@ require("which-key").register({
 			d = { vim.diagnostic.setqflist, "diags to qflist" },
 			q = {
 				function()
-					vim.cmd("ccl")
+					vim.cmd("cclose")
+					vim.cmd("lclose")
 				end,
-				"ccl",
+				"close",
 			},
 			i = {
 				function()
@@ -203,11 +208,16 @@ require("which-key").register({
 			o = {
 				function()
 					vim.cmd("copen")
-					-- vim.cmd('Trouble quickfix')
 					require("keys").register_jump_mappings("qf")
-					-- require('keys').register_jump_mappings("Trouble")
 				end,
-				"open",
+				"open qf-list",
+			},
+			l = {
+				function()
+					vim.cmd("lopen")
+					require("keys").register_jump_mappings("loclist")
+				end,
+				"open loc-list",
 			},
 			n = { "<cmd>cn<cr>", "next" },
 			p = { "<cmd>cp<cr>", "prev" },
@@ -220,6 +230,77 @@ require("which-key").register({
 				"/\\.<C-r>l/g %",
 			},
 		},
+		d = {
+			name = "diagnostic",
+			t = { require("diagnostic_funcs").toggle, "toggle" },
+            s = { vim.diagnostic.open_float, "open-float"},
+			l = {
+				name = "location list",
+				a = {
+					function()
+						require("diagnostic_funcs").loclist()
+					end,
+					"All",
+				},
+				e = {
+					function()
+						require("diagnostic_funcs").loclist(vim.diagnostic.severity.ERROR)
+					end,
+					"ERROR",
+				},
+				h = {
+					function()
+						require("diagnostic_funcs").loclist(vim.diagnostic.severity.HINT)
+					end,
+					"HINT",
+				},
+				w = {
+					function()
+						require("diagnostic_funcs").loclist(vim.diagnostic.severity.WARN)
+					end,
+					"WARN",
+				},
+				i = {
+					function()
+						require("diagnostic_funcs").loclist(vim.diagnostic.severity.INFO)
+					end,
+					"INFO",
+				},
+			},
+			c = {
+				name = "qflist",
+				a = {
+					function()
+						require("diagnostic_funcs").qflist()
+					end,
+					"All",
+				},
+				e = {
+					function()
+						require("diagnostic_funcs").qflist(vim.diagnostic.severity.ERROR)
+					end,
+					"ERROR",
+				},
+				h = {
+					function()
+						require("diagnostic_funcs").qflist(vim.diagnostic.severity.HINT)
+					end,
+					"HINT",
+				},
+				w = {
+					function()
+						require("diagnostic_funcs").qflist(vim.diagnostic.severity.WARN)
+					end,
+					"WARN",
+				},
+				i = {
+					function()
+						require("diagnostic_funcs").qflist(vim.diagnostic.severity.INFO)
+					end,
+					"INFO",
+				},
+			},
+		},
 		e = {
 			["|"] = {
 				function()
@@ -228,18 +309,22 @@ require("which-key").register({
 				"dont know",
 			},
 			a = { _cmd("AerialToggle"), "Aerial Toggle" },
-            b = {
-                s = { function()
-                        vim.cmd("set scrollbind")
-                        vim.cmd("set cursorbind")
-                    end, "window bind"
-                },
-                x = { function()
-                        vim.cmd("set noscrollbind")
-                        vim.cmd("set nocursorbind")
-                    end, "window bind off"
-                }
-            },
+			b = {
+				s = {
+					function()
+						vim.cmd("set scrollbind")
+						vim.cmd("set cursorbind")
+					end,
+					"window bind",
+				},
+				x = {
+					function()
+						vim.cmd("set noscrollbind")
+						vim.cmd("set nocursorbind")
+					end,
+					"window bind off",
+				},
+			},
 			c = { _cmd("cd %:p:h"), "cd %:p:h" },
 			f = {
 				name = "fold",
@@ -279,14 +364,30 @@ require("which-key").register({
 		},
 		g = {
 			name = "Git",
-            o = { _cmd("Git"), ":Git"},
-            c = { _cmd("Git commit"), "commit"},
-            q = { function()
-                require("keys").register_jump_mappings("qf")
-                vim.cmd("Git difftool")
-            end, "qflist"},
+			o = { _cmd("Git"), ":Git" },
+			c = { _cmd("Git commit"), "commit" },
+			q = {
+				function()
+					require("keys").register_jump_mappings("qf")
+					vim.cmd("Git difftool")
+				end,
+				"qflist",
+			},
 			d = {
 				name = "git-diff",
+                b = {
+					function()
+						vim.ui.input({ prompt = "Number of HEADS Back: " }, function(count)
+                            vim.cmd("DiffviewOpen HEAD"..string.rep("^", count))
+                            -- if type(count) == "number" then
+                            -- else
+                            --     print("Error: value must be a number")
+                            -- end
+						end)
+					end,
+					"SELECT",
+
+                },
 				h = { _cmd("DiffviewOpen"), "HEAD" },
 				s = {
 					function()
@@ -299,7 +400,7 @@ require("which-key").register({
 				f = { _cmd("DiffviewFileHistory"), "file history" },
 				q = { _cmd("DiffviewClose"), "quit" },
 			},
-            p = { _cmd("Gitsigns preview_hunk_inline"), "preview hunk"},
+			P = { _cmd("Gitsigns preview_hunk_inline"), "preview hunk" },
 		},
 		h = {
 			name = "harpoon/git",
@@ -308,10 +409,14 @@ require("which-key").register({
 			-- n = { require("harpoon.ui").nav_next, "goto next mark" },
 			-- p = { require("harpoon.ui").nav_prev, "goto prev mark" },
 
-            p = { require('gitsigns.actions').preview_hunk_inline,  "preview_hunk"},
-            s = { require('gitsigns.actions').stage_hunk,  "stage hunk"},
-            u = { require('gitsigns.actions').undo_stage_hunk,  "undo stage hunk"},
-            b = { require('gitsigns.actions').blame_line,  "undo stage hunk"},
+			p = { require("gitsigns.actions").preview_hunk_inline, "preview_hunk" },
+			s = { require("gitsigns.actions").stage_hunk, "stage hunk" },
+			u = { require("gitsigns.actions").undo_stage_hunk, "undo stage hunk" },
+			b = { require("gitsigns.actions").blame_line, "undo stage hunk" },
+			r = { function()
+                require("harpoon.tmux").sendCommand("!", "^p")
+                require("harpoon.tmux").sendCommand("!", "\r")
+            end, "tmux: prev-cmd" },
 		},
 		-- o = {
 		--     name = "Trouble",
@@ -390,9 +495,9 @@ require("which-key").register({
 			C = { _cmd("Neorg toggle-concealer"), "toggle-concealer" },
 			o = {
 				name = "Open",
-				r = { _cmd("Neorg workspace rust-main"), "rust-main" },
+				r = { _cmd("Neorg workspace rust"), "rust" },
 				n = { _cmd("Neorg workspace research"), "research" },
-				d = { _cmd("Neorg workspace default"), "default" },
+				d = { _cmd("Neorg workspace general"), "default" },
 			},
 			j = {
 				t = { _cmd("Neorg journal today"), "today" },
@@ -457,7 +562,7 @@ require("which-key").register({
 			},
 			o = { require("telescope.builtin").buffers, "buffers" },
 			-- k = { require("telescope.builtin").live_grep, "live grep" },
-			k = { require('telescope').extensions.live_grep_args.live_grep_args, "live grep" },
+			k = { require("telescope").extensions.live_grep_args.live_grep_args, "live grep" },
 			j = {
 				function()
 					require("telescope.builtin").live_grep({ cwd = require("telescope.utils").buffer_dir() })
@@ -499,11 +604,11 @@ require("which-key").register({
 			u = { require("telescope.builtin").find_files, "files" },
 			w = { require("telescope.builtin").lsp_workspace_symbols, "ws symbols" },
 		},
-        w = {
-            name = "Window",
-            m = { _cmd("WindowsMaximize"), "maximize"},
-            e = { _cmd("WindowsEqualize"), "equalize"}
-        }
+		w = {
+			name = "Window",
+			m = { _cmd("WindowsMaximize"), "maximize" },
+			e = { _cmd("WindowsEqualize"), "equalize" },
+		},
 	},
 })
 

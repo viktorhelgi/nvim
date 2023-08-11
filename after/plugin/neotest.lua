@@ -37,7 +37,7 @@ require("neotest").setup({
         enabled = true
     },
 	summary = {
-        open = "leftabove vsplit | vertical resize 50",
+        -- open = "leftabove vsplit | vertical resize 50",
       -- open = "botright vsplit | vertical resize 50"
 	--     mappings = {
 	--         mark = 'm',

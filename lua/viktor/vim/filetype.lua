@@ -7,6 +7,7 @@ local libs = require('viktor.vim.libs')
 vim.filetype.add({
   extension = {
     mdx = 'markdown',
+    docker = 'docker',
     -- [".dockerfile"] = 'dockerfile'
     conf = function(path, _)
         local conf_pairs = {

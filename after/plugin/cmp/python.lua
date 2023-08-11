@@ -2,7 +2,6 @@ local lspkind = require("lspkind")
 
 local cmp = require("cmp")
 local types = require("cmp.types")
-local cmp_ultisnips_mappings = require("cmp_nvim_ultisnips.mappings")
 local CmpConfigSources = require("cmp.config.sources")
 
 local cmp_source = function(wanted_kind)
@@ -48,18 +47,12 @@ local cmp_source_argument = function()
 end
 
 cmp.setup.filetype("python", {
-    snippet = {
-        expand = function(args)
-            vim.fn["UltiSnips#Anon"](args.body)
-        end,
-    },
     mapping = cmp.mapping.preset.insert({
 		["<C-u>"] = cmp.mapping.scroll_docs(-4),
 		["<C-d>"] = cmp.mapping.scroll_docs(4),
 		-- ['<C-Space>'] = cmp.mapping.complete({}),
 		["<C-e>"] = cmp.mapping.abort(),
 		-- ["<C-o>"] = cmp.mapping.complete(),
-		-- ["<C-a>"] = cmp.mapping.complete({config = {sources={name = "ultisnips"}}}),
 
 		["<C-o>"] = cmp.mapping.complete(),
 		-- ["<C-o>"] = cmp.mapping.complete({
@@ -72,8 +65,7 @@ cmp.setup.filetype("python", {
   --                   { name = "nvim_lsp" },
   --                   { name = "nvim_lsp_signature_help" },
   --                   { name = "path" },
-  --                   { name = "ultisnips"},
-  --               --     { name = "buffer" },
+                    -- { name = "buffer" },
   --               }),
 		-- 	},
 		-- }),
@@ -118,32 +110,11 @@ cmp.setup.filetype("python", {
 			behavior = types.cmp.ConfirmBehavior.Insert,
 			select = true,
 		}), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-		["<Tab>"] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-                cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
-            else
-                fallback()
-            end
-		end, {
-			"i",
-			"s", --[[ "c" (to enable the mapping in command mode) ]]
-		}),
-		["<S-Tab>"] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-			    cmp_ultisnips_mappings.jump_backwards(fallback)
-            else
-                fallback()
-            end
-		end, {
-			"i",
-			"s", --[[ "c" (to enable the mapping in command mode) ]]
-		}),
     }),
     sources = CmpConfigSources({
         { name = "nvim_lsp" },
         { name = "nvim_lsp_signature_help" },
         { name = "path" },
-        { name = "ultisnips"},
     --     { name = "buffer" },
     }),
     formatting = {

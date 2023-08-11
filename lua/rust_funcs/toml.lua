@@ -38,6 +38,8 @@ local M = {}
 ---@field target string
 ---@field registry string
 
+---@alias BuildProfile "release" | "dev"
+
 ---@class Target
 ---@field crate_types string[]
 ---@field doc boolean
@@ -48,6 +50,7 @@ local M = {}
 ---@field required-features string[]
 ---@field src_path string
 ---@field test boolean
+---@field build_profile BuildProfile
 
 local function has_value(tab, val)
 	for _, value in ipairs(tab) do

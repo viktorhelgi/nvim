@@ -31,11 +31,6 @@ vim.api.nvim_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 -- cmd('let test#strategy = "harpoon"')
 -- cmd('let g:test#harpoon_term = 1')
 -- cmd('let g:test#harpoon#gototerminal = 0')
-vim.cmd('let test#python#runner = \'pytest\'')
-vim.cmd('let test#rust#runner = \'cargotest\'')
-vim.cmd('let g:test#echo_command = 0')
-vim.cmd('let g:test#preserve_screen = 1')
-vim.cmd("let test#strategy = 'vimux'")
 
 vim.cmd("let g:ftplugin_sql_omni_key = '<C-o>'")
 
@@ -44,6 +39,5 @@ vim.g.python3_host_prog = "/usr/bin/python3.9"
 
 vim.cmd('au TextYankPost * silent! lua vim.highlight.on_yank()')
 
-vim.cmd("let g:cmake_root_markers=['build']")
 
 

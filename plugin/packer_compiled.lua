@@ -49,8 +49,8 @@ local function save_profiles(threshold)
 end
 
 time([[Luarocks path setup]], true)
-local package_path_str = "/home/viktorhg/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?.lua;/home/viktorhg/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?/init.lua;/home/viktorhg/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?.lua;/home/viktorhg/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?/init.lua"
-local install_cpath_pattern = "/home/viktorhg/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/lua/5.1/?.so"
+local package_path_str = "/home/viktorhg/.cache/nvim/packer_hererocks/2.1.1692716794/share/lua/5.1/?.lua;/home/viktorhg/.cache/nvim/packer_hererocks/2.1.1692716794/share/lua/5.1/?/init.lua;/home/viktorhg/.cache/nvim/packer_hererocks/2.1.1692716794/lib/luarocks/rocks-5.1/?.lua;/home/viktorhg/.cache/nvim/packer_hererocks/2.1.1692716794/lib/luarocks/rocks-5.1/?/init.lua"
+local install_cpath_pattern = "/home/viktorhg/.cache/nvim/packer_hererocks/2.1.1692716794/lib/lua/5.1/?.so"
 if not string.find(package.path, package_path_str, 1, true) then
   package.path = package.path .. ';' .. package_path_str
 end
@@ -140,7 +140,6 @@ _G.packer_plugins = {
     url = "https://github.com/CRAG666/code_runner.nvim"
   },
   ["crates.nvim"] = {
-    config = { "\27LJ\2\n4\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\vcrates\frequire\0" },
     loaded = true,
     path = "/home/viktorhg/.local/share/nvim/site/pack/packer/start/crates.nvim",
     url = "https://github.com/saecki/crates.nvim"
@@ -175,10 +174,23 @@ _G.packer_plugins = {
     path = "/home/viktorhg/.local/share/nvim/site/pack/packer/start/formatter.nvim",
     url = "https://github.com/mhartington/formatter.nvim"
   },
+  ["fzf-lua"] = {
+    loaded = true,
+    path = "/home/viktorhg/.local/share/nvim/site/pack/packer/start/fzf-lua",
+    url = "https://github.com/ibhagwan/fzf-lua"
+  },
   ["gitsigns.nvim"] = {
     loaded = true,
     path = "/home/viktorhg/.local/share/nvim/site/pack/packer/start/gitsigns.nvim",
     url = "https://github.com/lewis6991/gitsigns.nvim"
+  },
+  ["go.nvim"] = {
+    config = { "\27LJ\2\n0\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\ago\frequire\0" },
+    loaded = false,
+    needs_bufread = true,
+    only_cond = false,
+    path = "/home/viktorhg/.local/share/nvim/site/pack/packer/opt/go.nvim",
+    url = "https://github.com/ray-x/go.nvim"
   },
   ["grapple.nvim"] = {
     loaded = true,
@@ -221,6 +233,11 @@ _G.packer_plugins = {
     path = "/home/viktorhg/.local/share/nvim/site/pack/packer/start/kanagawa.nvim",
     url = "https://github.com/rebelot/kanagawa.nvim"
   },
+  ["line-number-interval.nvim"] = {
+    loaded = true,
+    path = "/home/viktorhg/.local/share/nvim/site/pack/packer/start/line-number-interval.nvim",
+    url = "https://github.com/IMOKURI/line-number-interval.nvim"
+  },
   ["lsp_signature.nvim"] = {
     loaded = true,
     path = "/home/viktorhg/.local/share/nvim/site/pack/packer/start/lsp_signature.nvim",
@@ -251,6 +268,21 @@ _G.packer_plugins = {
     path = "/home/viktorhg/.local/share/nvim/site/pack/packer/start/middleclass",
     url = "https://github.com/anuvyklack/middleclass"
   },
+  ["mini.cursorword"] = {
+    loaded = true,
+    path = "/home/viktorhg/.local/share/nvim/site/pack/packer/start/mini.cursorword",
+    url = "https://github.com/echasnovski/mini.cursorword"
+  },
+  ["mini.files"] = {
+    loaded = true,
+    path = "/home/viktorhg/.local/share/nvim/site/pack/packer/start/mini.files",
+    url = "https://github.com/echasnovski/mini.files"
+  },
+  ["mini.map"] = {
+    loaded = true,
+    path = "/home/viktorhg/.local/share/nvim/site/pack/packer/start/mini.map",
+    url = "https://github.com/echasnovski/mini.map"
+  },
   ["neodev.nvim"] = {
     loaded = true,
     path = "/home/viktorhg/.local/share/nvim/site/pack/packer/start/neodev.nvim",
@@ -261,8 +293,13 @@ _G.packer_plugins = {
     path = "/home/viktorhg/.local/share/nvim/site/pack/packer/start/neogen",
     url = "https://github.com/danymat/neogen"
   },
+  neogit = {
+    loaded = true,
+    path = "/home/viktorhg/.local/share/nvim/site/pack/packer/start/neogit",
+    url = "https://github.com/NeogitOrg/neogit"
+  },
   neorg = {
-    config = { "\27LJ\2\n„\3\0\0\a\0\21\0\0296\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\19\0005\3\6\0005\4\4\0005\5\3\0=\5\5\4=\4\a\0034\4\0\0=\4\b\0034\4\0\0=\4\t\0034\4\0\0=\4\n\0035\4\14\0005\5\v\0005\6\f\0=\6\r\5=\5\5\4=\4\15\0035\4\17\0005\5\16\0=\5\5\4=\4\18\3=\3\20\2B\0\2\1K\0\1\0\tload\1\0\0\20core.completion\1\0\0\1\0\1\vengine\rnvim-cmp\16core.dirman\1\0\0\15workspaces\1\0\4\fgeneral!/home/viktorhg/notes/default\trust\30/home/viktorhg/notes/rust\rresearch\"/home/viktorhg/notes/research\nlinux /home/viktorhg/notes/linux/\1\0\1\24open_last_workspace\1\23core.esupports.hop\19core.concealer\18core.defaults\18core.keybinds\1\0\0\vconfig\1\0\0\1\0\1\17neorg_leader\r<Leader>\nsetup\nneorg\frequire\0" },
+    config = { "\27LJ\2\nu\0\0\4\0\5\0\v6\0\0\0'\2\1\0B\0\2\0029\0\2\0006\1\0\0'\3\3\0B\1\2\0029\1\4\1\18\3\0\0B\1\2\1K\0\1\0\nsetup\nneorg\18configuration$viktor.config.plugin.neorg-conf\frequire\0" },
     loaded = true,
     path = "/home/viktorhg/.local/share/nvim/site/pack/packer/start/neorg",
     url = "https://github.com/nvim-neorg/neorg"
@@ -291,6 +328,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/viktorhg/.local/share/nvim/site/pack/packer/start/neovim-tasks",
     url = "https://github.com/Shatur/neovim-tasks"
+  },
+  ["nightfox.nvim"] = {
+    loaded = true,
+    path = "/home/viktorhg/.local/share/nvim/site/pack/packer/start/nightfox.nvim",
+    url = "https://github.com/EdenEast/nightfox.nvim"
   },
   ["nui.nvim"] = {
     loaded = true,
@@ -505,38 +547,34 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
--- Config for: overseer.nvim
-time([[Config for overseer.nvim]], true)
-try_loadstring("\27LJ\2\n6\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\roverseer\frequire\0", "config", "overseer.nvim")
-time([[Config for overseer.nvim]], false)
--- Config for: neorg
-time([[Config for neorg]], true)
-try_loadstring("\27LJ\2\n„\3\0\0\a\0\21\0\0296\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\19\0005\3\6\0005\4\4\0005\5\3\0=\5\5\4=\4\a\0034\4\0\0=\4\b\0034\4\0\0=\4\t\0034\4\0\0=\4\n\0035\4\14\0005\5\v\0005\6\f\0=\6\r\5=\5\5\4=\4\15\0035\4\17\0005\5\16\0=\5\5\4=\4\18\3=\3\20\2B\0\2\1K\0\1\0\tload\1\0\0\20core.completion\1\0\0\1\0\1\vengine\rnvim-cmp\16core.dirman\1\0\0\15workspaces\1\0\4\fgeneral!/home/viktorhg/notes/default\trust\30/home/viktorhg/notes/rust\rresearch\"/home/viktorhg/notes/research\nlinux /home/viktorhg/notes/linux/\1\0\1\24open_last_workspace\1\23core.esupports.hop\19core.concealer\18core.defaults\18core.keybinds\1\0\0\vconfig\1\0\0\1\0\1\17neorg_leader\r<Leader>\nsetup\nneorg\frequire\0", "config", "neorg")
-time([[Config for neorg]], false)
--- Config for: windows.nvim
-time([[Config for windows.nvim]], true)
-try_loadstring("\27LJ\2\nå\1\0\0\3\0\b\0\0186\0\0\0009\0\1\0)\1\n\0=\1\2\0006\0\0\0009\0\1\0)\1\n\0=\1\3\0006\0\0\0009\0\1\0+\1\1\0=\1\4\0006\0\5\0'\2\6\0B\0\2\0029\0\a\0B\0\1\1K\0\1\0\nsetup\fwindows\frequire\16equalalways\16winminwidth\rwinwidth\6o\bvim\0", "config", "windows.nvim")
-time([[Config for windows.nvim]], false)
--- Config for: crates.nvim
-time([[Config for crates.nvim]], true)
-try_loadstring("\27LJ\2\n4\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\vcrates\frequire\0", "config", "crates.nvim")
-time([[Config for crates.nvim]], false)
--- Config for: nvim-test
-time([[Config for nvim-test]], true)
-try_loadstring("\27LJ\2\n7\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\14nvim-test\frequire\0", "config", "nvim-test")
-time([[Config for nvim-test]], false)
--- Config for: inlay-hints.nvim
-time([[Config for inlay-hints.nvim]], true)
-try_loadstring("\27LJ\2\n9\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\16inlay-hints\frequire\0", "config", "inlay-hints.nvim")
-time([[Config for inlay-hints.nvim]], false)
--- Config for: toggleterm.nvim
-time([[Config for toggleterm.nvim]], true)
-try_loadstring("\27LJ\2\n8\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\15toggleterm\frequire\0", "config", "toggleterm.nvim")
-time([[Config for toggleterm.nvim]], false)
 -- Config for: zen-mode.nvim
 time([[Config for zen-mode.nvim]], true)
 try_loadstring("\27LJ\2\n:\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\rzen-mode\frequire\0", "config", "zen-mode.nvim")
 time([[Config for zen-mode.nvim]], false)
+-- Config for: neorg
+time([[Config for neorg]], true)
+try_loadstring("\27LJ\2\nu\0\0\4\0\5\0\v6\0\0\0'\2\1\0B\0\2\0029\0\2\0006\1\0\0'\3\3\0B\1\2\0029\1\4\1\18\3\0\0B\1\2\1K\0\1\0\nsetup\nneorg\18configuration$viktor.config.plugin.neorg-conf\frequire\0", "config", "neorg")
+time([[Config for neorg]], false)
+-- Config for: inlay-hints.nvim
+time([[Config for inlay-hints.nvim]], true)
+try_loadstring("\27LJ\2\n9\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\16inlay-hints\frequire\0", "config", "inlay-hints.nvim")
+time([[Config for inlay-hints.nvim]], false)
+-- Config for: windows.nvim
+time([[Config for windows.nvim]], true)
+try_loadstring("\27LJ\2\nå\1\0\0\3\0\b\0\0186\0\0\0009\0\1\0)\1\n\0=\1\2\0006\0\0\0009\0\1\0)\1\n\0=\1\3\0006\0\0\0009\0\1\0+\1\1\0=\1\4\0006\0\5\0'\2\6\0B\0\2\0029\0\a\0B\0\1\1K\0\1\0\nsetup\fwindows\frequire\16equalalways\16winminwidth\rwinwidth\6o\bvim\0", "config", "windows.nvim")
+time([[Config for windows.nvim]], false)
+-- Config for: nvim-test
+time([[Config for nvim-test]], true)
+try_loadstring("\27LJ\2\n7\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\14nvim-test\frequire\0", "config", "nvim-test")
+time([[Config for nvim-test]], false)
+-- Config for: toggleterm.nvim
+time([[Config for toggleterm.nvim]], true)
+try_loadstring("\27LJ\2\n8\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\15toggleterm\frequire\0", "config", "toggleterm.nvim")
+time([[Config for toggleterm.nvim]], false)
+-- Config for: overseer.nvim
+time([[Config for overseer.nvim]], true)
+try_loadstring("\27LJ\2\n6\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\roverseer\frequire\0", "config", "overseer.nvim")
+time([[Config for overseer.nvim]], false)
 -- Load plugins in order defined by `after`
 time([[Sequenced loading]], true)
 vim.cmd [[ packadd nvim-treesitter ]]
@@ -554,6 +592,23 @@ pcall(vim.api.nvim_create_user_command, 'CodeActionMenu', function(cmdargs)
       end})
 time([[Defining lazy-load commands]], false)
 
+vim.cmd [[augroup packer_load_aucmds]]
+vim.cmd [[au!]]
+  -- Filetype lazy-loads
+time([[Defining lazy-load filetype autocommands]], true)
+vim.cmd [[au FileType go ++once lua require("packer.load")({'go.nvim'}, { ft = "go" }, _G.packer_plugins)]]
+vim.cmd [[au FileType gomod ++once lua require("packer.load")({'go.nvim'}, { ft = "gomod" }, _G.packer_plugins)]]
+time([[Defining lazy-load filetype autocommands]], false)
+  -- Event lazy-loads
+time([[Defining lazy-load event autocommands]], true)
+vim.cmd [[au CmdlineEnter * ++once lua require("packer.load")({'go.nvim'}, { event = "CmdlineEnter *" }, _G.packer_plugins)]]
+time([[Defining lazy-load event autocommands]], false)
+vim.cmd("augroup END")
+vim.cmd [[augroup filetypedetect]]
+time([[Sourcing ftdetect script at: /home/viktorhg/.local/share/nvim/site/pack/packer/opt/go.nvim/ftdetect/filetype.vim]], true)
+vim.cmd [[source /home/viktorhg/.local/share/nvim/site/pack/packer/opt/go.nvim/ftdetect/filetype.vim]]
+time([[Sourcing ftdetect script at: /home/viktorhg/.local/share/nvim/site/pack/packer/opt/go.nvim/ftdetect/filetype.vim]], false)
+vim.cmd("augroup END")
 
 _G._packer.inside_compile = false
 if _G._packer.needs_bufread == true then

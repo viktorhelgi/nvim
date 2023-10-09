@@ -8,3 +8,14 @@ require("harpoon").setup({
     tabline_prefix = "  ",
     tabline_suffix = "  "
 })
+
+local function jump_to_mark(id)
+    require('harpoon.ui').nav_file(id)
+end
+
+for i = 0, 15 do
+    local lhs = i .. "<leader>"
+    local map = ":lua require('harpoon.ui').nav_file(" .. i ..")<CR>"
+    vim.keymap.set('n', lhs, map, { desc = "harpoon "..i, noremap = true, silent = true })
+end
+

@@ -44,15 +44,22 @@ _G.PythonKeyBindings = function()
 				"type definition",
 			},
 		},
+        ["ga"] = {
+            "<cmd>A<cr>", "projections"
+        },
 		["'L"] = {
 			"<CMD>e ~/.config/nvim/lua/viktor/lsp/python.lua<CR>",
 			"Goto FileType Config",
+		},
+		["'R"] = {
+			"<CMD>e ~/.config/nvim/lua/viktor/lsp/pyright.lua<CR>",
+			"goto pyright config file",
 		},
 		["<leader>"] = {
 			l = { vim.lsp.buf.code_action, "Code Action" },
 			r = {
 				j = { require("env_init.jupyter").set, "Set jupyter mappings" },
-				l = {
+				L = {
 					function()
 						-- vim.cmd("cd " .. vim.fn.expand("%:p:h"))
 						require("overseer").run_template({ name = "Ruff Lint" })
@@ -70,13 +77,6 @@ _G.PythonKeyBindings = function()
 					end,
 					"Run file",
 				},
-				n = {
-					function()
-						require("harpoon.tmux").sendCommand("!", "\rpytest -s --disable-warnings\r")
-					end,
-					"Pytest",
-				},
-
 				H = {
 					function()
 						local dirname = vim.fn.expand("%:p:h")
@@ -103,14 +103,29 @@ _G.PythonKeyBindings = function()
 					end,
 					"send 'git add/commit to pane 0",
 				},
+				l = {
+                    "<cmd>TestNearest<cr>",
+					"test nearest",
+				},
+				n = {
+                    "<cmd>TestNearest<cr>",
+					"test nearest",
+				},
 				t = {
 					function()
 						local command = "pytest -s --disable-warnings " .. vim.fn.expand("%")
 						_G.last_py_cmd = command .. " \r"
 						require("harpoon.tmux").sendCommand("!", _G.last_py_cmd)
 					end,
-					"Run test",
+					"pytest file",
 				},
+				T = {
+					function()
+						require("harpoon.tmux").sendCommand("!", "\rpytest -s --disable-warnings\r")
+					end,
+					"pytest",
+				},
+
 				a = {
 					function()
 						require("harpoon.tmux").sendCommand("!", _G.last_py_cmd)

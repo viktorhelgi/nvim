@@ -1,5 +1,5 @@
 require('viktor.plug')
--- vim.cmd [[packadd packer.nvim]]
+vim.cmd [[packadd packer.nvim]]
 
 -- require('viktor.setup')
 require('viktor.config.init')

@@ -106,7 +106,7 @@ lspconfig.pyright.setup({
 		},
 		python = {
 			analysis = {
-				autoImportCompletions = false,
+				autoImportCompletions = true,
 				autoSearchPaths = true,
 				diagnosticMode = true,
 				extraPaths = {},
@@ -119,10 +119,7 @@ lspconfig.pyright.setup({
 					reportDuplicateImport = "information",
 					reportFunctionMemberAccess = "information",
 					reportGeneralTypeIssues = "error",
-					reportImplicitOverride = "information",
-					reportImplicitStringConcatenation = "information",
 					reportImportCycles = "information",
-					reportIncompatibleMethodOverride = "information",
 					reportIncompatibleVariableOverride = "information",
 					reportIncompleteStub = "information",
 					reportInconsistentConstructor = "information",
@@ -130,14 +127,8 @@ lspconfig.pyright.setup({
 					reportInvalidStubStatement = "information",
 					reportInvalidTypeVarUse = "warning",
 					reportMatchNotExhaustive = "information",
-
 					reportMissingImports = "error",
-
-					reportMissingModuleSource = "warning",
-					-- reportMissingModuleSource = "information",
-
 					reportMissingParameterType = "information",
-					reportMissingSuperCall = "information",
 					reportMissingTypeArgument = "none",
 					reportMissingTypeStubs = "none",
 					reportOptionalCall = "error",
@@ -148,16 +139,13 @@ lspconfig.pyright.setup({
 					reportOptionalSubscript = "error",
 					reportOverlappingOverload = "information",
 					reportPrivateImportUsage = "error",
-					reportPrivateUsage = "information",
 					reportPropertyTypeMismatch = "information",
 					reportSelfClsParameterName = "warning",
 					reportShadowedImports = "information",
 					reportTypeCommentUsage = "information",
 					reportTypedDictNotRequiredAccess = "error",
 					reportUnboundVariable = "error",
-
 					reportUndefinedVariable = "error",
-
 					reportUninitializedInstanceVariable = "information",
 					reportUnknownArgumentType = "none",
 					reportUnknownLambdaType = "none",
@@ -180,8 +168,32 @@ lspconfig.pyright.setup({
 					reportUnusedExpression = "information",
 					reportUnusedFunction = "information",
 					reportUnusedImport = "information",
-					reportUnusedVariable = "information",
 					reportWildcardImportFromLibrary = "warning",
+
+					-- reportUnusedVariable = "information",
+					reportUnusedVariable = "none",
+
+					-- reportPrivateUsage = "information",
+					reportPrivateUsage = "none",
+
+					-- reportImplicitOverride = "information",
+					reportImplicitOverride = "none",
+
+					-- reportImplicitStringConcatenation = "information",
+					reportImplicitStringConcatenation = "none",
+
+					-- reportIncompatibleMethodOverride = "information",
+					reportIncompatibleMethodOverride = "none",
+
+					-- reportMissingModuleSource = "information",
+					reportMissingModuleSource = "warning",
+
+                    -- WHY AM I GETTING THIS ERROR!!!!!
+					-- reportMissingSuperCall = "information",
+					reportMissingSuperCall = "none",
+
+
+
 				},
 				stubPath = "typings",
 				typeCheckingMode = "off", --  ["off", "basic", "strict"]:

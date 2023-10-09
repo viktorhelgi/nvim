@@ -8,8 +8,8 @@ return {
 			cwd = vim.fn.getcwd(),
             -- cwd = vim.fn.expand('%:p:h'),
             -- cwd = "/home/viktor/hm/backend/functions",
-			cmd = "/home/viktor/.local/share/nvim/mason/bin/ruff .",
-			-- args = { "-j17" },
+			cmd = "/usr/bin/ruff",
+			args = { "." },
 			components = {
 				"default",
             	{"on_output_parse", parser = {

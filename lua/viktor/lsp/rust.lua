@@ -1,10 +1,13 @@
 local rust_tools = require("rust-tools")
+
 local rust_funcs = require("rust_funcs")
 local neotest = require("neotest")
 
 local function _cmd(input)
 	return "<CMD>" .. input .. "<CR>"
 end
+
+local build_settings = "--release --features dev"
 
 local my_on_attach = function(client, bufnr)
 
@@ -77,7 +80,7 @@ local my_on_attach = function(client, bufnr)
                         last_run = true,
                         auto_close = false,
                         open_win = function()
-                            vim.cmd('vertical split')
+                            vim.cmd('split')
                             return vim.api.nvim_get_current_win()
                         end
                     })
@@ -108,9 +111,9 @@ local my_on_attach = function(client, bufnr)
 		c = {
 			name = "Change/Cargo",
 			-- a = { _cmd("RustCodeAction"), "code-action" },
-			b = { _cmd("Task start cargo lbuild"), "build" },
-			["*"] = { _cmd("Task start cargo clippy --release"), "build" },
-			["|"] = { _cmd("Task start cargo bench"), "build" },
+			b = { _cmd("Task start cargo build "..build_settings), "build" },
+			["*"] = { _cmd("Task start cargo clippy "..build_settings), "build" },
+			["|"] = { _cmd("Task start cargo bench "..build_settings), "build" },
 			d = { vim.diagnostic.setqflist, "setqflist" },
 			r = { rust_funcs.run.with_arguments, "run --" },
 			l = { rust_funcs.run.last_cmd, "run --" },
@@ -119,7 +122,7 @@ local my_on_attach = function(client, bufnr)
 			q = { _cmd("cclose"), "close qflist" },
 		},
         ["<leader>c"] = {
-			["*"] = { _cmd("Task start cargo clippy --release"), "build" },
+			["*"] = { _cmd("Task start cargo clippy "..build_settings), "build" },
         },
 		d = {
 			s = { rust_funcs.explain_error.open_popup_here, "explain error" },
@@ -150,7 +153,7 @@ local my_on_attach = function(client, bufnr)
                     end,
                     "all tests",
                 },
-                n = {
+                h = {
                     function()
                         neotest.run.run({extra_args = { "--success-output=immediate" }})
                     end,
@@ -187,10 +190,10 @@ local my_on_attach = function(client, bufnr)
 			-- 	end,
 			-- 	"build with copen",
 			-- },
-			b = { _cmd("Task start cargo build --release"), "build" },
+			b = { _cmd("Task start cargo build "..build_settings), "build" },
 			c = {
 				function()
-					vim.cmd("Task start cargo clippy --tests --examples")
+					vim.cmd("Task start cargo clippy "..build_settings)
 				end,
 				"clippy tests examples",
 			},
@@ -225,17 +228,7 @@ local my_on_attach = function(client, bufnr)
 			-- 	"make test file",
 			-- },
 			t = {
-				-- function()
-				--     vim.cmd("Task start cargo test")
-				-- end
-				function()
-					vim.cmd("TSTextobjectGotoPreviousStart @function.outer")
-					vim.cmd("normal t(")
-					vim.cmd("RustHoverActions")
-					vim.cmd("RustHoverActions")
-					-- require'rust-tools'.hover_actions.hover_actions()
-					-- require'rust-tools'.hover_actions.hover_actions()
-				end,
+                rust_funcs.run.nearest_test,
 				"cargo test",
 			},
 			-- T = { rust_funcs.tree.show, "module tree" },
@@ -260,7 +253,7 @@ end
 rust_tools.setup({
 	tools = {
 		-- executor = require("rust-tools.executors").toggleterm,
-		executor = require("rust_funcs").run.rust_tools_executor,
+		executor = require("rust_funcs").run.rust_tools_executor2,
 		inlay_hints = {
 			-- automatically set inlay hints (type hints)
 			-- default: true
@@ -276,7 +269,9 @@ rust_tools.setup({
 			["rust-analyzer"] = {
 				cargo = {
 					autoReload = true,
-					-- features = {
+					features = {
+                        "dev"
+                    }
 					-- 	"all",
 					-- 	"gcloud_bucket",
 					-- 	-- "read_tiff",
@@ -297,10 +292,10 @@ rust_tools.setup({
 				-- },
 
 				procMacro = {
-					enable = true,
+					enable = false,
 				},
 				diagnostics = {
-					enable = true,
+					enable = false,
 					disabled = { "unresolved-proc-macro" },
 				},
 				check = {
@@ -332,6 +327,12 @@ rust_tools.setup({
 				border = "rounded",
 				width = 80,
 			}),
+            ["textDocument/publishDiagnostics"] = vim.lsp.with(
+              vim.lsp.diagnostic.on_publish_diagnostics, {
+                -- delay update diagnostics
+                update_in_insert = false,
+              }
+            )
 			-- ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" }),
 		},
 	},
@@ -350,3 +351,15 @@ rust_tools.inlay_hints.disable()
 -- 	-- require'rust-tools'.hover_actions.hover_actions()
 -- 	-- require'rust-tools'.hover_actions.hover_actions()
 -- end)
+
+-- bin/http_server.rs
+-- src/pathfinding/evaluate.rs
+-- src/pathfinding/run.rs
+-- src/pathfinding/astar/execute.rs
+-- src/pathfinding/astar/evaluator/mod.rs
+-- src/geos/raster/base_3dim.rs
+-- src/data_manager/forecast/grib_data.rs
+-- src/read/grib/mod.rs
+-- src/geos/raster/aliases.rs
+-- src/geos/raster/join.rs
+-- src/geos/raster/owned.rs

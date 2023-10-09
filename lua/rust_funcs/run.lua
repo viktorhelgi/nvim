@@ -36,12 +36,12 @@ M.selected_binary = function()
 	local get_cmd = function(tg)
 		if tg.kind[1] == "bin" or tg.kind[1] == "example" then
 			if tg.build_profile == "release" then
-				return "cargo run --release --" .. tg.kind[1] .. " " .. tg.name
+				return "cargo run --release --features dev --" .. tg.kind[1] .. " " .. tg.name
 			else
 				return "cargo run --" .. tg.kind[1] .. " " .. tg.name
 			end
 		elseif tg.kind[1] == "bench" then
-			return "cargo bench --bench " .. tg.name
+			return "cargo bench --bench  --features dev " .. tg.name
 		end
 	end
 
@@ -114,10 +114,10 @@ M.something_good = function()
 
 		if 1 < #targets then
 			vim.ui.select(targets, { prompt = "Select" }, function(choice)
-				run("cargo run --bin " .. choice .. "\r")
+				run("cargo run  --features dev --bin " .. choice .. "\r")
 			end)
 		else
-			run("cargo run --bin " .. targets[1] .. "\r")
+			run("cargo run --features dev --bin " .. targets[1] .. "\r")
 		end
 		print("no targets found")
 	end
@@ -141,8 +141,23 @@ M.rust_tools_executor.execute_command = function(
 	local cmd = require("rust-tools.utils.utils").make_command_from_args(command, args)
 	-- M._last_cmd = cmd
     run(cmd)
+	-- term.sendCommand("!", cmd .. "\r")
+end
 
-	term.sendCommand("!", cmd .. "\r")
+M.nearest_test = function()
+    local tree = require('neotest').run.get_tree_from_args({}, true)
+	if tree == nil then
+        print("Error: data is nil")
+        return
+    end
+    local data = tree:data()
+    local id = data.id
+
+    -- local cmd = "cargo test --package route-guidance --lib -- "..id.." --exact --nocapture"
+    local cmd = "cargo test --features dev --package route-guidance --lib -- "..id.." --nocapture"
+    -- local cmd = "cargo nextest run --lib "..id.." --no-capture"
+    run(cmd)
+
 end
 
 return M

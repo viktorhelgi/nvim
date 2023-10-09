@@ -3,7 +3,7 @@ local ts_config = require("nvim-treesitter.configs")
 
 ts_config.setup({
 	-- A list of parser names, or "all"
-	ensure_installed = { "lua", "python", "cpp", "fish", "rust", "typescript", "tsx" },
+	ensure_installed = { "lua", "python", "cpp", "fish", "rust", "typescript", "tsx" , "bash"},
 	--
 	-- parser_install_dir = "/home/viktor/.config/treesitter/parsers",
 

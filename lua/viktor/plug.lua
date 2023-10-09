@@ -23,6 +23,7 @@ return require("packer").startup(function(use)
 	use("folke/tokyonight.nvim")
 	use("sainnhe/gruvbox-material")
 	use("rebelot/kanagawa.nvim")
+	use("EdenEast/nightfox.nvim")
 	-- }}}
 	-- {{{ Looks
 	use("nvim-tree/nvim-web-devicons")
@@ -98,11 +99,8 @@ return require("packer").startup(function(use)
 	use("simrat39/rust-tools.nvim")
 	use({
 		"saecki/crates.nvim",
-		tag = "v0.3.0",
+		-- tag = "v0.3.0",
 		requires = { "nvim-lua/plenary.nvim" },
-		config = function()
-			require("crates").setup()
-		end,
 	})
 
 	use("windwp/nvim-autopairs")
@@ -247,40 +245,8 @@ return require("packer").startup(function(use)
 		"nvim-neorg/neorg",
 		run = ":Neorg sync-parsers", -- This is the important bit!
 		config = function()
-			require("neorg").setup({
-				load = {
-					["core.keybinds"] = {
-						config = {
-							neorg_leader = "<Leader>",
-						},
-					},
-					["core.defaults"] = {
-						-- journal_folder = "~/neovim/neorg/journal",
-						-- config = {
-						-- 	workspace = "~/neovim/neorg/default/",
-						-- },
-					}, -- Loads default behaviour
-					["core.concealer"] = {}, -- Adds pretty icons to your documents
-					["core.esupports.hop"] = {}, -- "Hop" between Neorg links, following them with a single keypress.
-					["core.dirman"] = { -- Manages Neorg workspaces
-						config = {
-							-- default_workspace = "default",
-							open_last_workspace = false,
-							workspaces = {
-								general = "/home/viktorhg/notes/default",
-								research = "/home/viktorhg/notes/research",
-								rust = "/home/viktorhg/notes/rust",
-								linux = "/home/viktorhg/notes/linux/",
-							},
-						},
-					},
-					["core.completion"] = {
-						config = {
-							engine = "nvim-cmp",
-						},
-					},
-				},
-			})
+			local configs = require("viktor.config.plugin.neorg-conf").configuration
+			require("neorg").setup(configs)
 		end,
 	})
 
@@ -321,5 +287,34 @@ return require("packer").startup(function(use)
 
 	-- MINIS
 	use({ "echasnovski/mini.cursorword", branch = "stable" })
-	use({ "echasnovski/mini.files", branch = "stable" })
+	use({ "echasnovski/mini.files" })
+	use({ "echasnovski/mini.map", branch = "stable" })
+
+	-- GO
+	use({
+		"ray-x/go.nvim",
+		config = function()
+			require("go").setup()
+		end,
+		event = { "CmdlineEnter" },
+		ft = { "go", "gomod" },
+		build = ':lua require("go.install").update_all_sync()', -- if you need to install/update all binaries
+	})
+
+	-- line number color
+	use("IMOKURI/line-number-interval.nvim")
+
+	use({
+		"NeogitOrg/neogit",
+		requires = {
+			"nvim-lua/plenary.nvim", -- required
+			"nvim-telescope/telescope.nvim", -- optional
+			"sindrets/diffview.nvim", -- optional
+			"ibhagwan/fzf-lua", -- optional
+		}
+	})
+
+    use({
+        "folke/todo-comments.nvim"
+    })
 end)

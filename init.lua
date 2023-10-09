@@ -1,4 +1,5 @@
 require('viktor')
+
 require('fidget').setup({})
 
 -- local should_profile = os.getenv("NVIM_PROFILE")
@@ -130,5 +131,3 @@ local query_templat = [[
 -- }
 -- ```
 -- `
-
-

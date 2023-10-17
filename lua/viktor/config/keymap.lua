@@ -10,6 +10,7 @@ local function _cmd(command)
 	end
 end
 
+-- NORMAL - NOT with LEADER
 require("which-key").register({
 	["<C-h>"] = {
 		function()
@@ -148,6 +149,10 @@ require("which-key").register({
 		name = "yank",
 		s = { 'viw"ly' },
 	},
+})
+
+-- NORMAL - LEADER
+require("which-key").register({
 	["<leader>"] = {
 		[","] = { _cmd("Telescope file_browser path=%:p:h theme=dropdown"), "File Browser" },
 		["|"] = { _cmd("messages"), "messages" },
@@ -662,6 +667,7 @@ require("which-key").register({
 	},
 })
 
+-- VISUAL MODE
 require("which-key").register({
 	["<leader>"] = {
 		h = {
@@ -672,12 +678,6 @@ require("which-key").register({
 	mode = "v",
 })
 
-require("viktor.lib.funcs").cmd_mappings("i", {
-	-- ['<C-space>'] = '<C-x><C-o>',
-	-- ['<C-o>'] = '<C-x><C-o>',
-	["<C-f>"] = "<C-x><C-f>",
-})
-
 require("viktor.lib.funcs").cmd_mappings("v", {
 	["<leader>"] = {
 		e = {
@@ -686,6 +686,15 @@ require("viktor.lib.funcs").cmd_mappings("v", {
 	},
 })
 
+
+-- INSERT MODE
+require("viktor.lib.funcs").cmd_mappings("i", {
+	-- ['<C-space>'] = '<C-x><C-o>',
+	-- ['<C-o>'] = '<C-x><C-o>',
+	["<C-f>"] = "<C-x><C-f>",
+})
+
+-- TERMINAL MODE
 require("viktor.lib.funcs").cmd_mappings("t", {
 	["<esc>"] = "<C-\\><C-n>",
 	["<C-q>"] = "<C-\\><C-n>",
@@ -693,6 +702,7 @@ require("viktor.lib.funcs").cmd_mappings("t", {
 	["<C-k>"] = "<Up>",
 })
 
+-- COMMAND MODE
 require("viktor.lib.funcs").cmd_mappings("c", {
 	["<C-j>"] = "<Down>",
 	["<C-k>"] = "<Up>",

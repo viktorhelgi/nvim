@@ -56,11 +56,9 @@ local my_on_attach = function(client, bufnr)
 
 	require("which-key").register({
 		["["] = {
-			d = { vim.diagnostic.goto_prev, "diagnostic" },
             t = { function() neotest.jump.prev({status='failed'}) end, "test"}
 		},
 		["]"] = {
-			d = { vim.diagnostic.goto_next, "diagnostic" },
             t = { function() neotest.jump.next({status='failed'}) end, "test"}
 		},
 		["'"] = {
@@ -95,14 +93,8 @@ local my_on_attach = function(client, bufnr)
 		g = {
 			name = "goto",
 			c = { _cmd("RustOpenCargo"), "cargo" },
-			i = { vim.lsp.buf.implementation, "impl" },
-			D = { vim.lsp.buf.declaration, "decl" },
 			h = { _cmd("RustHoverActions"), "hover-action" },
-			-- k = {"gk", "K" },
 			p = { _cmd("RustParentModule"), "parent" },
-			r = { vim.lsp.buf.references, "ref" },
-			s = { vim.lsp.buf.signature_help, "sign" },
-			k = { _cmd("TSTextobjectPeekDefinitionCode @function.inner"), "peek definition" },
 		},
 		-- l = {
 		-- 	a = { _cmd("CodeActionMenu"), "code-action" },
@@ -110,16 +102,12 @@ local my_on_attach = function(client, bufnr)
 		-- },
 		c = {
 			name = "Change/Cargo",
-			-- a = { _cmd("RustCodeAction"), "code-action" },
 			b = { _cmd("Task start cargo build "..build_settings), "build" },
 			["*"] = { _cmd("Task start cargo clippy "..build_settings), "build" },
 			["|"] = { _cmd("Task start cargo bench "..build_settings), "build" },
-			d = { vim.diagnostic.setqflist, "setqflist" },
 			r = { rust_funcs.run.with_arguments, "run --" },
 			l = { rust_funcs.run.last_cmd, "run --" },
-			s = { _cmd("DiagWindowShow"), "show diagnostic" },
 			R = { rust_funcs.run.selected_binary, "run --bin <?>" },
-			q = { _cmd("cclose"), "close qflist" },
 		},
         ["<leader>c"] = {
 			["*"] = { _cmd("Task start cargo clippy "..build_settings), "build" },
@@ -205,15 +193,6 @@ local my_on_attach = function(client, bufnr)
 			i = { require("rust_funcs").toggle_inlay_hints, "toggle inlay hints" },
 			o = { require("rust_funcs").toggle_inlay_hinst_all_lines, "toggle line inlay-hints" },
 			l = { rust_funcs.run.something_good, "something good" },
-			m = {
-				function()
-					require("harpoon.tmux").sendCommand(
-						"!",
-						'maturin develop --cargo-extra-args="--features python-bindings"\r' .. "python3 main.py\r"
-					)
-				end,
-				"maturin build",
-			},
 			p = { require("rust_funcs").cargo_run, "cargo run" },
 			r = { _cmd("CargoReload"), "cargo-reload" },
 			-- r = {

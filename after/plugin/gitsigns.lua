@@ -1,4 +1,5 @@
 require("gitsigns").setup({
+    trouble = false,
 	signs = {
 		add = { text = "│" },
 		change = { text = "│" },

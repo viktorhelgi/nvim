@@ -120,6 +120,14 @@ require("which-key").register({
         end, "failed test"},
 		t = { _cmd("TSTextobjectRepeatLastMovePrevious"), "ts: repeat" },
 	},
+
+    c = {
+        name = "lists",
+		s = { _cmd("DiagWindowShow"), "show diagnostic" },
+		d = { vim.diagnostic.setqflist, "setqflist" },
+		q = { _cmd("cclose"), "close qflist" },
+    },
+
 	d = {
         name = "diagnostics",
 		o = { vim.diagnostic.open_float, "open-float" },
@@ -144,7 +152,8 @@ require("which-key").register({
 		},
 		D = { vim.lsp.buf.declaration, "declaration" },
 		h = { vim.lsp.buf.hover, "hover" },
-		k = { vim.lsp.buf.hover, "hover" },
+		i = { vim.lsp.buf.implementation, "impl" },
+		k = { _cmd("TSTextobjectPeekDefinitionCode @function.inner"), "peek definition" },
 		s = { vim.lsp.buf.signature_help, "signature_help" },
 		-- t = { require('telescope.builtin').lsp_type_deftnitions, "type-definition" }
 		t = { vim.lsp.buf.type_definition, "type-definition" },
@@ -162,6 +171,7 @@ require("which-key").register({
 	["<leader>"] = {
 		[","] = { _cmd("Telescope file_browser path=%:p:h theme=dropdown"), "File Browser" },
 		["|"] = { _cmd("messages"), "messages" },
+		["~"] = { function() vim.print("REMEMBER: use <leader>| now") end, "messages" },
 		["-"] = { _cmd("b#"), "b#" },
 		q = { _cmd("q"), "quit" },
 		Q = { _cmd("confirm qa"), "quit-all" },
@@ -382,11 +392,21 @@ require("which-key").register({
 			o = { _cmd("Git"), ":Git" },
 			c = { _cmd("Git commit"), "commit" },
 			q = {
-				function()
-					require("keys").register_jump_mappings("qf")
-					vim.cmd("Git difftool")
-				end,
-				"qflist",
+                name = "setqflist",
+                a = {
+                    function()
+                        require("keys").register_jump_mappings("qf")
+                        vim.cmd("Git difftool")
+                    end,
+                    "all hunks",
+                },
+                f = {
+                    function()
+                        require("keys").register_jump_mappings("qf")
+                        vim.cmd("Gitsigns setqflist")
+                    end,
+                    "current file"
+                }
 			},
 			D = {
 				function()

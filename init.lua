@@ -131,3 +131,9 @@ local query_templat = [[
 -- }
 -- ```
 -- `
+--
+-- src/pathfinding/evaluate.rs
+-- src/pathfinding/run.rs
+-- src/pathfinding/astar/mod.rs
+-- src/pathfinding/astar/get_successive_nodes.rs
+-- src/pathfinding/post_processing.rs

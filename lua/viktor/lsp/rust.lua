@@ -114,7 +114,7 @@ local my_on_attach = function(client, bufnr)
         },
 		d = {
 			s = { rust_funcs.explain_error.open_popup_here, "explain error" },
-			o = { rust_funcs.explain_error.print_error_as_json, "print error as json" },
+			J = { rust_funcs.explain_error.print_error_as_json, "print error as json" },
 		},
 		["<leader>d"] = {
 			e = {

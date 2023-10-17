@@ -123,9 +123,8 @@ require("which-key").register({
 
     c = {
         name = "lists",
-		s = { _cmd("DiagWindowShow"), "show diagnostic" },
 		d = { vim.diagnostic.setqflist, "setqflist" },
-		q = { _cmd("cclose"), "close qflist" },
+		q = { _cmd("cclose"), "close" },
     },
 
 	d = {

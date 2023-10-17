@@ -216,7 +216,7 @@ local my_on_attach = function(client, bufnr)
 		},
 	})
 
-	rust_funcs.jump.on_attach(client, bufnr)
+	-- rust_funcs.jump.on_attach(client, bufnr)
 
 	vim.cmd("compiler cargo")
 end

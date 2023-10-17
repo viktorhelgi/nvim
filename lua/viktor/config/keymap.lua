@@ -125,6 +125,29 @@ require("which-key").register({
         name = "lists",
 		d = { vim.diagnostic.setqflist, "setqflist" },
 		q = { _cmd("cclose"), "close" },
+        g = {
+            name = "git",
+            a = {
+                function()
+                    require("keys").register_jump_mappings("qf")
+                    vim.cmd("Git difftool")
+                end,
+                "all hunks",
+            },
+            f = {
+                function()
+                    require("keys").register_jump_mappings("qf")
+                    vim.cmd("Gitsigns setqflist")
+                end,
+                "all hunks in file"
+            },
+            s = {
+                function()
+                    vim.cmd("Telescope git_status")
+                end,
+                "status",
+            }
+        }
     },
 
 	d = {
@@ -443,6 +466,36 @@ require("which-key").register({
 				q = { _cmd("DiffviewClose"), "quit" },
 			},
 			P = { _cmd("Gitsigns preview_hunk_inline"), "preview hunk" },
+            t = {
+                name = "toggle",
+                s = { "<CMD> Gitsigns toggle_signs                           <CR> ", "signs"},
+                n = { "<CMD> Gitsigns toggle_numhl                           <CR> ", "num-highlight"},
+                l = { "<CMD> Gitsigns toggle_linehl                          <CR> ", "line-highlight"},
+                h = { function()
+                    vim.cmd("Gitsigns toggle_linehl")
+                    vim.cmd("Gitsigns toggle_numhl")
+                    vim.cmd("Gitsigns toggle_word_diff")
+                end, "highlight"},
+                d = { "<CMD> Gitsigns toggle_deleted                         <CR> ", "deleted"},
+                w = { "<CMD> Gitsigns toggle_word_diff                       <CR> ", "word-diff"},
+                b = { "<CMD> Gitsigns toggle_current_line_blame              <CR> ", "current-line-blame"},
+            },
+            S = { "<CMD> Gitsigns show <CR>", "Show Head"},
+            s = {
+                name = "stage",
+                b = { "<CMD> Gitsigns stage_buffer <CR>", "buffer"},
+                f = { "<CMD> Gitsigns stage_hunk <CR>", "hunk"},
+            },
+            r = {
+                name = "reset",
+                b = { "<CMD> Gitsigns reset_buffer_index <CR>", "buffer"},
+                f = { "<CMD> Gitsigns undo_stage_hunk <CR>", "hunk"},
+            },
+            R = {
+                name = "restore",
+                b = { "<CMD> Gitsigns reset_buffer <CR>", "buffer"},
+                f = { "<CMD> Gitsigns reset_hunk <CR>", "hunk"},
+            },
 		},
 
 		h = {

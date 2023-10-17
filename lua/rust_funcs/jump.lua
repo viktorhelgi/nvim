@@ -1,6 +1,6 @@
 local M = {}
 
-M.on_attach = function(client, bufnr)
+M.on_attach = function(_, bufnr)
 	local searches = require("rust_jump")
 	vim.keymap.set(
 		"n",

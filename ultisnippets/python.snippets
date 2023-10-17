@@ -1,0 +1,40 @@
+priority -50
+
+extends c
+
+# We want to overwrite everything in parent ft.
+priority -49
+###########################################################################
+#			    Global functions 						  #
+###########################################################################
+
+
+
+snippet pandas_test "setup panda"
+dft = pd.DataFrame(data=[
+    [1,2],
+    [3,4],
+    [1,2],
+    [1,2],
+    [3,4],
+    [3,4],
+], columns=["a", "b"])
+endsnippet
+
+snippet debug "debug"
+print(f"{$1 = }")
+endsnippet
+
+snippet pr "debug2"
+print("$1")
+endsnippet
+
+snippet main "create_main"
+
+def main() -> None:
+	$1
+	return None
+	 
+if __name__ == "__main__":
+	main()
+endsnippet

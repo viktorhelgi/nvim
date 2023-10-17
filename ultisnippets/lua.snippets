@@ -1,0 +1,14 @@
+
+snippet keyf
+vim.keymap.set("${1:n}", "$2", function()
+	$3
+end, ${4:options})
+endsnippet
+
+snippet key
+vim.keymap.set("${1:n}", "$2", $3, ${4:options})
+endsnippet
+
+
+
+

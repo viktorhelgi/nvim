@@ -28,14 +28,20 @@ M.serialize_table = function(t)
   return string.format("{ %s }", table.concat(serializedValues, ', ') )
 end
 
+local wk = require('which-key')
 
 -- cmd_mappings
 function Cmd_mappings(mode, tab, prefix)
     if prefix == nil then prefix = '' end
 
     for k, v in pairs(tab) do
-        local bind = prefix..k 
-        if type(v) == 'table' then
+        local bind = prefix..k
+
+        if k == "name" then
+            local stt = {}
+            stt[prefix] = {name = v}
+            wk.register(stt, {})
+        elseif type(v) == 'table' then
             if v['require'] and v['cmd'] then
                 local cmd = v['cmd']
                 if type(v['args']) == 'table' then
@@ -47,14 +53,30 @@ function Cmd_mappings(mode, tab, prefix)
                 end
                 local req = 'lua require("'..v['require']..'").'
                 vim.keymap.set(mode, bind, '<cmd>'..req..cmd..'<cr>')
-                -- print(req..cmd)
+            elseif v['args'] then
+                local cmd = table.remove(v, 1)
+                vim.keymap.set(mode, bind, function()
+                    cmd(table.unpack(v))
+                end)
             else
-                Cmd_mappings(mode, v, bind)
+                if type(v[1]) == 'function' then
+                    vim.keymap.set(mode, bind, v[1])
+                    if 2 == #v then
+                        wk.register({
+                            [k] = { v[1], v[2]}
+                        }, {prefix=prefix})
+                        print(k, prefix)
+                    end
+                else
+                    Cmd_mappings(mode, v, bind)
+                end
             end
         elseif type(v) == 'string' then
             if is_cmd_map(v) then
                 v = "<cmd>" .. string.sub(v, 7, -1) .. "<cr>"
             end
+            vim.keymap.set(mode, bind, v)
+        elseif type(v) == 'function' then
             vim.keymap.set(mode, bind, v)
         end
     end

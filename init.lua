@@ -1,61 +1,139 @@
--- nmea/pgn/129026
+require('viktor')
 
-require('impatient')
-require('plug') -- ~/AppData/Local/nvim/lua/plug.lua
+require('fidget').setup({})
 
-require('keymap') -- ~/AppData/Local/nvim/lua/keymap.lua
-require('options') -- ~/AppData/Local/nvim/lua/options.lua
-require('autocmds') -- ~/AppData/Local/nvim/lua/autocmds.lua
-
-require('config.plug')
-require('config.lsp')
-require('config.plug.cmp')
-require('config.modules') -- ~/AppData/Local/nvim/lua/autocmds.lua
-
-if vim.g.neovide ~= nil then --{{{
-    -- set guifont=FiraCode\ Nerd\ Font\ Mono\ Retina:h11
-    -- vim.opt.guifont='JetBrainsMonoNL Nerd Font Mono:h12'
-    vim.g.neovide_transparency = 0.9
-    -- vim.opt.guifont='JetBrainsMonoNL Nerd Font Mono:h10'
-    vim.opt.guifont = 'FiraCode Nerd Font:h11'
-    vim.api.nvim_set_keymap('n', '<F11>', ':let g:neovide_transparency-=0.01<CR>', {})
-    vim.api.nvim_set_keymap('n', '<F12>', ':let g:neovide_transparency+=0.01<CR>', {})
-end --}}}
-
-require('matchparen').setup({})
-
-require('lib.cmake_testing')
-
--- -- require('themes.rose-pine')
--- -- require('themes.nightfox')
+-- local should_profile = os.getenv("NVIM_PROFILE")
+-- if should_profile then
+--   require("profile").instrument_autocmds()
+--   if should_profile:lower():match("^start") then
+--     require("profile").start("*")
+--   else
+--     require("profile").instrument("*")
+--   end
+-- end
 --
+-- local function toggle_profile()
+--   local prof = require("profile")
+--   if prof.is_recording() then
+--     prof.stop()
+--     vim.ui.input({ prompt = "Save profile to:", completion = "file", default = "profile.json" }, function(filename)
+--       if filename then
+--         prof.export(filename)
+--         vim.notify(string.format("Wrote %s", filename))
+--       end
+--     end)
+--   else
+--     prof.start("*")
+--   end
+-- end
+-- vim.keymap.set("", "<f1>", toggle_profile)
 --
+
+local function toggle_profile()
+    if _G.__toggle_profile then
+        vim.cmd("profile pause")
+        vim.cmd("noautocmd qall!")
+    else
+        vim.cmd("TSContextDisable")
+        vim.cmd("TSDisable highlight")
+        vim.cmd("TSDisable indent")
+        vim.cmd("profile start profile.log")
+        vim.cmd("profile func *")
+        vim.cmd("profile file *")
+        _G.__toggle_profile = true
+    end
+end
+vim.keymap.set("", "<f1>", toggle_profile)
+
+
+-- vim.cmd [[
+--   augroup strdr4605
+--     autocmd FileType typescript,typescriptreact compiler tsc | setlocal makeprg=npx\ tsc
+--   augroup END
+-- ]]
+
+-- local augroup = vim.api.nvim_create_augroup("strdr4605", { clear = true })
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "typescript,typescriptreact",
+--   group = augroup,
+--   command = "compiler tsc | setlocal makeprg=npx\\ tsc",
+-- })
+-- vim.cmd [[
+--   augroup strdr4605
+--     autocmd FileType typescript,typescriptreact set makeprg=./node_modules/.bin/tsc\ \\\|\ sed\ 's/(\\(.*\\),\\(.*\\)):/:\\1:\\2:/'
+--   augroup END
+-- ]]
 --
-vim.g.material_style="palenight"
-vim.g.gruvbox_material_foreground="mix"
--- local scheme = require('lib.scheme')
--- scheme.load_scheme('rose-pine')
--- vim.cmd('colorscheme duskfox')
--- vim.cmd('colorscheme material')
--- vim.cmd('colorscheme gruvbox-material')
--- vim.cmd('colorscheme catppuccin-frappe')
--- require("catppuccin").load("frappe")
-require('themes.gruvbox-material-dark')
 
--- vim.g.jupyter_ascending_python_executable = "python3"
-
-local find = require('viktor.lib.find')
-
--- local out = find.root("/home/viktor/hm/research/wbv-analysis/external/MK2-embedded/device/wbv/include/commons/CMakeLists.txt", {"README.md"})
--- print("out "..out)
-
--- vim.cmd('let g:test#cpp#catch2#bin_dir = "tests"')
--- vim.cmd('let g:test#cpp#catch2#bin_dir = "./tests"')
--- vim.cmd('let g:test#cpp#catch2#suite_command = "cd tests && ctest --ouput-on-failure"')
+-- vim.cmd('set makeprg=npm\\ start\\ --port\\ 3000')
+-- vim.cmd[[
+--     compiler tsc
+--     " set makeprg=./node_modules/.bin/tsc\ \\\|\ sed\ 's/(\\(.*\\),\\(.*\\)):/:\\1:\\2:/'
+--     " set efm=%-P%f,
+--     "         \%E%>\ #%n\ %m,%Z%.%#Line\ %l\\,\ Pos\ %c,
+--     "                     \%-G%f\ is\ OK.,%-Q
+-- ]]
 
 
--- %:~:.:h
+vim.cmd([[
+    let g:vimspector_sidebar_width = 85
+    let g:vimspector_bottombar_height = 15
+    let g:vimspector_terminal_maxwidth = 70
+]])
 
+vim.cmd([[
+    nmap <F9> <cmd>call vimspector#Launch()<cr>
+    nmap <F5> <cmd>call vimspector#StepOver()<cr>
+    nmap <F8> <cmd>call vimspector#Reset()<cr>
+    nmap <F11> <cmd>call vimspector#StepOver()<cr>")
+    nmap <F12> <cmd>call vimspector#StepOut()<cr>")
+    nmap <F10> <cmd>call vimspector#StepInto()<cr>")
+]])
 
--- local fold_snippets = require'foldmethods.snippets'
--- fold_snippets.setup_folding()
+vim.keymap.set("n", "<leader>Db", ":call vimspector#ToggleBreakpoint()<cr>")
+vim.keymap.set("n", "<leader>Dw", ":call vimspector#AddWatch()<cr>")
+vim.keymap.set("n", "<leader>De", ":call vimspector#Evaluate()<cr>")
+
+local regular_string = [[
+lorem impsum 
+some frog and a red fox
+lets go
+]]
+
+local query_template = [[
+;; letsgoman
+((function_call
+  name: [
+    (identifier) @_cdef_identifier
+    (_ _ (identifier) @_cdef_identifier)
+  ]
+  arguments: (arguments (string content: _ @c)))
+  (#eq? @_cdef_identifier "cdef"))
+
+((function_call
+  name: (_) @_vimcmd_identifier
+  arguments: (arguments . (string content: _ @vim)))
+  (#any-of? @_vimcmd_identifier "vim.cmd" "vim.api.nvim_command" "vim.api.nvim_exec" "vim.api.nvim_exec2"))
+]]
+
+local query_templat = [[
+;; rust 
+]]
+
+-- ```
+-- #[derive(Error, Debug)]
+-- pub enum ServerError {
+--     #[error("")]
+--     ClientInitialization(#[from] GCloudBucketError),
+--
+--     #[error("")]
+--     DownloadMetadata(#[from] metadata::DownloadError),
+-- }
+-- ```
+-- `
+--
+-- src/pathfinding/evaluate.rs
+-- src/pathfinding/run.rs
+-- src/pathfinding/astar/mod.rs
+-- src/pathfinding/astar/get_successive_nodes.rs
+-- src/pathfinding/post_processing.rs

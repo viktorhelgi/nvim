@@ -1,0 +1,44 @@
+-- package.path = package.path .. ';./lua/?.lua'
+-- package.path = package.path .. ';./lua/?/init.lua'
+-- package.path = package.path .. ';/home/viktor/.config/nvim/lua/?.lua'
+--
+-- -- local runtime_path = vim.api.nvim_get_runtime_file('', true)
+-- -- table.insert(runtime_path, vim.split(package.path, ';'))
+-- -- table.insert(runtime_path, 'lua/?.lua')
+-- -- table.insert(runtime_path, '~/.local/share/nvim/site/pack/packer/start/?.lua')
+-- -- table.insert(runtime_path, '/usr/local/share/nvim/runtime/lua?.lua')
+-- -- table.insert(runtime_path, vim.fn.expand('$VIMRUNTIME/lua?.lua'))
+--
+-- -- table.insert(runtime_path, 'lua/?/init.lua')
+-- -- table.insert(runtime_path, vim.fn.expand('/usr/local/share/nvim/runtime/lua/vim'))
+--
+-- -- if fn.has('win32') == 1 then
+-- --     table.insert(runtime_path, fn.stdpath('config') .. '/?.lua')
+-- -- end
+--
+-- -- local runtime_path = vim.api.nvim_get_runtime_file('', true)
+-- -- table.insert(runtime_path, 'lua/?.lua')
+--
+-- -- local runtime_path = "/home/viktor/.local/share/nvim/site/pack/packer/start/?.lua"
+--
+--
+-- local test = require('rust_funcs.list_implementations')
+--
+-- describe("vusted", function()
+--   it("can use vim module", function()
+--       assert(test._this() == "what")
+--   end)
+--
+--   it("can print", function()
+--       ---@type Range
+--       local range = {start = {line = 6, character = 0}, ['end'] = {line = 6, character = 30} }
+--       test.get_text(range, 0)
+--   end)
+--
+--   it("test f", function()
+--       ---@type string
+--       local input = "use crate::Dog;\n\n\npub trait Walk {\n    fn walk(&self, speed: f64) -> bool;\n}\n\n\n\n\npub trait Speek {\n    fn speek(noice: f64) -> bool;\n}\n\n\n\n\n\nimpl Walk for Dog<f64> {\n    fn walk(&self, speed: f64) -> bool {\n        speed < 0.3\n    }\n}\n\nimpl Walk for Dog<String> {\n    fn walk(&self, speed: f64) -> bool {\n        speed < 0.2\n    }\n}\n\n\n\n\n\n\nimpl Speek for Dog<f64> {\n    fn speek(noice : f64) -> bool {\n        noice > 0.3\n    }\n}\n" ---@type Range
+--       test._get_substring(input)
+--   end)
+-- end)
+

@@ -36,6 +36,7 @@ require("which-key").register({
 		end,
 		"left window",
 	},
+
 	["'"] = {
 		name = "Navigate to",
 		h = {
@@ -95,6 +96,7 @@ require("which-key").register({
 		b = { _cmd("b#"), "b#" },
 		["/"] = { _cmd("A"), "src-test" },
 	},
+
 	["]"] = {
 		name = "Goto Next",
 		d = { vim.diagnostic.goto_next, "diagnostic" },
@@ -106,6 +108,7 @@ require("which-key").register({
         end, "failed test"},
 		t = { _cmd("TSTextobjectRepeatLastMoveNext"), "ts: repeat" },
 	},
+
 	["["] = {
 		name = "Goto Prev",
 		d = { vim.diagnostic.goto_prev, "diagnostic" },
@@ -118,8 +121,10 @@ require("which-key").register({
 		t = { _cmd("TSTextobjectRepeatLastMovePrevious"), "ts: repeat" },
 	},
 	d = {
-		o = { vim.diagnostic.open_float, "show diagnostic" },
+        name = "diagnostics",
+		o = { vim.diagnostic.open_float, "open-float" },
 	},
+
 	g = {
 		name = "+goto",
 		c = { _cmd("e Cargo.toml"), "Cargo.toml" },
@@ -145,6 +150,7 @@ require("which-key").register({
 		t = { vim.lsp.buf.type_definition, "type-definition" },
 		r = { vim.lsp.buf.references, "references" },
 	},
+
 	y = {
 		name = "yank",
 		s = { 'viw"ly' },
@@ -162,31 +168,13 @@ require("which-key").register({
 		G = { _cmd("Git"), "Git" },
 		s = { _cmd("w"), "save" },
 		z = { _cmd("ZenMode"), "Zen mode" },
-		[";"] = {
-			name = "letsgo",
-			t = {
-				function()
-					vim.cmd("NvimTreeToggle")
-				end,
-				"something",
-			},
-			f = {
-				function()
-					vim.cmd("NvimTreeFindFile")
-				end,
-				"something",
-			},
-			r = {
-				function()
-					vim.cmd("NvimTreeRefresh")
-				end,
-				"something",
-			},
-		},
+
 		b = {
+            name = "buffer",
 			n = { "<cmd>bn<cr>" },
 			p = { "<cmd>bp<cr>" },
 		},
+
 		c = {
 			name = "lists",
 			P = { vim.cmd.colder, "older" },
@@ -198,7 +186,7 @@ require("which-key").register({
 				end,
 				"close",
 			},
-
+            g = { "<CMD>Gitsigns setqflist<CR>", "Git changes" },
 			d = { vim.diagnostic.setqflist, "diags to qflist" },
 			q = {
 				function()
@@ -247,6 +235,7 @@ require("which-key").register({
 				"/\\.<C-r>l/g %",
 			},
 		},
+
 		d = {
 			name = "diagnostic",
 			t = { require("diagnostic_funcs").toggle, "toggle" },
@@ -318,6 +307,7 @@ require("which-key").register({
 				},
 			},
 		},
+
 		e = {
             name = "extras",
 			["|"] = {
@@ -386,6 +376,7 @@ require("which-key").register({
 			},
 			["-"] = { _cmd("cd .."), "cd .." },
 		},
+
 		g = {
 			name = "Git",
 			o = { _cmd("Git"), ":Git" },
@@ -434,13 +425,13 @@ require("which-key").register({
 			},
 			P = { _cmd("Gitsigns preview_hunk_inline"), "preview hunk" },
 		},
+
 		h = {
 			name = "harpoon/git",
 			["'"] = { require("harpoon.mark").add_file, "mark file" },
 			t = { require("harpoon.ui").toggle_quick_menu, "toggle menu" },
 			-- n = { require("harpoon.ui").nav_next, "goto next mark" },
 			-- p = { require("harpoon.ui").nav_prev, "goto prev mark" },
-
 			u = { require("gitsigns.actions").undo_stage_hunk, "undo stage hunk" },
 			p = { require("gitsigns.actions").preview_hunk_inline, "preview_hunk" },
 			b = { require("gitsigns.actions").blame_line, "blame line" },
@@ -453,17 +444,6 @@ require("which-key").register({
 				"tmux: prev-cmd",
 			},
 		},
-		-- o = {
-		--     name = "Trouble",
-		--     l = { function() vim.cmd('Trouble loclist') end, "loclist" },
-		--     q = { function() vim.cmd('Trouble quickfix') end, "quickfix" },
-		--     r = { function() vim.cmd('Trouble lsp_references') end, "lsp_references" },
-		--     f = { function() vim.cmd('Trouble lsp_definitions') end, "lsp_definitions" },
-		--     i = { function() vim.cmd('Trouble lsp_implementations') end, "lsp_implementations" },
-		--     t = { function() vim.cmd('Trouble lsp_type_definitions') end, "lsp_type_definitions" },
-		--     d = { function() vim.cmd('Trouble document_diagnostics') end, "document_diagnostics" },
-		--     w = { function() vim.cmd('Trouble workspace_diagnostics') end, "workspace_diagnostics" },
-		-- },
 
 		l = {
 			name = "LSP",
@@ -509,10 +489,12 @@ require("which-key").register({
 				l = { vim.lsp.buf.list_workspace_folders, "list_workspace_folders" },
 			},
 		},
+
 		L = {
 			i = { _cmd("LspInfo"), "LSPInfo" },
 			m = { _cmd("Mason"), "Mason" },
 		},
+
 		n = {
 			name = "Neorg",
 			c = {
@@ -568,6 +550,7 @@ require("which-key").register({
 			-- u = { _cmd("Neorg update-metadata"), ""},
 			-- t = { _cmd("Neorg toggle-concealer"), ""},
 		},
+
 		m = {
 			name = "Mini",
 			o = {
@@ -589,6 +572,7 @@ require("which-key").register({
 				"Map focus",
 			},
 		},
+
 		P = {
 			name = "Packer",
 			r = { _cmd("PackerClean"), "PackerClean" },
@@ -606,7 +590,9 @@ require("which-key").register({
 			},
 			["-"] = { _cmd("PackerSync"), "PackerSync" },
 		},
+
 		T = { _cmd("Telescope"), "Telescope" },
+
 		t = {
 			name = "Telescope",
 			a = { _cmd("Telescope aerial"), "aerial" },
@@ -659,6 +645,7 @@ require("which-key").register({
 			u = { require("telescope.builtin").find_files, "files" },
 			w = { require("telescope.builtin").lsp_workspace_symbols, "ws symbols" },
 		},
+
 		w = {
 			name = "Window",
 			m = { _cmd("WindowsMaximize"), "maximize" },

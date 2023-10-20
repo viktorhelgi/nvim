@@ -462,7 +462,9 @@ require("which-key").register({
 					end,
 					"SELECT",
 				},
-				f = { _cmd("DiffviewFileHistory"), "file history" },
+				f = { function()
+                    vim.cmd("Gitsigns diffthis")
+                end, "file" },
 				q = { _cmd("DiffviewClose"), "quit" },
 			},
 			P = { _cmd("Gitsigns preview_hunk_inline"), "preview hunk" },
@@ -483,18 +485,18 @@ require("which-key").register({
             S = { "<CMD> Gitsigns show <CR>", "Show Head"},
             s = {
                 name = "stage",
-                b = { "<CMD> Gitsigns stage_buffer <CR>", "buffer"},
-                f = { "<CMD> Gitsigns stage_hunk <CR>", "hunk"},
+                f = { "<CMD> w <CR><CMD> Gitsigns stage_buffer <CR>", "file"},
+                h = { "<CMD> Gitsigns stage_hunk <CR>", "hunk"},
             },
             r = {
                 name = "reset",
-                b = { "<CMD> Gitsigns reset_buffer_index <CR>", "buffer"},
-                f = { "<CMD> Gitsigns undo_stage_hunk <CR>", "hunk"},
+                f = { "<CMD> w <CR><CMD> Gitsigns reset_buffer_index <CR>", "file"},
+                h = { "<CMD> Gitsigns undo_stage_hunk <CR>", "hunk"},
             },
             R = {
                 name = "restore",
-                b = { "<CMD> Gitsigns reset_buffer <CR>", "buffer"},
-                f = { "<CMD> Gitsigns reset_hunk <CR>", "hunk"},
+                f = { "<CMD> w <CR><CMD> Gitsigns reset_buffer <CR>", "file"},
+                h = { "<CMD> Gitsigns reset_hunk <CR>", "hunk"},
             },
 		},
 

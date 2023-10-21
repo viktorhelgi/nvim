@@ -1,3 +1,7 @@
+local rust = {
+	build_settings = '--release --features dev',
+}
+
 local function _cmd(command)
 	if type(command) == 'string' then
 		return '<CMD>' .. command .. '<CR>'
@@ -12,92 +16,63 @@ end
 
 -- NORMAL - NOT with LEADER
 require('which-key').register({
-	['<C-h>'] = {
-		function()
-			vim.cmd('wincmd h')
-		end,
-		'left window',
-	},
-
-	['<C-l>'] = {
-		function()
-			vim.cmd('wincmd l')
-		end,
-		'left window',
-	},
-
-	['<C-k>'] = {
-		function()
-			vim.cmd('wincmd k')
-		end,
-		'left window',
-	},
-
-	['<C-j>'] = {
-		function()
-			vim.cmd('wincmd j')
-		end,
-		'left window',
-	},
+	['<C-h>'] = { _cmd('wincmd h'), 'left window' },
+	['<C-l>'] = { _cmd('wincmd l'), 'left window' },
+	['<C-k>'] = { _cmd('wincmd k'), 'left window' },
+	['<C-j>'] = { _cmd('wincmd j'), 'left window' },
 
 	["'"] = {
 		name = 'Navigate to',
-		h = {
+        -- stylua: ignore start
+		h = {     function() require('harpoon.ui').nav_file(1) end, '1st' },
+		t = {     function() require('harpoon.ui').nav_file(2) end, '2nd' },
+		n = {     function() require('harpoon.ui').nav_file(3) end, '3rd' },
+		s = {     function() require('harpoon.ui').nav_file(4) end, '4th' },
+		['-'] = { function() require('harpoon.ui').nav_file(5) end, '5th' },
+		m = { function() require('harpoon.term').gotoTerminal(1) end, '1st-term', },
+		w = { function() require('harpoon.term').gotoTerminal(2) end, '2nd-term', },
+		c = { function() vim.cmd('ClangdSwitchSourceHeader') end, 'clang-switch', },
+		q = { function() vim.cmd('Fcarbon %:p:h')            end, 'fcarbon', },
+		b = {     _cmd('b#'), 'b#' },
+		['/'] = { _cmd('A'),  'src-test' },
+		-- stylua: ignore end
+
+		d = {
 			function()
-				require('harpoon.ui').nav_file(1)
+				if 'rust' == vim.bo.filetype then
+					require('neotest').output_panel.toggle()
+				else
+					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+				end
 			end,
-			'1st',
+			'neotest-open-down',
 		},
-		t = {
+		o = {
 			function()
-				require('harpoon.ui').nav_file(2)
+				if 'rust' == vim.bo.filetype then
+					require('neotest').output.open({ enter = true, last_run = true, auto_close = false })
+				else
+					vim.cmd('keymap set for filetype ' .. vim.bo.filetype)
+				end
 			end,
-			'2nd',
+			'neotest-open',
 		},
-		n = {
+		l = {
 			function()
-				require('harpoon.ui').nav_file(3)
+				if 'rust' == vim.bo.filetype then
+					local open_win = function()
+						vim.cmd('split')
+						return vim.api.nvim_get_current_win()
+					end
+                    -- stylua: ignore
+                    require('neotest').output.open({ enter = true, last_run = true, auto_close = false, open_win = open_win })
+				else
+					vim.cmd('keymap set for filetype ' .. vim.bo.filetype)
+				end
 			end,
-			'3rd',
+			'neotest-open-left',
 		},
-		s = {
-			function()
-				require('harpoon.ui').nav_file(4)
-			end,
-			'4th',
-		},
-		['-'] = {
-			function()
-				require('harpoon.ui').nav_file(5)
-			end,
-			'5th',
-		},
-		m = {
-			function()
-				require('harpoon.term').gotoTerminal(1)
-			end,
-			'1st-term',
-		},
-		w = {
-			function()
-				require('harpoon.term').gotoTerminal(2)
-			end,
-			'2nd-term',
-		},
-		c = {
-			function()
-				vim.cmd('ClangdSwitchSourceHeader')
-			end,
-			'clang-switch',
-		},
-		q = {
-			function()
-				vim.cmd('Fcarbon %:p:h')
-			end,
-			'fcarbon',
-		},
-		b = { _cmd('b#'), 'b#' },
-		['/'] = { _cmd('A'), 'src-test' },
+
 		L = {
 			function()
 				local ft = vim.bo.filetype
@@ -118,7 +93,6 @@ require('which-key').register({
 			end,
 			'got to config',
 		},
-
 		C = {
 			function()
 				local ft = vim.bo.filetype
@@ -148,19 +122,22 @@ require('which-key').register({
 		d = { vim.diagnostic.goto_next, 'diagnostic' },
 		g = { _cmd('Gitsigns next_hunk'), 'next hunk' },
 		h = { require('harpoon.ui').nav_next, 'harpoon' },
-		-- ["l"] = { require("harpoon.ui").nav_next, "goto next mark" },
 		l = {
 			function()
-				require('neotest').jump.next({ status = 'failed' })
+				if 'rust' == vim.bo.filetype then
+					require('neotest').jump.next({ status = 'failed' })
+				else
+					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+				end
 			end,
-			'failed test',
+			'ft',
 		},
 		t = {
 			function()
 				if 'rust' == vim.bo.filetype then
 					require('neotest').jump.next({ status = 'failed' })
 				else
-					_cmd('TSTextobjectRepeatLastMoveNext')
+					vim.cmd('TSTextobjectRepeatLastMoveNext')
 				end
 			end,
 			'ft',
@@ -175,23 +152,89 @@ require('which-key').register({
 		-- ["l"] = { require("harpoon.ui").nav_prev, "goto prev mark" },
 		l = {
 			function()
-				require('neotest').jump.prev({ status = 'failed' })
+				if 'rust' == vim.bo.filetype then
+					require('neotest').jump.prev({ status = 'failed' })
+				else
+					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+				end
 			end,
-			'failed test',
+			'ft',
 		},
-		-- t = { _cmd('TSTextobjectRepeatLastMovePrevious'), 'ts: repeat' },
 		t = {
 			function()
-				vim.cmd('This here is the none-filetype keybinding')
+				if 'rust' == vim.bo.filetype then
+					require('neotest').jump.next({ status = 'failed' })
+				else
+					vim.cmd('TSTextobjectRepeatLastMovePrevious')
+				end
 			end,
-			'ts: repeat',
+			'ft',
 		},
 	},
 
 	c = {
-		name = 'lists',
+		name = 'lists/cargo',
+		['<leader>'] = {
+			function()
+				if 'rust' == vim.bo.filetype then
+					require('rust_funcs').run.command('cargo run --release --features dev --bin http-server')
+				else
+					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+				end
+			end,
+			'ft: A: cargo run --release --features dev --bin http-server',
+		},
+		['*'] = {
+			function()
+				if 'rust' == vim.bo.filetype then
+					vim.cmd('Task start cargo clippy ' .. rust.build_settings)
+				else
+					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+				end
+			end,
+			'ft: A: cargo clippy',
+		},
+		['!'] = {
+			function()
+				if 'rust' == vim.bo.filetype then
+					vim.cmd('Task start cargo check ' .. rust.build_settings)
+				else
+					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+				end
+			end,
+			'ft: A: cargo check',
+		},
+		['|'] = {
+			function()
+				if 'rust' == vim.bo.filetype then
+					vim.cmd('Task start cargo bench ' .. rust.build_settings)
+				else
+					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+				end
+			end,
+			'ft: A: cargo bench',
+		},
+		b = {
+			function()
+				if 'rust' == vim.bo.filetype then
+					vim.cmd('Task start cargo build ' .. rust.build_settings)
+				else
+					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+				end
+			end,
+			'ft: A: cargo build',
+		},
 		d = { vim.diagnostic.setqflist, 'setqflist' },
-		q = { _cmd('cclose'), 'close' },
+		l = {
+			function()
+				if 'rust' == vim.bo.filetype then
+					require('rust_funcs').run.last_cmd()
+				else
+					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+				end
+			end,
+			'ft: A: run last command',
+		},
 		g = {
 			name = 'git',
 			a = {
@@ -215,23 +258,69 @@ require('which-key').register({
 				'status',
 			},
 		},
+		q = { _cmd('cclose'), 'close' },
+		r = {
+			function()
+				if 'rust' == vim.bo.filetype then
+					require('rust_funcs').run.with_arguments()
+				else
+					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+				end
+			end,
+			'ft: A: cargo run -- <Prompt>',
+		},
+		R = {
+			function()
+				if 'rust' == vim.bo.filetype then
+					require('rust_funcs').run.selected_binary()
+				else
+					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+				end
+			end,
+			'ft: A: cargo run --bin <?>',
+		},
 		s = { vim.lsp.buf.signature_help, 'signature_help' },
 	},
 
 	d = {
 		name = 'diagnostics / diff',
 		o = { vim.diagnostic.open_float, 'open-float' },
-		h = {
+        -- stylua: ignore
+		h = { function() vim.cmd('DiffviewOpen') end, 'Diff Head', },
+		s = {
 			function()
-				vim.cmd('DiffviewOpen')
+				if 'rust' == vim.bo.filetype then
+					require('rust_funcs').explain_error.open_popup_here()
+				else
+					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+				end
 			end,
-			'Diff Head',
+			'ft: explain error',
+		},
+		J = {
+			function()
+				if 'rust' == vim.bo.filetype then
+					require('rust_funcs').explain_error.print_error_as_json()
+				else
+					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+				end
+			end,
+			'ft: print error as json',
 		},
 	},
 
 	g = {
 		name = '+goto',
-		c = { _cmd('e Cargo.toml'), 'Cargo.toml' },
+		c = {
+			function()
+				if 'rust' == vim.bo.filetype then
+					vim.cmd('RustOpenCargo')
+				else
+					vim.cmd('e Cargo.toml')
+				end
+			end,
+			'Cargo.toml',
+		},
 		d = {
 			function()
 				vim.lsp.buf.definition({
@@ -247,7 +336,26 @@ require('which-key').register({
 			'definition',
 		},
 		D = { vim.lsp.buf.declaration, 'declaration' },
-		h = { vim.lsp.buf.hover, 'hover' },
+		h = {
+			function()
+				if 'rust' == vim.bo.filetype then
+					vim.cmd('RustHoverActions')
+				else
+					vim.lsp.buf.hover()
+				end
+			end,
+			'hover/actions',
+		},
+		p = {
+			function()
+				if 'rust' == vim.bo.filetype then
+					vim.cmd('RustParentModule')
+				else
+					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+				end
+			end,
+			'ft',
+		},
 		i = { vim.lsp.buf.implementation, 'impl' },
 		k = { _cmd('TSTextobjectPeekDefinitionCode @function.inner'), 'peek definition' },
 		-- t = { require('telescope.builtin').lsp_type_deftnitions, "type-definition" }

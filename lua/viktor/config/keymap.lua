@@ -400,6 +400,16 @@ require('which-key').register({
 
 		c = {
 			name = 'lists',
+			['*'] = {
+				function()
+					if 'rust' == vim.bo.filetype then
+						vim.cmd('Task start cargo clippy ' .. rust.build_settings)
+					else
+						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+					end
+				end,
+				'ft: build',
+			},
 			P = { vim.cmd.colder, 'older' },
 			N = { vim.cmd.cnewer, 'Newer' },
 			c = {
@@ -461,41 +471,6 @@ require('which-key').register({
 
 		d = {
 			name = 'diagnostic',
-			t = { require('diagnostic_funcs').toggle, 'toggle' },
-			s = { vim.diagnostic.open_float, 'open-float' },
-			l = {
-				name = 'location list',
-				a = {
-					function()
-						require('diagnostic_funcs').loclist()
-					end,
-					'All',
-				},
-				e = {
-					function()
-						require('diagnostic_funcs').loclist(vim.diagnostic.severity.ERROR)
-					end,
-					'ERROR',
-				},
-				h = {
-					function()
-						require('diagnostic_funcs').loclist(vim.diagnostic.severity.HINT)
-					end,
-					'HINT',
-				},
-				w = {
-					function()
-						require('diagnostic_funcs').loclist(vim.diagnostic.severity.WARN)
-					end,
-					'WARN',
-				},
-				i = {
-					function()
-						require('diagnostic_funcs').loclist(vim.diagnostic.severity.INFO)
-					end,
-					'INFO',
-				},
-			},
 			c = {
 				name = 'qflist',
 				a = {
@@ -529,6 +504,51 @@ require('which-key').register({
 					'INFO',
 				},
 			},
+			e = {
+				function()
+					if 'rust' == vim.bo.filetype then
+						require('rust_funcs').explain_error.open_popup_here()
+					else
+						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+					end
+				end,
+				'ft: explain error',
+			},
+			l = {
+				name = 'location list',
+				a = {
+					function()
+						require('diagnostic_funcs').loclist()
+					end,
+					'All',
+				},
+				e = {
+					function()
+						require('diagnostic_funcs').loclist(vim.diagnostic.severity.ERROR)
+					end,
+					'ERROR',
+				},
+				h = {
+					function()
+						require('diagnostic_funcs').loclist(vim.diagnostic.severity.HINT)
+					end,
+					'HINT',
+				},
+				w = {
+					function()
+						require('diagnostic_funcs').loclist(vim.diagnostic.severity.WARN)
+					end,
+					'WARN',
+				},
+				i = {
+					function()
+						require('diagnostic_funcs').loclist(vim.diagnostic.severity.INFO)
+					end,
+					'INFO',
+				},
+			},
+			s = { vim.diagnostic.open_float, 'open-float' },
+			t = { require('diagnostic_funcs').toggle, 'toggle' },
 		},
 
 		e = {
@@ -767,7 +787,17 @@ require('which-key').register({
 		},
 
 		n = {
-			name = 'Neorg',
+			name = 'Neorg/neotest',
+			a = {
+				function()
+					if 'rust' == vim.bo.filetype then
+						require('neotest').run.run(vim.fn.getcwd() .. '/src')
+					else
+						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+					end
+				end,
+				'ft: all tests in src/',
+			},
 			c = {
 				function()
 					if _G._neorg_concealed then
@@ -781,12 +811,28 @@ require('which-key').register({
 				'toggle-concealer',
 			},
 			C = { _cmd('Neorg toggle-concealer'), 'toggle-concealer' },
-			o = {
-				name = 'Open',
-				r = { _cmd('Neorg workspace rust'), 'rust' },
-				n = { _cmd('Neorg workspace research'), 'research' },
-				d = { _cmd('Neorg workspace general'), 'default' },
+			f = {
+				function()
+					if 'rust' == vim.bo.filetype then
+						require('neotest').run.run(vim.fn.expand('%'))
+					else
+						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+					end
+				end,
+				'ft: all tests',
 			},
+			h = {
+				function()
+					if 'rust' == vim.bo.filetype then
+						require('neotest').run.run({ extra_args = { '--success-output=immediate' } })
+					else
+						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+					end
+				end,
+				'ft: this test',
+			},
+			i = { _cmd('Neorg index'), 'index' },
+			I = { _cmd('Neorg inject-metadata'), 'inject-metadata' },
 			j = {
 				t = { _cmd('Neorg journal today'), 'today' },
 				c = { _cmd('Neorg journal custom'), 'custom' },
@@ -794,6 +840,40 @@ require('which-key').register({
 				n = { _cmd('Neorg journal tomorrow'), 'tomorrow' },
 				y = { _cmd('Neorg journal yesterday'), 'yesterday' },
 			},
+			l = {
+				function()
+					if 'rust' == vim.bo.filetype then
+						require('neotest').run.run_last()
+					else
+						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+					end
+				end,
+				'ft: last test',
+			},
+			m = {
+				function()
+					if 'rust' == vim.bo.filetype then
+						require('neotest').summary.run_marked()
+					else
+						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+					end
+				end,
+				'ft: marked tests',
+			},
+			M = {
+				name = 'mode',
+				n = { _cmd('Neorg mode norg'), 'norg' },
+				t = { _cmd('Neorg mode traverse-heading'), 'traverse-heading' },
+				l = { _cmd('Neorg module list'), 'list' },
+				L = { _cmd('Neorg module load'), 'load' },
+			},
+			o = {
+				name = 'Open',
+				r = { _cmd('Neorg workspace rust'), 'rust' },
+				n = { _cmd('Neorg workspace research'), 'research' },
+				d = { _cmd('Neorg workspace general'), 'default' },
+			},
+			r = { _cmd('Neorg return'), 'return' },
 			t = {
 				name = 'TOC',
 				l = { _cmd('Neorg toc left'), 'left' },
@@ -801,17 +881,17 @@ require('which-key').register({
 				q = { _cmd('Neorg toc qflist'), 'qflist' },
 			},
 			T = { _cmd('Neorg tangle'), 'Tangle' },
-			m = {
-				name = 'mode',
-				n = { _cmd('Neorg mode norg'), 'norg' },
-				t = { _cmd('Neorg mode traverse-heading'), 'traverse-heading' },
-				l = { _cmd('Neorg module list'), 'list' },
-				L = { _cmd('Neorg module load'), 'load' },
+			s = {
+				function()
+					if 'rust' == vim.bo.filetype then
+						require('neotest').summary.toggle()
+					else
+						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+					end
+				end,
+				'ft: open summary',
 			},
-			i = { _cmd('Neorg index'), 'index' },
-			I = { _cmd('Neorg inject-metadata'), 'inject-metadata' },
 			U = { _cmd('Neorg update-metadata'), 'update-metadata' },
-			r = { _cmd('Neorg return'), 'return' },
 			-- t = { _cmd("Neorg tangle"), ""},
 			-- k = { _cmd("Neorg keybind"), ""},
 			-- u = { _cmd("Neorg upgrade"), ""},
@@ -845,6 +925,151 @@ require('which-key').register({
 		},
 
 		r = {
+			name = 'ft:Rust',
+			b = {
+				function()
+					if 'rust' == vim.bo.filetype then
+						vim.cmd('Task start cargo build ' .. rust.build_settings)
+					else
+						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+					end
+				end,
+				'ft: build',
+			},
+			c = {
+				function()
+					if 'rust' == vim.bo.filetype then
+						vim.cmd('Task start cargo clippy ' .. rust.build_settings)
+					else
+						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+					end
+				end,
+				'ft: clippy tests examples',
+			},
+			C = {
+				function()
+					if 'rust' == vim.bo.filetype then
+						vim.cmd('RustOpenCargo')
+					else
+						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+					end
+				end,
+				'ft: Open Cargo.toml',
+			},
+			d = {
+				function()
+					if 'rust' == vim.bo.filetype then
+						vim.cmd('RustOpenExternalDocs')
+					else
+						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+					end
+				end,
+				'ft: Open Docs',
+			},
+			e = {
+				function()
+					if 'rust' == vim.bo.filetype then
+						vim.cmd('RustExpandMacro')
+					else
+						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+					end
+				end,
+				'ft: Expand Macro',
+			},
+			f = {
+				function()
+					if 'rust' == vim.bo.filetype then
+						vim.cmd('RustFmt')
+					else
+						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+					end
+				end,
+				'ft: format',
+			},
+			h = {
+				function()
+					if 'rust' == vim.bo.filetype then
+						vim.cmd('RustHoverActions')
+					else
+						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+					end
+				end,
+				'ft: hover-action',
+			},
+			i = {
+				function()
+					if 'rust' == vim.bo.filetype then
+						require('rust_funcs').toggle_inlay_hints()
+					else
+						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+					end
+				end,
+				'ft: toggle inlay hints',
+			},
+			o = {
+				function()
+					if 'rust' == vim.bo.filetype then
+						require('rust_funcs').toggle_inlay_hinst_all_lines()
+					else
+						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+					end
+				end,
+				'ft: toggle line inlay-hints',
+			},
+			l = {
+				function()
+					if 'rust' == vim.bo.filetype then
+						require('rust_funcs').run.something_good()
+					else
+						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+					end
+				end,
+				'ft: something good',
+			},
+			p = {
+				function()
+					if 'rust' == vim.bo.filetype then
+						require('rust_funcs').cargo_run()
+					else
+						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+					end
+				end,
+				'ft: cargo run',
+			},
+			r = {
+				function()
+					if 'rust' == vim.bo.filetype then
+						vim.cmd('CargoReload')
+					else
+						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+					end
+				end,
+				'ft: cargo-reload',
+			},
+			-- r = {
+			-- 	w = { _cmd("RustReloadWorkspace") },
+			-- },
+			-- t = {
+			-- 	function()
+			-- 		vim.cmd("copen")
+			-- 		vim.cmd("wincmd w")
+			-- 		vim.cmd("silent make test " .. vim.fn.expand("%"))
+			-- 	end,
+			-- 	"make test file",
+			-- },
+			t = {
+				function()
+					if 'rust' == vim.bo.filetype then
+						require('rust_funcs').run.nearest_test()
+					else
+						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
+					end
+				end,
+				'ft: cargo test',
+			},
+			-- T = { rust_funcs.tree.show, "module tree" },
+			-- T = { rust_funcs.tree.lib, "module tree" },
+			-- T = { rust_funcs.tree.bin, "module tree" },
 			w = {
 				function()
 					local current_word

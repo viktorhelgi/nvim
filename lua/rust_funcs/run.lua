@@ -10,6 +10,15 @@ local run = function(command)
 	tmux.sendCommand("1", M._last_cmd .. "\r")
 end
 
+M.command = function(command)
+    if type(command) ~= "string" then
+        error("The Input should be of type 'string' not " + type(command))
+        return nil
+    end
+    run(command)
+end
+
+
 M.selected_binary = function()
 	local configs = require("rust_funcs").toml.read_configs()
 	if configs == nil then

@@ -47,12 +47,15 @@ require('which-key').register({
 					vim.cmd('e ' .. dir .. '/tsserver.lua')
 				elseif 'cpp' == ft then
 					vim.cmd('e ' .. dir .. '/clangd.lua')
+				elseif 'go' == ft then
+					vim.cmd('e ' .. dir .. '/gopls.lua')
 				elseif 'toml' == ft then
 					vim.cmd('e ' .. dir .. '/toml.lua')
 				end
 			end,
 			'got to config',
 		},
+
 		C = {
 			function()
 				local ft = vim.bo.filetype
@@ -69,6 +72,8 @@ require('which-key').register({
 					vim.cmd('e ' .. dir .. '/tsserver.lua')
 				elseif 'cpp' == ft then
 					vim.cmd('e ' .. dir .. '/clangd.lua')
+				elseif 'go' == ft then
+					vim.cmd('e ' .. dir .. '/gopls.lua')
 				elseif 'toml' == ft then
 					vim.cmd('e ' .. dir .. '/toml.lua')
 				end

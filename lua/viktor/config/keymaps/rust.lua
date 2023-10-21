@@ -7,7 +7,20 @@ local rust = {
 }
 
 RegisterFTKeymaps.RustKeyBindings = function()
-	vim.cmd('set colorcolumn=100')
+	local bufnr = vim.api.nvim_get_current_buf()
+
+	vim.o.foldmethod = 'marker'
+
+	vim.cmd('set colorcolumn=102')
+	vim.cmd('compiler cargo')
+
+    -- stylua: ignore start
+	pcall(function() vim.keymap.del('i', '<tab>') end)
+	pcall(function() vim.keymap.del('n', 'caÞ') end)
+	-- stylua: ignore end
+
+	vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+	require('lsp_signature').on_attach(require('viktor.config.plugin.lsp_signature_configs'), bufnr)
 
 	require('which-key').register({
 		["'"] = {
@@ -157,37 +170,46 @@ RegisterFTKeymaps.RustKeyBindings = function()
                     function() vim.cmd('RustHoverActions') end,
                     'hover-action',
                 },
-                i = {
-                    require('rust_funcs').toggle_inlay_hints,
-                    'toggle inlay hints',
-                },
-                l = {
-                    require('rust_funcs').run.something_good,
-                    'TestNearest',
-                },
-                o = {
-                    require('rust_funcs').toggle_inlay_hinst_all_lines,
-                    'toggle line inlay-hints',
-                },
-                p = {
-                    require('rust_funcs').cargo_run,
-                    'cargo run',
-                },
-                r = {
-                    function() vim.cmd('CargoReload') end,
-                    'cargo-reload',
-                },
-                t = {
-                    require('rust_funcs').run.nearest_test,
-                    'Test',
-                },
 				-- stylua: ignore end
+				i = {
+					require('rust_funcs').toggle_inlay_hints,
+					'toggle inlay hints',
+				},
+				l = {
+					require('rust_funcs').run.something_good,
+					'TestNearest',
+				},
+				m = {
+					function()
+						local rfile = vim.fn.expand('%:r')
+						local module = rfile:sub(rfile:find('/') + 1, -1):gsub('/', '::')
+						vim.cmd('Task start cargo nextest run ' .. module)
+					end,
+					'nextest run',
+				},
+				o = {
+					require('rust_funcs').toggle_inlay_hinst_all_lines,
+					'toggle line inlay-hints',
+				},
+				p = {
+					require('rust_funcs').cargo_run,
+					'cargo run',
+				},
+				r = {
+				    -- stylua: ignore
+                    function() vim.cmd('CargoReload') end,
+					'cargo-reload',
+				},
+				t = {
+					require('rust_funcs').run.nearest_test,
+					'Test',
+				},
 			},
 		},
 	}, { -- Options
 		mode = 'n',
 		noremap = true,
 		silent = true,
-		buffer = vim.api.nvim_get_current_buf(),
+		buffer = bufnr,
 	})
 end

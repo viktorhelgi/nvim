@@ -1,5 +1,5 @@
 vim.cmd([[
-    autocmd FileType python lua RegisterFTKeymaps.PythonKeyBindings()
+    autocmd FileType python lua RegisterFTKeymaps.Python()
 ]])
 
 local cmp = require('cmp')
@@ -28,14 +28,15 @@ local cmp_source = function(wanted_kind)
 	}
 end
 
-RegisterFTKeymaps.PythonKeyBindings = function()
-	-- require('viktor.config.plugin.neotest').on_attach('python', 0)
+RegisterFTKeymaps.Python = function()
+	local bufnr = vim.api.nvim_get_current_buf()
 
+	-- require('viktor.config.plugin.neotest').on_attach('python', 0)
+	require('lsp_signature').on_attach(require('viktor.config.plugin.lsp_signature_configs'), bufnr)
 	vim.cmd('set colorcolumn=88')
 
 	require('which-key').register({
 		['<leader>'] = {
-
 			r = {
 				name = 'ft:Run',
 				a = {
@@ -141,12 +142,24 @@ RegisterFTKeymaps.PythonKeyBindings = function()
 				-- y = {},
 				-- z = {},
 			},
+
+			w = {
+				name = 'Workspace',
+				a = { vim.lsp.buf.add_workspace_folder, 'Add Workspace folder' },
+				l = {
+					function()
+						print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+					end,
+					'List Workspace folders',
+				},
+				r = { vim.lsp.buf.remove_workspace_folder, 'Remove Workspace folder' },
+			},
 		},
 	}, { -- Options
 		mode = 'n',
 		noremap = true,
 		silent = true,
-		buffer = vim.api.nvim_get_current_buf(),
+		buffer = bufnr,
 	})
 
 	require('which-key').register({
@@ -186,6 +199,6 @@ RegisterFTKeymaps.PythonKeyBindings = function()
 		mode = 'i',
 		noremap = true,
 		silent = true,
-		buffer = vim.api.nvim_get_current_buf(),
+		buffer = bufnr,
 	})
 end

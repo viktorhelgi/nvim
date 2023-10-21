@@ -1,28 +1,11 @@
 local rust_tools = require('rust-tools')
 
-local my_on_attach = function(client, bufnr)
-    -- stylua: ignore start
-	pcall(function() vim.keymap.del('i', '<tab>') end)
-	pcall(function() vim.keymap.del('n', 'caÞ') end)
-	-- stylua: ignore end
-
-	vim.o.foldmethod = 'marker'
-	vim.cmd('set colorcolumn=102')
+local my_on_attach = function(_, bufnr)
 	vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-	require('lsp_signature').on_attach(require('viktor.config.plugin.lsp_signature'), bufnr) -- no need to specify bufnr if you don't use toggle_key
-
-	require('viktor.config.plugin.tasks').on_attach(client, bufnr)
-
-	-- require("viktor.config.plugin.neotest").on_attach(client, bufnr)
-	-- rust_funcs.jump.on_attach(client, bufnr)
-
-	vim.cmd('compiler cargo')
+	require('lsp_signature').on_attach(require('viktor.config.plugin.lsp_signature_configs'), bufnr)
 end
 
 local function _get_capabilites()
-	-- local out = vim.lsp.protocol.make_client_capabilities()
-	-- out = require('cmp_nvim_lsp').update_capabilities(capabilities)
 	local out = require('cmp_nvim_lsp').default_capabilities()
 	out.textDocument.completion.completionItem.snippetSupport = false
 	return out

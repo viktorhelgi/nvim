@@ -1,8 +1,8 @@
 vim.cmd([[
-    autocmd FileType norg lua _G.NorgKeyBindings()
+    autocmd FileType norg lua RegisterFTKeymaps.Norg()
 ]])
 
-_G.NorgKeyBindings = function()
+RegisterFTKeymaps.Norg = function()
     local bufnr = vim.api.nvim_get_current_buf()
 
 	-- vim.cmd("set shiftwidth=2")

@@ -1,13 +1,8 @@
 local on_attach = function(_, bufnr)
-	-- require('lsp_signature').on_attach(require('viktor.config.plugin.lsp_signature'), bufnr) -- no need to specify bufnr if you don't use toggle_key
-
-	vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
+	require('lsp_signature').on_attach(require('viktor.config.plugin.lsp_signature_configs'), bufnr)
 	vim.wo.foldmethod = 'indent' -- set fold method to marker
-
-	vim.keymap.set('n', '<leader>rn', function()
-		require('lua_funcs').test_file()
-	end, { silent = true, buffer = bufnr })
+	vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+	vim.keymap.set('n', '<leader>rn', require('lua_funcs').test_file, { silent = true, buffer = bufnr })
 end
 
 require('lspconfig').lua_ls.setup({

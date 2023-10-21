@@ -1,7 +1,3 @@
-local rust = {
-	build_settings = '--release --features dev',
-}
-
 local function _cmd(command)
 	if type(command) == 'string' then
 		return '<CMD>' .. command .. '<CR>'
@@ -36,42 +32,6 @@ require('which-key').register({
 		b = {     _cmd('b#'), 'b#' },
 		['/'] = { _cmd('A'),  'src-test' },
 		-- stylua: ignore end
-
-		d = {
-			function()
-				if 'rust' == vim.bo.filetype then
-					require('neotest').output_panel.toggle()
-				else
-					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-				end
-			end,
-			'neotest-open-down',
-		},
-		o = {
-			function()
-				if 'rust' == vim.bo.filetype then
-					require('neotest').output.open({ enter = true, last_run = true, auto_close = false })
-				else
-					vim.cmd('keymap set for filetype ' .. vim.bo.filetype)
-				end
-			end,
-			'neotest-open',
-		},
-		l = {
-			function()
-				if 'rust' == vim.bo.filetype then
-					local open_win = function()
-						vim.cmd('split')
-						return vim.api.nvim_get_current_win()
-					end
-                    -- stylua: ignore
-                    require('neotest').output.open({ enter = true, last_run = true, auto_close = false, open_win = open_win })
-				else
-					vim.cmd('keymap set for filetype ' .. vim.bo.filetype)
-				end
-			end,
-			'neotest-open-left',
-		},
 
 		L = {
 			function()
@@ -122,26 +82,6 @@ require('which-key').register({
 		d = { vim.diagnostic.goto_next, 'diagnostic' },
 		g = { _cmd('Gitsigns next_hunk'), 'next hunk' },
 		h = { require('harpoon.ui').nav_next, 'harpoon' },
-		l = {
-			function()
-				if 'rust' == vim.bo.filetype then
-					require('neotest').jump.next({ status = 'failed' })
-				else
-					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-				end
-			end,
-			'ft',
-		},
-		t = {
-			function()
-				if 'rust' == vim.bo.filetype then
-					require('neotest').jump.next({ status = 'failed' })
-				else
-					vim.cmd('TSTextobjectRepeatLastMoveNext')
-				end
-			end,
-			'ft',
-		},
 	},
 
 	['['] = {
@@ -150,91 +90,11 @@ require('which-key').register({
 		g = { _cmd('Gitsigns prev_hunk'), 'prev hunk' },
 		h = { require('harpoon.ui').nav_prev, 'harpoon' },
 		-- ["l"] = { require("harpoon.ui").nav_prev, "goto prev mark" },
-		l = {
-			function()
-				if 'rust' == vim.bo.filetype then
-					require('neotest').jump.prev({ status = 'failed' })
-				else
-					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-				end
-			end,
-			'ft',
-		},
-		t = {
-			function()
-				if 'rust' == vim.bo.filetype then
-					require('neotest').jump.next({ status = 'failed' })
-				else
-					vim.cmd('TSTextobjectRepeatLastMovePrevious')
-				end
-			end,
-			'ft',
-		},
 	},
 
 	c = {
 		name = 'lists/cargo',
-		['<leader>'] = {
-			function()
-				if 'rust' == vim.bo.filetype then
-					require('rust_funcs').run.command('cargo run --release --features dev --bin http-server')
-				else
-					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-				end
-			end,
-			'ft: A: cargo run --release --features dev --bin http-server',
-		},
-		['*'] = {
-			function()
-				if 'rust' == vim.bo.filetype then
-					vim.cmd('Task start cargo clippy ' .. rust.build_settings)
-				else
-					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-				end
-			end,
-			'ft: A: cargo clippy',
-		},
-		['!'] = {
-			function()
-				if 'rust' == vim.bo.filetype then
-					vim.cmd('Task start cargo check ' .. rust.build_settings)
-				else
-					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-				end
-			end,
-			'ft: A: cargo check',
-		},
-		['|'] = {
-			function()
-				if 'rust' == vim.bo.filetype then
-					vim.cmd('Task start cargo bench ' .. rust.build_settings)
-				else
-					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-				end
-			end,
-			'ft: A: cargo bench',
-		},
-		b = {
-			function()
-				if 'rust' == vim.bo.filetype then
-					vim.cmd('Task start cargo build ' .. rust.build_settings)
-				else
-					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-				end
-			end,
-			'ft: A: cargo build',
-		},
 		d = { vim.diagnostic.setqflist, 'setqflist' },
-		l = {
-			function()
-				if 'rust' == vim.bo.filetype then
-					require('rust_funcs').run.last_cmd()
-				else
-					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-				end
-			end,
-			'ft: A: run last command',
-		},
 		g = {
 			name = 'git',
 			a = {
@@ -259,26 +119,6 @@ require('which-key').register({
 			},
 		},
 		q = { _cmd('cclose'), 'close' },
-		r = {
-			function()
-				if 'rust' == vim.bo.filetype then
-					require('rust_funcs').run.with_arguments()
-				else
-					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-				end
-			end,
-			'ft: A: cargo run -- <Prompt>',
-		},
-		R = {
-			function()
-				if 'rust' == vim.bo.filetype then
-					require('rust_funcs').run.selected_binary()
-				else
-					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-				end
-			end,
-			'ft: A: cargo run --bin <?>',
-		},
 		s = { vim.lsp.buf.signature_help, 'signature_help' },
 	},
 
@@ -287,40 +127,13 @@ require('which-key').register({
 		o = { vim.diagnostic.open_float, 'open-float' },
         -- stylua: ignore
 		h = { function() vim.cmd('DiffviewOpen') end, 'Diff Head', },
-		s = {
-			function()
-				if 'rust' == vim.bo.filetype then
-					require('rust_funcs').explain_error.open_popup_here()
-				else
-					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-				end
-			end,
-			'ft: explain error',
-		},
-		J = {
-			function()
-				if 'rust' == vim.bo.filetype then
-					require('rust_funcs').explain_error.print_error_as_json()
-				else
-					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-				end
-			end,
-			'ft: print error as json',
-		},
 	},
 
 	g = {
 		name = '+goto',
-		c = {
-			function()
-				if 'rust' == vim.bo.filetype then
-					vim.cmd('RustOpenCargo')
-				else
-					vim.cmd('e Cargo.toml')
-				end
-			end,
-			'Cargo.toml',
-		},
+		a = { '<cmd>A<cr>', 'alt file' },
+        -- stylua: ignore
+		c = { function() vim.cmd('e Cargo.toml') end, 'Cargo.toml', },
 		d = {
 			function()
 				vim.lsp.buf.definition({
@@ -336,26 +149,7 @@ require('which-key').register({
 			'definition',
 		},
 		D = { vim.lsp.buf.declaration, 'declaration' },
-		h = {
-			function()
-				if 'rust' == vim.bo.filetype then
-					vim.cmd('RustHoverActions')
-				else
-					vim.lsp.buf.hover()
-				end
-			end,
-			'hover/actions',
-		},
-		p = {
-			function()
-				if 'rust' == vim.bo.filetype then
-					vim.cmd('RustParentModule')
-				else
-					vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-				end
-			end,
-			'ft',
-		},
+		h = { vim.lsp.buf.hover, 'hover/actions' },
 		i = { vim.lsp.buf.implementation, 'impl' },
 		k = { _cmd('TSTextobjectPeekDefinitionCode @function.inner'), 'peek definition' },
 		-- t = { require('telescope.builtin').lsp_type_deftnitions, "type-definition" }
@@ -400,16 +194,6 @@ require('which-key').register({
 
 		c = {
 			name = 'lists',
-			['*'] = {
-				function()
-					if 'rust' == vim.bo.filetype then
-						vim.cmd('Task start cargo clippy ' .. rust.build_settings)
-					else
-						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-					end
-				end,
-				'ft: build',
-			},
 			P = { vim.cmd.colder, 'older' },
 			N = { vim.cmd.cnewer, 'Newer' },
 			c = {
@@ -503,16 +287,6 @@ require('which-key').register({
 					end,
 					'INFO',
 				},
-			},
-			e = {
-				function()
-					if 'rust' == vim.bo.filetype then
-						require('rust_funcs').explain_error.open_popup_here()
-					else
-						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-					end
-				end,
-				'ft: explain error',
 			},
 			l = {
 				name = 'location list',
@@ -788,16 +562,6 @@ require('which-key').register({
 
 		n = {
 			name = 'Neorg/neotest',
-			a = {
-				function()
-					if 'rust' == vim.bo.filetype then
-						require('neotest').run.run(vim.fn.getcwd() .. '/src')
-					else
-						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-					end
-				end,
-				'ft: all tests in src/',
-			},
 			c = {
 				function()
 					if _G._neorg_concealed then
@@ -811,26 +575,6 @@ require('which-key').register({
 				'toggle-concealer',
 			},
 			C = { _cmd('Neorg toggle-concealer'), 'toggle-concealer' },
-			f = {
-				function()
-					if 'rust' == vim.bo.filetype then
-						require('neotest').run.run(vim.fn.expand('%'))
-					else
-						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-					end
-				end,
-				'ft: all tests',
-			},
-			h = {
-				function()
-					if 'rust' == vim.bo.filetype then
-						require('neotest').run.run({ extra_args = { '--success-output=immediate' } })
-					else
-						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-					end
-				end,
-				'ft: this test',
-			},
 			i = { _cmd('Neorg index'), 'index' },
 			I = { _cmd('Neorg inject-metadata'), 'inject-metadata' },
 			j = {
@@ -840,27 +584,7 @@ require('which-key').register({
 				n = { _cmd('Neorg journal tomorrow'), 'tomorrow' },
 				y = { _cmd('Neorg journal yesterday'), 'yesterday' },
 			},
-			l = {
-				function()
-					if 'rust' == vim.bo.filetype then
-						require('neotest').run.run_last()
-					else
-						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-					end
-				end,
-				'ft: last test',
-			},
 			m = {
-				function()
-					if 'rust' == vim.bo.filetype then
-						require('neotest').summary.run_marked()
-					else
-						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-					end
-				end,
-				'ft: marked tests',
-			},
-			M = {
 				name = 'mode',
 				n = { _cmd('Neorg mode norg'), 'norg' },
 				t = { _cmd('Neorg mode traverse-heading'), 'traverse-heading' },
@@ -881,16 +605,6 @@ require('which-key').register({
 				q = { _cmd('Neorg toc qflist'), 'qflist' },
 			},
 			T = { _cmd('Neorg tangle'), 'Tangle' },
-			s = {
-				function()
-					if 'rust' == vim.bo.filetype then
-						require('neotest').summary.toggle()
-					else
-						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-					end
-				end,
-				'ft: open summary',
-			},
 			U = { _cmd('Neorg update-metadata'), 'update-metadata' },
 			-- t = { _cmd("Neorg tangle"), ""},
 			-- k = { _cmd("Neorg keybind"), ""},
@@ -925,151 +639,18 @@ require('which-key').register({
 		},
 
 		r = {
-			name = 'ft:Rust',
-			b = {
-				function()
-					if 'rust' == vim.bo.filetype then
-						vim.cmd('Task start cargo build ' .. rust.build_settings)
-					else
-						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-					end
-				end,
-				'ft: build',
-			},
-			c = {
-				function()
-					if 'rust' == vim.bo.filetype then
-						vim.cmd('Task start cargo clippy ' .. rust.build_settings)
-					else
-						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-					end
-				end,
-				'ft: clippy tests examples',
-			},
-			C = {
-				function()
-					if 'rust' == vim.bo.filetype then
-						vim.cmd('RustOpenCargo')
-					else
-						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-					end
-				end,
-				'ft: Open Cargo.toml',
-			},
-			d = {
-				function()
-					if 'rust' == vim.bo.filetype then
-						vim.cmd('RustOpenExternalDocs')
-					else
-						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-					end
-				end,
-				'ft: Open Docs',
-			},
-			e = {
-				function()
-					if 'rust' == vim.bo.filetype then
-						vim.cmd('RustExpandMacro')
-					else
-						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-					end
-				end,
-				'ft: Expand Macro',
-			},
-			f = {
-				function()
-					if 'rust' == vim.bo.filetype then
-						vim.cmd('RustFmt')
-					else
-						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-					end
-				end,
-				'ft: format',
-			},
-			h = {
-				function()
-					if 'rust' == vim.bo.filetype then
-						vim.cmd('RustHoverActions')
-					else
-						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-					end
-				end,
-				'ft: hover-action',
-			},
-			i = {
-				function()
-					if 'rust' == vim.bo.filetype then
-						require('rust_funcs').toggle_inlay_hints()
-					else
-						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-					end
-				end,
-				'ft: toggle inlay hints',
-			},
-			o = {
-				function()
-					if 'rust' == vim.bo.filetype then
-						require('rust_funcs').toggle_inlay_hinst_all_lines()
-					else
-						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-					end
-				end,
-				'ft: toggle line inlay-hints',
-			},
-			l = {
-				function()
-					if 'rust' == vim.bo.filetype then
-						require('rust_funcs').run.something_good()
-					else
-						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-					end
-				end,
-				'ft: something good',
-			},
-			p = {
-				function()
-					if 'rust' == vim.bo.filetype then
-						require('rust_funcs').cargo_run()
-					else
-						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-					end
-				end,
-				'ft: cargo run',
-			},
-			r = {
-				function()
-					if 'rust' == vim.bo.filetype then
-						vim.cmd('CargoReload')
-					else
-						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-					end
-				end,
-				'ft: cargo-reload',
-			},
-			-- r = {
-			-- 	w = { _cmd("RustReloadWorkspace") },
-			-- },
-			-- t = {
-			-- 	function()
-			-- 		vim.cmd("copen")
-			-- 		vim.cmd("wincmd w")
-			-- 		vim.cmd("silent make test " .. vim.fn.expand("%"))
-			-- 	end,
-			-- 	"make test file",
-			-- },
-			t = {
-				function()
-					if 'rust' == vim.bo.filetype then
-						require('rust_funcs').run.nearest_test()
-					else
-						vim.cmd('keymap not set for filetype ' .. vim.bo.filetype)
-					end
-				end,
-				'ft: cargo test',
-			},
+			name = 'ft:Run',
+			-- j = {},
+			-- k = {},
+			-- m = {},
+			n = {},
+			-- q = {},
+			-- s = {},
 			-- T = { rust_funcs.tree.show, "module tree" },
 			-- T = { rust_funcs.tree.lib, "module tree" },
 			-- T = { rust_funcs.tree.bin, "module tree" },
+			-- u = {},
+			-- v = {},
 			w = {
 				function()
 					local current_word
@@ -1084,6 +665,9 @@ require('which-key').register({
 				end,
 				'replace word',
 			},
+			-- x = {},
+			-- y = {},
+			-- z = {},
 		},
 
 		P = {

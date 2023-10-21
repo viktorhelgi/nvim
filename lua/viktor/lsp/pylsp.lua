@@ -28,7 +28,7 @@ local on_attach = function(client, bufnr)
 	-- vim.keymap.set('n', '<leader>lf', function() vim.cmd('Format') end, opt)
 	-- vim.keymap.set('v', '<leader>lf', "<cmd>Format<cr>", opt)
 
-	require("viktor.config.plugin.neotest").on_attach(client, bufnr)
+	-- require("viktor.config.plugin.neotest").on_attach(client, bufnr)
 
 	vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, opt)
 end

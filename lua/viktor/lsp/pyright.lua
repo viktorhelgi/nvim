@@ -8,6 +8,7 @@ local on_attach = function(client, bufnr)
 	--
 	-- end
 
+	require('lsp_signature').on_attach(require('viktor.config.plugin.lsp_signature'), bufnr) -- no need to specify bufnr if you don't use toggle_key
 	local opts = { noremap = true, silent = false }
 	local opt = { noremap = true, silent = false, buffer = bufnr }
 

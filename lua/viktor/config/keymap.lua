@@ -12,10 +12,10 @@ end
 
 -- NORMAL - NOT with LEADER
 require('which-key').register({
-	['<C-h>'] = { _cmd('wincmd h'), 'left window' },
-	['<C-l>'] = { _cmd('wincmd l'), 'left window' },
-	['<C-k>'] = { _cmd('wincmd k'), 'left window' },
-	['<C-j>'] = { _cmd('wincmd j'), 'left window' },
+	['<C-h>'] = { '<CMD> wincmd h <CR>', 'left window' },
+	['<C-l>'] = { '<CMD> wincmd l <CR>', 'left window' },
+	['<C-k>'] = { '<CMD> wincmd k <CR>', 'left window' },
+	['<C-j>'] = { '<CMD> wincmd j <CR>', 'left window' },
 
 	["'"] = {
 		name = 'Navigate to',
@@ -29,10 +29,9 @@ require('which-key').register({
 		w = { function() require('harpoon.term').gotoTerminal(2) end, '2nd-term', },
 		c = { function() vim.cmd('ClangdSwitchSourceHeader') end, 'clang-switch', },
 		q = { function() vim.cmd('Fcarbon %:p:h')            end, 'fcarbon', },
-		b = {     _cmd('b#'), 'b#' },
-		['/'] = { _cmd('A'),  'src-test' },
+		b = {     '<CMD> b# <CR>', 'b#' },
+		['/'] = { '<CMD> A  <CR>',  'src-test' },
 		-- stylua: ignore end
-
 		L = {
 			function()
 				local ft = vim.bo.filetype
@@ -55,7 +54,6 @@ require('which-key').register({
 			end,
 			'got to config',
 		},
-
 		C = {
 			function()
 				local ft = vim.bo.filetype
@@ -176,26 +174,20 @@ require('which-key').register({
 -- NORMAL - LEADER -----------------------------------
 require('which-key').register({
 	['<leader>'] = {
-		[','] = { _cmd('Telescope file_browser path=%:p:h theme=dropdown'), 'File Browser' },
-		['|'] = { _cmd('messages'), 'messages' },
-		['~'] = {
-			function()
-				vim.print('REMEMBER: use <leader>| now')
-			end,
-			'messages',
-		},
-		['-'] = { _cmd('b#'), 'b#' },
-		q = { _cmd('q'), 'quit' },
-		Q = { _cmd('confirm qa'), 'quit-all' },
-		G = { _cmd('Git'), 'Git' },
-		s = { _cmd('w'), 'save' },
-		z = { _cmd('ZenMode'), 'Zen mode' },
+        name = "Leader",
+		[','] = { '<CMD> Telescope file_browser path=%:p:h theme=dropdown <CR>', 'File Browser' },
+		['|'] = { '<CMD> messages                                         <CR>', 'messages' },
+		['~'] = { '<CMD> echo "REMEMBER: use <leader>| now"               <CR>' },
+		['-'] = { 'b#', 'b#' },
+		q = { '<CMD> q          <CR>', 'quit' },
+		Q = { '<CMD> confirm qa <CR>', 'quit-all' },
+		G = { '<CMD> Git        <CR>', 'Git' },
+		s = { '<CMD> w          <CR>', 'save' },
+		z = { '<CMD> ZenMode    <CR>', 'Zen mode' },
+		T = { '<CMD> Telescope  <CR>', 'Telescope' },
 
-		b = {
-			name = 'buffer',
-			n = { '<cmd>bn<cr>' },
-			p = { '<cmd>bp<cr>' },
-		},
+		-- a = { },
+		-- b = { },
 
 		c = {
 			name = 'lists',
@@ -399,6 +391,8 @@ require('which-key').register({
 			['-'] = { _cmd('cd ..'), 'cd ..' },
 		},
 
+		-- f = {},
+
 		g = {
 			name = 'Git',
 			o = { _cmd('Git'), ':Git' },
@@ -515,6 +509,10 @@ require('which-key').register({
 			},
 		},
 
+		-- i = { },
+		-- j = { },
+		-- k = { },
+
 		l = {
 			name = 'LSP',
 			-- a = { vim.lsp.buf.code_action, "code action" },
@@ -563,6 +561,28 @@ require('which-key').register({
 		L = {
 			i = { _cmd('LspInfo'), 'LSPInfo' },
 			m = { _cmd('Mason'), 'Mason' },
+		},
+
+		m = {
+			name = 'Mini',
+			o = {
+				require('mini.files').open,
+				'Files Open',
+			},
+			[','] = {
+				function()
+					require('mini.files').open(vim.fn.expand('%'))
+				end,
+				'Files Open (file)',
+			},
+			t = {
+				require('mini.map').toggle,
+				'Map toggle',
+			},
+			l = {
+				require('mini.map').toggle_focus,
+				'Map focus',
+			},
 		},
 
 		n = {
@@ -621,27 +641,27 @@ require('which-key').register({
 			-- t = { _cmd("Neorg toggle-concealer"), ""},
 		},
 
-		m = {
-			name = 'Mini',
-			o = {
-				require('mini.files').open,
-				'Files Open',
+		-- o = { },
+
+		P = {
+			name = 'Packer',
+			r = { _cmd('PackerClean'), 'PackerClean' },
+			c = { _cmd('PackerCompile'), 'PackerCompile' },
+			i = { _cmd('PackerInstall'), 'PackerInstall' },
+			l = { _cmd('PackerLoad'), 'PackerLoad' },
+			p = { _cmd('PackerProfile'), 'PackerProfile' },
+			s = { _cmd('PackerStatus'), 'PackerStatus' },
+			u = { _cmd('PackerUpdate'), 'PackerUpdate' },
+			S = {
+				name = 'Snapshot',
+				c = { _cmd('PackerSnapshot'), 'PackerSnapshot' },
+				d = { _cmd('PackerSnapshotDelete'), 'PackerSnapshotDelete' },
+				r = { _cmd('PackerSnapshotRollback'), 'PackerSnapshotRollback' },
 			},
-			[','] = {
-				function()
-					require('mini.files').open(vim.fn.expand('%'))
-				end,
-				'Files Open (file)',
-			},
-			t = {
-				require('mini.map').toggle,
-				'Map toggle',
-			},
-			l = {
-				require('mini.map').toggle_focus,
-				'Map focus',
-			},
+			['-'] = { _cmd('PackerSync'), 'PackerSync' },
 		},
+
+		-- q = { },
 
 		r = {
 			name = 'ft:Run',
@@ -675,25 +695,7 @@ require('which-key').register({
 			-- z = {},
 		},
 
-		P = {
-			name = 'Packer',
-			r = { _cmd('PackerClean'), 'PackerClean' },
-			c = { _cmd('PackerCompile'), 'PackerCompile' },
-			i = { _cmd('PackerInstall'), 'PackerInstall' },
-			l = { _cmd('PackerLoad'), 'PackerLoad' },
-			p = { _cmd('PackerProfile'), 'PackerProfile' },
-			s = { _cmd('PackerStatus'), 'PackerStatus' },
-			u = { _cmd('PackerUpdate'), 'PackerUpdate' },
-			S = {
-				name = 'Snapshot',
-				c = { _cmd('PackerSnapshot'), 'PackerSnapshot' },
-				d = { _cmd('PackerSnapshotDelete'), 'PackerSnapshotDelete' },
-				r = { _cmd('PackerSnapshotRollback'), 'PackerSnapshotRollback' },
-			},
-			['-'] = { _cmd('PackerSync'), 'PackerSync' },
-		},
-
-		T = { _cmd('Telescope'), 'Telescope' },
+		-- s = { },
 
 		t = {
 			name = 'Telescope',
@@ -750,11 +752,51 @@ require('which-key').register({
 			w = { require('telescope.builtin').lsp_workspace_symbols, 'ws symbols' },
 		},
 
+		-- u = { },
+		-- v = { },
+
 		w = {
 			name = 'Window',
 			m = { _cmd('WindowsMaximize'), 'maximize' },
 			e = { _cmd('WindowsEqualize'), 'equalize' },
 		},
+
+		-- x = { },
+		-- y = { },
+		-- z = { },
+	},
+})
+
+-- NORMAL - SUB-LEADER -----------------------------------
+require('which-key').register({
+	['\\'] = {
+		name = 'Something',
+        a = {"<CMD> echo 'LETS GOOO MAN' <CR>", "Something"},
+        -- b = { },
+        -- c = { },
+        -- d = { },
+        -- e = { },
+        -- f = { },
+        -- g = { },
+        -- h = { },
+        -- i = { },
+        -- j = { },
+        -- k = { },
+        -- l = { },
+        -- m = { },
+        -- n = { },
+        -- o = { },
+        -- p = { },
+        -- q = { },
+        -- r = { },
+        -- s = { },
+        -- t = { },
+        -- u = { },
+        -- v = { },
+        -- w = { },
+        -- x = { },
+        -- y = { },
+        -- z = { },
 	},
 })
 

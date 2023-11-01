@@ -495,10 +495,11 @@ require('which-key').register({
 			t = { require('harpoon.ui').toggle_quick_menu, 'toggle menu' },
 			-- n = { require("harpoon.ui").nav_next, "goto next mark" },
 			-- p = { require("harpoon.ui").nav_prev, "goto prev mark" },
-			-- u = { require('gitsigns.actions').undo_stage_hunk, 'undo stage hunk' },
+			u = { require('gitsigns.actions').undo_stage_hunk, 'undo stage hunk' },
 			p = { require('gitsigns.actions').preview_hunk_inline, 'preview_hunk' },
 			b = { require('gitsigns.actions').blame_line, 'blame line' },
 			s = { ':Gitsigns stage_hunk<CR>', 'stage hunk' },
+			S = { '<CMD> w <CR><CMD> Gitsigns stage_buffer <CR>', 'file' },
 			r = { '<CMD> Gitsigns undo_stage_hunk    <CR>', 'hunk' },
 			R = { '<CMD> Gitsigns reset_buffer_index <CR>', 'file' },
 		},
@@ -701,22 +702,27 @@ require('which-key').register({
 		t = {
 			name = 'Telescope',
 			a = { _cmd('Telescope aerial'), 'aerial' },
+			b = { require('telescope.builtin').buffers, 'buffers' },
 			c = { _cmd('Telescope colorscheme path=%:p:h theme=dropdown'), 'colorscheme' },
-			e = {
-				function()
-					require('telescope.builtin').find_files({ cwd = require('telescope.utils').buffer_dir() })
-				end,
-				'files in %:p:h',
-			},
-			o = { require('telescope.builtin').buffers, 'buffers' },
+
+			-- u = { require('telescope.builtin').find_files, 'files' },
+			-- e = { function() require('telescope.builtin').find_files({ cwd = require('telescope.utils').buffer_dir() }) end, 'files in %:p:h', },
+			-- k = { require('telescope').extensions.live_grep_args.live_grep_args, 'live grep' },
+			-- j = { function() require('telescope.builtin').live_grep({ cwd = require('telescope.utils').buffer_dir() }) end, 'live grep in %:p:h', },
+
+			p = { '<CMD> Telescope file_browser            <CR>', 'File Browser' },
+			['.'] = { '<CMD> Telescope file_browser cwd=%:p:h  <CR>', 'File Browser' },
+
+			u = { '<CMD> Telescope find_files              <CR>', 'find files' },
+			e = { '<CMD> Telescope find_files   cwd=%:p:h  <CR>', 'find files in %:p:h' },
+
+			k = { '<CMD> Telescope live_grep               <CR>', 'grep' },
+			j = { '<CMD> Telescope live_grep    cwd=%:p:h  <CR>', 'grep in %:p:h' },
+
+			B = { '<CMD> Telescope file_browser theme=dropdown <CR>', 'File Browser (cwd)' },
+			C = { '<CMD> Telescope colorscheme theme=dropdown  <CR>', 'Colorscheme' },
+
 			-- k = { require("telescope.builtin").live_grep, "live grep" },
-			k = { require('telescope').extensions.live_grep_args.live_grep_args, 'live grep' },
-			j = {
-				function()
-					require('telescope.builtin').live_grep({ cwd = require('telescope.utils').buffer_dir() })
-				end,
-				'live grep in %:p:h',
-			},
 			g = {
 				name = 'git',
 				s = {
@@ -738,18 +744,14 @@ require('which-key').register({
 					'commits',
 				},
 			},
-			["'"] = { require('telescope.builtin').marks, 'marks' },
-			[','] = { _cmd('Telescope file_browser path=%:p:h'), 'File Browser' },
-			b = { _cmd('Telescope file_browser theme=dropdown'), 'File Browser (cwd)' },
-			m = { require('telescope.builtin').keymaps, 'keymaps' },
 			-- n = { function() require("trouble").next({ skip_groups = true, jump = true }) end, "Trouble next" },
 			-- p = { function() require("trouble").previous({ skip_groups = true, jump = true }) end, "Trouble prev" },
 			-- c = { _cmd('TroubleClose'), "TroubleClose" },
 			-- C = { require('telescope.builtin').colorscheme({theme='dropdown'}), "Colorscheme"},
-			C = { _cmd('Telescope colorscheme theme=dropdown'), 'Colorscheme' },
 			-- r = { _cmd('TroubleRefresh'), "TroubleRefresh" },
+			["'"] = { require('telescope.builtin').marks, 'marks' },
+			m = { require('telescope.builtin').keymaps, 'keymaps' },
 			r = { require('telescope.builtin').resume, 'resume' },
-			u = { require('telescope.builtin').find_files, 'files' },
 			w = { require('telescope.builtin').lsp_workspace_symbols, 'ws symbols' },
 		},
 

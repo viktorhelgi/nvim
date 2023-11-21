@@ -24,6 +24,8 @@ return require("packer").startup(function(use)
 	use("sainnhe/gruvbox-material")
 	use("rebelot/kanagawa.nvim")
 	use("EdenEast/nightfox.nvim")
+    use("cryptomilk/nightcity.nvim")
+    use("AlexvZyl/nordic.nvim")
 	-- }}}
 	-- {{{ Looks
 	use("nvim-tree/nvim-web-devicons")
@@ -317,4 +319,6 @@ return require("packer").startup(function(use)
     use({
         "folke/todo-comments.nvim"
     })
+
+    -- use("miversen33/sunglasses.nvim")
 end)

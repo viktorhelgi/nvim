@@ -1,0 +1,5 @@
+-- require("sunglasses").setup({
+--     -- filter_type = "TINT"
+--     filter_type = "SHADE"
+--     -- filter_type = "NOSYNTAX"
+-- })

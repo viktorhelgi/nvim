@@ -4,7 +4,7 @@ local root_dir = require('lspconfig').util.root_pattern({
 	'setup.py',
 	'setup.cfg',
 	'venv',
-	'requirements.yml',
+	'requirements.txt',
 	'pyrightconfig.json',
 	'.letsgo',
 })
@@ -14,8 +14,8 @@ require('lspconfig').pyright.setup({
 	on_attach = function(client, _)
 		client.server_capabilities = require('viktor.lsp.capabilities.pyright')
 
-		local handlers = require('viktor.lsp.handlers.pyright')
-		vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(handlers.textDocument.publishDiagnostics, {})
+		-- local handlers = require('viktor.lsp.handlers.pyright')
+		-- vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(handlers.textDocument.publishDiagnostics, {})
 	end,
 	root_dir = root_dir,
 	settings = {
@@ -38,7 +38,7 @@ require('lspconfig').pyright.setup({
 					reportDeprecated = 'information',
 					reportDuplicateImport = 'information',
 					reportFunctionMemberAccess = 'information',
-					reportGeneralTypeIssues = 'error',
+
 					reportImportCycles = 'information',
 					reportIncompatibleVariableOverride = 'information',
 					reportIncompleteStub = 'information',
@@ -111,6 +111,9 @@ require('lspconfig').pyright.setup({
 					-- WHY AM I GETTING THIS ERROR!!!!!
 					-- reportMissingSuperCall = "information",
 					reportMissingSuperCall = 'none',
+
+					-- -- reportGeneralTypeIssues = 'error',
+					-- reportGeneralTypeIssues = 'none',
 				},
 				stubPath = 'typings',
 				typeCheckingMode = 'off', --  ["off", "basic", "strict"]:

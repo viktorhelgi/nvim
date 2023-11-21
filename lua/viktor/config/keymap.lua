@@ -10,12 +10,15 @@ local function _cmd(command)
 	end
 end
 
+vim.cmd("nnoremap <expr> <leader>! ':%s/'.expand('<cword>').'//gn<CR>``'")
+
 -- NORMAL - NOT with LEADER
 require('which-key').register({
 	['<C-h>'] = { '<CMD> wincmd h <CR>', 'left window' },
 	['<C-l>'] = { '<CMD> wincmd l <CR>', 'left window' },
 	['<C-k>'] = { '<CMD> wincmd k <CR>', 'left window' },
 	['<C-j>'] = { '<CMD> wincmd j <CR>', 'left window' },
+	['<C-space>'] = { 'zz', 'center window' },
 
 	["'"] = {
 		name = 'Navigate to',
@@ -30,30 +33,9 @@ require('which-key').register({
 		c = { function() vim.cmd('ClangdSwitchSourceHeader') end, 'clang-switch', },
 		q = { function() vim.cmd('Fcarbon %:p:h')            end, 'fcarbon', },
 		b = {     '<CMD> b# <CR>', 'b#' },
+		r = { '<cmd>A<cr>', 'alt file' },
 		['/'] = { '<CMD> A  <CR>',  'src-test' },
 		-- stylua: ignore end
-		L = {
-			function()
-				local ft = vim.bo.filetype
-				local dir = '~/.config/nvim/lua/viktor/lsp'
-				if 'rust' == ft then
-					vim.cmd('e ' .. dir .. '/rust.lua')
-				elseif 'lua' == ft then
-					vim.cmd('e ' .. dir .. '/lua_ls.lua')
-				elseif 'python' == ft then
-					vim.cmd('e ' .. dir .. '/python.lua')
-				elseif 'typescriptreact' == ft then
-					vim.cmd('e ' .. dir .. '/tsserver.lua')
-				elseif 'cpp' == ft then
-					vim.cmd('e ' .. dir .. '/clangd.lua')
-				elseif 'go' == ft then
-					vim.cmd('e ' .. dir .. '/gopls.lua')
-				elseif 'toml' == ft then
-					vim.cmd('e ' .. dir .. '/toml.lua')
-				end
-			end,
-			'got to config',
-		},
 		C = {
 			function()
 				local ft = vim.bo.filetype
@@ -78,7 +60,59 @@ require('which-key').register({
 			end,
 			'goto cmp',
 		},
+		L = {
+			function()
+				local ft = vim.bo.filetype
+				local dir = '~/.config/nvim/lua/viktor/lsp'
+				if 'rust' == ft then
+					vim.cmd('e ' .. dir .. '/rust.lua')
+				elseif 'lua' == ft then
+					vim.cmd('e ' .. dir .. '/lua_ls.lua')
+				elseif 'python' == ft then
+					vim.cmd('e ' .. dir .. '/python.lua')
+				elseif 'typescriptreact' == ft then
+					vim.cmd('e ' .. dir .. '/tsserver.lua')
+				elseif 'cpp' == ft then
+					vim.cmd('e ' .. dir .. '/clangd.lua')
+				elseif 'go' == ft then
+					vim.cmd('e ' .. dir .. '/gopls.lua')
+				elseif 'toml' == ft then
+					vim.cmd('e ' .. dir .. '/toml.lua')
+				end
+			end,
+			'got to config',
+		},
+		M = {
+			function()
+				local ft = vim.bo.filetype
+				local dir = '~/.config/nvim/lua/viktor/config/keymaps'
+				if 'rust' == ft then
+					vim.cmd('e ' .. dir .. '/rust.lua')
+				elseif 'lua' == ft then
+					vim.cmd('e ' .. dir .. '/lua.lua')
+				elseif 'python' == ft then
+					vim.cmd('e ' .. dir .. '/python.lua')
+				elseif 'typescriptreact' == ft then
+					vim.cmd('e ' .. dir .. '/typescriptreact.lua')
+				elseif 'cpp' == ft then
+					vim.cmd('e ' .. dir .. '/cpp.lua')
+				elseif 'go' == ft then
+					vim.cmd('e ' .. dir .. '/go.lua')
+				elseif 'toml' == ft then
+					vim.cmd('e ' .. dir .. '/toml.lua')
+				end
+			end,
+			'gt ft-keymaps',
+		},
 	},
+
+    -- stylua: ignore start
+    m = {
+        ['L'] = { function() vim.print('mark L is binded') end, "notify" },
+        ['C'] = { function() vim.print('mark C is binded') end, "notify" },
+        ['M'] = { function() vim.print('mark M is binded') end, "notify" },
+    },
+	-- stylua: ignore end
 
 	[']'] = {
 		name = 'Goto Next',
@@ -123,6 +157,13 @@ require('which-key').register({
 		},
 		q = { _cmd('cclose'), 'close' },
 		s = { vim.lsp.buf.signature_help, 'signature_help' },
+		l = {
+			function()
+				require('harpoon.tmux').sendCommand('!', '^p')
+				require('harpoon.tmux').sendCommand('!', '\r')
+			end,
+			'last cmd',
+		},
 	},
 
 	d = {
@@ -178,6 +219,7 @@ require('which-key').register({
 		['|'] = { '<CMD> messages                                         <CR>', 'messages' },
 		[','] = { '<CMD> Telescope file_browser path=%:p:h theme=dropdown <CR>', 'File Browser' },
 		['-'] = { '<CMD> b#                                               <CR>', 'b#' },
+        -- ['!'] = { "<CMD> %s/'.expand('<cword>').'//gn<CR>`` <CR", "ss"},
 		q = { '<CMD> q          <CR>', 'quit' },
 		Q = { '<CMD> confirm qa <CR>', 'quit-all' },
 		G = { '<CMD> Git        <CR>', 'Git' },
@@ -187,6 +229,15 @@ require('which-key').register({
 
 		-- a = { },
 		-- b = { },
+
+		b = {
+			name = 'b',
+			c = { '<CMD> hi normal guibg=none <CR>', 'be cool' },
+			o = {
+				'<CMD> hi Normal guibg=none <CR>',
+				'background off',
+			},
+		},
 
 		c = {
 			name = 'lists',

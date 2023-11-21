@@ -1,4 +1,3 @@
-
 local _on_attach = function(_, _)
 	-- require("viktor.config.plugin.neotest").on_attach(client, bufnr)
 
@@ -19,5 +18,12 @@ local _on_attach = function(_, _)
 end
 
 require('lspconfig').pylyzer.setup({
-	filetypes = { 'python', 'py' },
+	settings = {
+		python = {
+			checkOnType = false,
+			diagnostics = true,
+			inlayHints = true,
+			smartCompletion = true,
+		},
+	},
 })

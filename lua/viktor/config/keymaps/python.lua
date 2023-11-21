@@ -36,7 +36,15 @@ RegisterFTKeymaps.Python = function()
 	vim.cmd('set colorcolumn=88')
 
 	require('which-key').register({
+        K = { vim.lsp.buf.hover, "hover"},
 		['<leader>'] = {
+            l = {
+                name = "lsp",
+                a = {
+                    "<CMD> lua vim.lsp.buf.code_action()  <CR>",
+                    "code-action"
+                }
+            },
 			r = {
 				name = 'ft:Run',
 				a = {

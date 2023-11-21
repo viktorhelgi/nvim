@@ -88,6 +88,9 @@ vim.api.nvim_set_var('_previous_command', 'echo "No command has been executed"')
 -- https://github.com/rcarriga/vim-ultest
 -- g.ultest_use_pty = 1
 cmd('let test#python#runner = \'pytest\'')
+vim.cmd([[
+let test#python#rspec#options = { 'nearest': '-s'}
+]])
 cmd('let g:test#preserve_screen = 1')
 -- cmd('let test#strategy = "harpoon"')
 -- cmd('let g:test#harpoon_term = 1')

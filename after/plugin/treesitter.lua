@@ -1,9 +1,8 @@
-local ts_config = require("nvim-treesitter.configs")
-
+local ts_config = require('nvim-treesitter.configs')
 
 ts_config.setup({
 	-- A list of parser names, or "all"
-	ensure_installed = { "lua", "python", "cpp", "fish", "rust", "typescript", "tsx" , "bash"},
+	ensure_installed = { 'lua', 'python', 'cpp', 'fish', 'rust', 'typescript', 'tsx', 'bash' },
 	--
 	-- parser_install_dir = "/home/viktor/.config/treesitter/parsers",
 
@@ -30,74 +29,74 @@ ts_config.setup({
 		additional_vim_regex_highlighting = false,
 	},
 	indent = {
-		enable = { "tsx", "typescript" },
+		enable = { 'tsx', 'typescript' },
+		disable = { 'cpp' },
 	},
 	-- #########################################
 	-- Viktor Configs
 	textobjects = {
 		move = {
 			selection_modes = {
-				["@parameter.outer"] = "v", -- charwise
-				["@function.inner"] = "V", -- linewise
-				["@class.outer"] = "V", -- blockwise
+				['@parameter.outer'] = 'v', -- charwise
+				['@function.inner'] = 'V', -- linewise
+				['@class.outer'] = 'V', -- blockwise
 			},
 			enable = true,
 			set_jumps = true,
 			goto_next_start = {
-				["]n"] = "@number.inner",
-				["]a"] = "@assignment.rhs",
+				[']n'] = '@number.inner',
+				[']a'] = '@assignment.rhs',
 				-- ["]al"] = "@assignment.rhs",
-				["]r"] = "@return.inner",
-				["]p"] = "@parameter.inner",
-				["]f"] = "@function.outer",
-				["]c"] = "@class.outer",
-				["]im"] = "@function.inner",
-				["]ic"] = "@class.inner",
+				[']r'] = '@return.inner',
+				[']p'] = '@parameter.inner',
+				[']f'] = '@function.outer',
+				[']c'] = '@class.outer',
+				[']im'] = '@function.inner',
+				[']ic'] = '@class.inner',
 			},
 			goto_next_end = {
-				["]R"] = "@return.inner",
-				["]F"] = "@function.outer",
-				["]C"] = "@class.outer",
-				["]iM"] = "@function.inner",
-				["]iC"] = "@class.inner",
+				[']R'] = '@return.inner',
+				[']F'] = '@function.outer',
+				[']C'] = '@class.outer',
+				[']iM'] = '@function.inner',
+				[']iC'] = '@class.inner',
 			},
 			goto_previous_start = {
-				["[n"] = "@number.inner",
-				["[a"] = "@assignment.lhs",
+				['[n'] = '@number.inner',
+				['[a'] = '@assignment.lhs',
 				-- ["[al"] = "@assignment.rhs",
-				["[r"] = "@return.inner",
-				["[p"] = "@parameter.inner",
-				["[f"] = "@function.outer",
-				["[c"] = "@class.outer",
-				["[im"] = "@function.inner",
-				["[ic"] = "@class.inner",
+				['[r'] = '@return.inner',
+				['[p'] = '@parameter.inner',
+				['[f'] = '@function.outer',
+				['[c'] = '@class.outer',
+				['[im'] = '@function.inner',
+				['[ic'] = '@class.inner',
 			},
 			goto_previous_end = {
-				["[R"] = "@return.inner",
-				["[F"] = "@function.outer",
-				["[C"] = "@class.outer",
-				["[iM"] = "@function.inner",
-				["[iC"] = "@class.inner",
+				['[R'] = '@return.inner',
+				['[F'] = '@function.outer',
+				['[C'] = '@class.outer',
+				['[iM'] = '@function.inner',
+				['[iC'] = '@class.inner',
 			},
 		},
 		swap = {
 			enable = true,
-			swap_previous = { ["[m"] = "@parameter.inner" },
-			swap_next = { ["]m"] = "@parameter.inner" },
+			swap_previous = { ['[m'] = '@parameter.inner' },
+			swap_next = { [']m'] = '@parameter.inner' },
 		},
 		lsp_interop = {
 			enable = true,
-			border = "single",
+			border = 'single',
 			peek_definition_code = {
 				-- ["<leader>pd"] = "@function.outer",
-				["<leader>lh"] = "@function.outer",
+				['<leader>lh'] = '@function.outer',
 				-- ["gp"] = "@function.outer",
-				["<leader>lc"] = "@class.outer",
+				['<leader>lc'] = '@class.outer',
 			},
 		},
 	},
 })
-
 
 -- Repeat movement with ; and ,
 -- ensure ; goes forward and , goes backward regardless of the last direction

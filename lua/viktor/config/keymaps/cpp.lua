@@ -2,6 +2,8 @@ vim.cmd([[
     autocmd FileType cpp lua RegisterFTKeymaps.Cpp()
 ]])
 
+local CMAKE_BUILD_TYPE = "TESTING"
+
 RegisterFTKeymaps.Cpp = function()
 	vim.cmd('set colorcolumn=102')
 
@@ -13,6 +15,37 @@ RegisterFTKeymaps.Cpp = function()
 					vim.cmd('TSTextobjectPeekDefinitionCode @function.inner')
 				end,
 				'peek definition',
+			},
+		},
+		c = {
+			['*'] = {
+				function()
+					vim.cmd('Task start cmake build')
+				end,
+				'cmake build',
+			},
+			['b'] = {
+				function()
+					local items = {
+						'normal',
+						'vcpkg',
+					}
+					vim.ui.select(items, {
+						prompt = 'Select Build',
+					}, function(tg)
+						local cmd
+						if tg == 'normal' then
+							cmd =
+								'cmake -B build -S . -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE='..CMAKE_BUILD_TYPE..' -DENABLE_TIME_CONSUMING_TESTS=OFF'
+						elseif tg == 'vcpkg' then
+							cmd =
+								'cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=/home/viktorhg/git-repos/vcpkg/scripts/buildsystems/vcpkg.cmake'
+						end
+						require('harpoon.tmux').sendCommand('1', '^c')
+						require('harpoon.tmux').sendCommand('!', cmd .. '\r')
+					end)
+				end,
+				'build',
 			},
 		},
 		['<leader>'] = {
@@ -45,9 +78,10 @@ RegisterFTKeymaps.Cpp = function()
 							local cmd
 							if tg == 'normal' then
 								cmd =
-									'cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=/home/viktorhg/git-repos/vcpkg/scripts/buildsystems/vcpkg.cmake'
+									'cmake -B build -S . -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE='..CMAKE_BUILD_TYPE..' -DENABLE_TIME_CONSUMING_TESTS=OFF'
 							elseif tg == 'vcpkg' then
-								cmd = 'cmake -B build -S . -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=DEBUG'
+								cmd =
+									'cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=/home/viktorhg/git-repos/vcpkg/scripts/buildsystems/vcpkg.cmake'
 							end
 							require('harpoon.tmux').sendCommand('1', '^c')
 							require('harpoon.tmux').sendCommand('!', cmd .. '\r')
@@ -93,8 +127,7 @@ RegisterFTKeymaps.Cpp = function()
 		                require("cpp_test").run_test(vim.fn.expand("%:p"))
                     end,
                     "test file"
-                }
-,
+                },
 
 				-- stylua: ignore end
 			},

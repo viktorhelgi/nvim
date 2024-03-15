@@ -3,7 +3,7 @@ vim.cmd([[
 ]])
 
 local rust = {
-	build_settings = '--release --features dev',
+	build_settings = '--release --features mk2-prod',
 }
 
 RegisterFTKeymaps.RustKeyBindings = function()

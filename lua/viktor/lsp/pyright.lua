@@ -22,7 +22,7 @@ require('lspconfig').pyright.setup({
 		pyright = {
 			disableLanguageServices = false,
 			disableOrganizeImports = false,
-			pythonVersion = '3.9',
+			pythonVersion = '3.12',
 		},
 		python = {
 			analysis = {

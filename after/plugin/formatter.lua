@@ -41,13 +41,30 @@ require("formatter").setup {
             end
         },
         json = {
-            require('formatter.filetypes.json').fixjson
+            require('formatter.filetypes.json').prettier
         },
+        proto = function()
+            -- return {
+            --     exe = "sqlfmt --dialect polyglot -",
+            --     stdin = true
+            -- }
+            -- return {
+            --     exe = "sqlfluff format --dialect bigquery "..vim.fn.expand('%'),
+            --     stdin = false,
+            -- }
+            return {
+                exe = "buf format",
+                stdin = true
+            }
+        end,
         javascript = {
             require('formatter.filetypes.javascriptreact').prettier
         },
         typescriptreact = {
             require('formatter.filetypes.typescript').prettier
+        },
+        go = {
+            require('formatter.filetypes.go').gofmt
         },
         cpp = {
             require('formatter.filetypes.cpp').clangformat

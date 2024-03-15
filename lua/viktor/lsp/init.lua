@@ -1,5 +1,6 @@
 return {
 	require('viktor.lsp.clangd'),
+	require('viktor.lsp.bufls'),
 	require('viktor.lsp.cmake'),
 	require('viktor.lsp.custom-elements-languageserver'),
 	require('viktor.lsp.eslint'),

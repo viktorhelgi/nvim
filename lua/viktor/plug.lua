@@ -289,7 +289,7 @@ return require("packer").startup(function(use)
 
 	-- MINIS
 	use({ "echasnovski/mini.cursorword", branch = "stable" })
-	use({ "echasnovski/mini.files" })
+	-- use({ "echasnovski/mini.files" })
 	use({ "echasnovski/mini.map", branch = "stable" })
 
 	-- GO

@@ -20,7 +20,8 @@ RegisterFTKeymaps.Cpp = function()
 		c = {
 			['*'] = {
 				function()
-					vim.cmd('Task start cmake build')
+					vim.cmd('Task start cmake build -- -j 12')
+                    -- cmake --build build -- -j $(nproc)
 				end,
 				'cmake build',
 			},
@@ -124,11 +125,12 @@ RegisterFTKeymaps.Cpp = function()
 
                 n = {
                     function()
-		                require("cpp_test").run_test(vim.fn.expand("%:p"))
+		                require("cpp_test").run_test2(vim.fn.expand("%:p"))
                     end,
                     "test file"
                 },
 
+                l = { require('cpp_test').run_last, "last command" }
 				-- stylua: ignore end
 			},
 		},

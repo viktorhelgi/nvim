@@ -419,6 +419,12 @@ require('which-key').register({
 					'manual',
 				},
 			},
+            F = {
+                function()
+                    vim.print(vim.fn.expand('%:p'))
+                end,
+                "print file name"
+            },
 			h = {
 				function()
 					vim.cmd('set hlsearch!')
@@ -610,17 +616,7 @@ require('which-key').register({
 		},
 
 		m = {
-			name = 'Mini',
-			o = {
-				require('mini.files').open,
-				'Files Open',
-			},
-			[','] = {
-				function()
-					require('mini.files').open(vim.fn.expand('%'))
-				end,
-				'Files Open (file)',
-			},
+			name = 'Mni',
 			t = {
 				require('mini.map').toggle,
 				'Map toggle',

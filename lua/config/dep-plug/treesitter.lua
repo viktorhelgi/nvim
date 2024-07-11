@@ -1,11 +1,48 @@
 local ts_config = require('nvim-treesitter.configs')
 
-
-vim.keymap.set('n', 'ga', ":TSTextobjectRepeatLastMove<CR>", {})
+vim.keymap.set('n', 'ga', ':TSTextobjectRepeatLastMove<CR>', {})
 
 ts_config.setup({
 	-- A list of parser names, or "all"
-	ensure_installed = { 'lua', 'python', 'cpp', 'fish'},
+	ensure_installed = {
+		'bash',
+		'c',
+		'cmake',
+		'cpp',
+		'css',
+		'dockerfile',
+		'doxygen',
+		'fish',
+		'git_config',
+		'git_rebase',
+		'gitcommit',
+		'gitignore',
+		'go',
+		'gomod',
+		'javascript',
+		'jq',
+		'json',
+		'lua',
+		'luadoc',
+		'make',
+		'markdown',
+		'markdown_inline',
+		'norg',
+		'python',
+		'query',
+		'requirements',
+		'rust',
+		'scss',
+		'sql',
+		'tmux',
+		'toml',
+		'tsx',
+		'typescript',
+		'vim',
+		'vimdoc',
+		'vue',
+		'yaml',
+	},
 
 	-- Install languages synchronously (only applied to `ensure_installed`)
 	sync_install = true,
@@ -29,54 +66,54 @@ ts_config.setup({
 	-- #########################################
 	-- Viktor Configs
 	textobjects = {
-        move = {
-            enable = true,
-            set_jumps = true,
-            goto_next_start = {
-              ["]n"] = "@number.inner",
-              ["]ah"] = "@assignment.lhs",
-              ["]al"] = "@assignment.rhs",
-              ["]r"] = "@return.inner",
-              ["]p"] = "@parameter.inner",
-              ["]m"] = "@function.outer",
-              ["]c"] = "@class.outer",
-              ["]im"] = "@function.inner",
-              ["]ic"] = "@class.inner",
-            },
-            goto_next_end = {
-              ["]R"] = "@return.inner",
-              ["]M"] = "@function.outer",
-              ["]C"] = "@class.outer",
-              ["]iM"] = "@function.inner",
-              ["]iC"] = "@class.inner",
-            },
-            goto_previous_start = {
-              ["[n"] = "@number.inner",
-              ["[ah"] = "@assignment.lhs",
-              ["[al"] = "@assignment.rhs",
-              ["[r"] = "@return.inner",
-              ["[p"] = "@parameter.inner",
-              ["[m"] = "@function.outer",
-              ["[c"] = "@class.outer",
-              ["[im"] = "@function.inner",
-              ["[ic"] = "@class.inner",
-            },
-            goto_previous_end = {
-              ["[R"] = "@return.inner",
-              ["[M"] = "@function.outer",
-              ["[C"] = "@class.outer",
-              ["[iM"] = "@function.inner",
-              ["[iC"] = "@class.inner",
-            },
-        },
+		move = {
+			enable = true,
+			set_jumps = true,
+			goto_next_start = {
+				[']n'] = '@number.inner',
+				[']ah'] = '@assignment.lhs',
+				[']al'] = '@assignment.rhs',
+				[']r'] = '@return.inner',
+				[']p'] = '@parameter.inner',
+				[']m'] = '@function.outer',
+				[']c'] = '@class.outer',
+				[']im'] = '@function.inner',
+				[']ic'] = '@class.inner',
+			},
+			goto_next_end = {
+				[']R'] = '@return.inner',
+				[']M'] = '@function.outer',
+				[']C'] = '@class.outer',
+				[']iM'] = '@function.inner',
+				[']iC'] = '@class.inner',
+			},
+			goto_previous_start = {
+				['[n'] = '@number.inner',
+				['[ah'] = '@assignment.lhs',
+				['[al'] = '@assignment.rhs',
+				['[r'] = '@return.inner',
+				['[p'] = '@parameter.inner',
+				['[m'] = '@function.outer',
+				['[c'] = '@class.outer',
+				['[im'] = '@function.inner',
+				['[ic'] = '@class.inner',
+			},
+			goto_previous_end = {
+				['[R'] = '@return.inner',
+				['[M'] = '@function.outer',
+				['[C'] = '@class.outer',
+				['[iM'] = '@function.inner',
+				['[iC'] = '@class.inner',
+			},
+		},
 		lsp_interop = {
 			enable = true,
 			border = 'none',
 			peek_definition_code = {
 				-- ["<leader>pd"] = "@function.outer",
-				["<leader>pm"] = "@function.outer",
-				["<leader>pc"] = "@class.outer"
-			}
-		}
+				['<leader>pm'] = '@function.outer',
+				['<leader>pc'] = '@class.outer',
+			},
+		},
 	},
 })

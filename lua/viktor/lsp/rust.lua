@@ -54,8 +54,8 @@ rust_tools.setup({
 		checkOnSave = {
 			enable = true,
 		},
-		cmd = { '/home/viktorhg/git-repos/ra-multiplex/target/release/ra-multiplex', 'client' },
-		-- cmd = {"rust-analyzer"},
+		-- cmd = { '/home/viktorhg/git-repos/ra-multiplex/target/release/ra-multiplex', 'client' },
+		cmd = {"rust-analyzer"},
 		handlers = {
 			-- vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' })
 			-- vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })

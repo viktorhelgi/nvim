@@ -18,6 +18,7 @@ local _on_attach = function(_, _)
 end
 
 require('lspconfig').pylyzer.setup({
+    cmd = { "pylyzer", "--stdio" },
 	settings = {
 		python = {
 			checkOnType = false,

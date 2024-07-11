@@ -263,7 +263,7 @@ M.run_test = function(file, with_valgrind)
 			.. build_dir
 			.. ' && cd '
 			.. exe_dir
-			.. '&& make '
+			.. '&& make -j12 '
 			.. exe_name
 			.. '&& ./'
 			.. exe_name
@@ -324,7 +324,7 @@ M.run_test2 = function(file)
 		.. '&& cd '
 		.. vim.fn.fnamemodify(exe_relative_path, ':p:h')
 		.. ' '
-		.. '&& make '
+		.. '&& make -j12 '
 		.. exe_name
 		.. ' '
 		.. '&& ./'
@@ -337,13 +337,27 @@ M.run_test2 = function(file)
 	tmux.sendCommand('!', M._last_cmd)
 end
 
+M.run_file = function(file_abs_path)
+	local file = vim.fn.fnamemodify(file_abs_path, ':t')
+	local exe = vim.fn.fnamemodify(file_abs_path, ':t:r')
+	M._last_cmd = 'g++ -o '
+        .. exe
+        .. ' '
+        .. file
+        .. ' && ./' .. exe
+        .. '\r'
+
+	tmux.sendCommand('1', '^c')
+	tmux.sendCommand('!', M._last_cmd)
+end
+
 M.run_last = function()
-    if M._last_cmd ~= nil then
-        tmux.sendCommand('1', '^c')
-        tmux.sendCommand('!', M._last_cmd)
-    else
-        print("No command has been executed")
-    end
+	if M._last_cmd ~= nil then
+		tmux.sendCommand('1', '^c')
+		tmux.sendCommand('!', M._last_cmd)
+	else
+		print('No command has been executed')
+	end
 end
 
 -- M.run_test2('/home/viktorhg/hm/embedded/frontpub/tests/alerts/test_config.cpp')

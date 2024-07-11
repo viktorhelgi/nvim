@@ -34,7 +34,8 @@ require('lspconfig').pyright.setup({
 				diagnosticSeverityOverrides = {
 					reportAssertAlwaysTrue = 'warning',
 					reportCallInDefaultInitializer = 'information',
-					reportConstantRedefinition = 'information',
+					-- reportConstantRedefinition = 'information',
+					reportConstantRedefinition = 'none',
 					reportDeprecated = 'information',
 					reportDuplicateImport = 'information',
 					reportFunctionMemberAccess = 'information',
@@ -82,7 +83,10 @@ require('lspconfig').pyright.setup({
 					reportUntypedClassDecorator = 'information',
 					reportUntypedFunctionDecorator = 'information',
 					reportUntypedNamedTuple = 'information',
-					reportUnusedCallResult = 'information',
+
+					-- reportUnusedCallResult = 'information',
+					reportUnusedCallResult = 'none',
+
 					reportUnusedClass = 'information',
 					reportUnusedCoroutine = 'information',
 					reportUnusedExpression = 'information',
@@ -116,7 +120,7 @@ require('lspconfig').pyright.setup({
 					-- reportGeneralTypeIssues = 'none',
 				},
 				stubPath = 'typings',
-				typeCheckingMode = 'off', --  ["off", "basic", "strict"]:
+				typeCheckingMode = 'on', --  ["off", "basic", "strict"]:
 				typeshedPaths = {},
 				useLibraryCodeForTypes = true,
 				-- stubPath = "/home/viktor/hm/rust-main/fetch-data/stubs",

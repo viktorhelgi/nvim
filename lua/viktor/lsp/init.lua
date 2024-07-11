@@ -9,6 +9,7 @@ return {
 	require('viktor.lsp.neodev'),
 	require('viktor.lsp.rust'),
 	require('viktor.lsp.python'),
+	require('viktor.lsp.vue'),
 	require('viktor.lsp.tailwindcss'),
 	require('viktor.lsp.toml'),
 	require('viktor.lsp.tsserver'),

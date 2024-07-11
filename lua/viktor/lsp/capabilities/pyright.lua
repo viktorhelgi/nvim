@@ -100,10 +100,10 @@ return {
 	referencesProvider = {
 		workDoneProgress = true,
 	},
-	-- renameProvider = {
-	-- 	prepareProvider = true,
-	-- 	workDoneProgress = true,
-	-- },
+	renameProvider = {
+		prepareProvider = true,
+		workDoneProgress = true,
+	},
 	signatureHelpProvider = {
 		triggerCharacters = { "(", ",", ")" },
 		workDoneProgress = true,

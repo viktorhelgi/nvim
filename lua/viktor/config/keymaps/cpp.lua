@@ -2,7 +2,7 @@ vim.cmd([[
     autocmd FileType cpp lua RegisterFTKeymaps.Cpp()
 ]])
 
-local CMAKE_BUILD_TYPE = "TESTING"
+local CMAKE_BUILD_TYPE = 'TESTING'
 
 RegisterFTKeymaps.Cpp = function()
 	vim.cmd('set colorcolumn=102')
@@ -21,7 +21,7 @@ RegisterFTKeymaps.Cpp = function()
 			['*'] = {
 				function()
 					vim.cmd('Task start cmake build -- -j 12')
-                    -- cmake --build build -- -j $(nproc)
+					-- cmake --build build -- -j $(nproc)
 				end,
 				'cmake build',
 			},
@@ -36,8 +36,9 @@ RegisterFTKeymaps.Cpp = function()
 					}, function(tg)
 						local cmd
 						if tg == 'normal' then
-							cmd =
-								'cmake -B build -S . -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE='..CMAKE_BUILD_TYPE..' -DENABLE_TIME_CONSUMING_TESTS=OFF'
+							cmd = 'cmake -B build -S . -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE='
+								.. CMAKE_BUILD_TYPE
+								.. ' -DENABLE_TIME_CONSUMING_TESTS=OFF'
 						elseif tg == 'vcpkg' then
 							cmd =
 								'cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=/home/viktorhg/git-repos/vcpkg/scripts/buildsystems/vcpkg.cmake'
@@ -78,8 +79,9 @@ RegisterFTKeymaps.Cpp = function()
 						}, function(tg)
 							local cmd
 							if tg == 'normal' then
-								cmd =
-									'cmake -B build -S . -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE='..CMAKE_BUILD_TYPE..' -DENABLE_TIME_CONSUMING_TESTS=OFF'
+								cmd = 'cmake -B build -S . -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE='
+									.. CMAKE_BUILD_TYPE
+									.. ' -DENABLE_TIME_CONSUMING_TESTS=OFF'
 							elseif tg == 'vcpkg' then
 								cmd =
 									'cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=/home/viktorhg/git-repos/vcpkg/scripts/buildsystems/vcpkg.cmake'
@@ -91,6 +93,28 @@ RegisterFTKeymaps.Cpp = function()
 					'build',
 				},
 			},
+			f = {
+				name = 'fold',
+				i = {
+					function()
+						-- vim.cmd(':setlocal foldmarker=#ifdef,#endif')
+						vim.cmd(':setlocal foldmarker=#if,#endif')
+						vim.cmd(':set foldmethod=marker')
+					end,
+					"fold 'ifdef'..",
+				},
+			},
+            m = {
+                name = "man",
+                o = {
+                    function() require('cppman').open_cppman_for(vim.fn.expand('<cword>')) end,
+                    "open cppman for word under cursor"
+                },
+                i = {
+                    function() require('cppman').input() end,
+                    "open cppman for input"
+                }
+            },
 			p = {
 				function()
 					local file_relpath = vim.fn.expand('%:r')
@@ -114,14 +138,13 @@ RegisterFTKeymaps.Cpp = function()
                     function() vim.cmd("Task start cmake configure") end,
                     "cmake configure"
                 },
+                f = {
+                    function() 
+		                require("cpp_test").run_file(vim.fn.expand("%:p"))
+                    end,
+                    "file: g++ -o file file.cpp && ./file"
+                },
 
-				f = {
-					function()
-						vim.cmd(':setlocal foldmarker=#ifdef,#endif')
-						vim.cmd(':set foldmethod=marker')
-					end,
-					"fold 'ifdef'..",
-				},
 
                 n = {
                     function()
@@ -131,6 +154,7 @@ RegisterFTKeymaps.Cpp = function()
                 },
 
                 l = { require('cpp_test').run_last, "last command" }
+,
 				-- stylua: ignore end
 			},
 		},

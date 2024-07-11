@@ -23,5 +23,5 @@ if not configs.ruff_lsp then
 end
 
 require('lspconfig').ruff_lsp.setup({
-	root_dir = root_dir,
+	-- root_dir = root_dir,
 })

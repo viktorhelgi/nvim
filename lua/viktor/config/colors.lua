@@ -9,12 +9,12 @@ function ColorMyPencils(color)
     -- color = color or "kanagawa-dragon"
     color = color or "nightfox"
     -- color = color or "catppuccin-macchiato"
+    -- color = color or "catppuccin"
     -- color = color or "gruvbox-material"
 
     vim.cmd('set background=dark')
 	vim.cmd("colorscheme "..color)
-
-    vim.cmd("hi Normal guibg=none")
+    -- vim.cmd("hi Normal guibg=none")
 
     -- if color == 'nightfox' then
 	   --  vim.api.nvim_set_hl(0, "MiniCursorword", { underline=true})

@@ -217,7 +217,13 @@ require('which-key').register({
 	['<leader>'] = {
 		name = 'Leader',
 		['|'] = { '<CMD> messages                                         <CR>', 'messages' },
-		[','] = { '<CMD> Telescope file_browser path=%:p:h theme=dropdown <CR>', 'File Browser' },
+
+		[','] = { '<CMD> Telescope file_browser theme=dropdown path=%:p:h <CR>', 'File Browser' },
+		['.'] = { '<CMD> Telescope file_browser theme=dropdown <CR>', 'File Browser' },
+
+        ['<'] = { '<CMD> Telescope file_browser cwd=%:p:h <CR>', 'File Browser' },
+        ['>'] = { '<CMD> Telescope file_browser <CR>', 'File Browser' },
+
 		['-'] = { '<CMD> b#                                               <CR>', 'b#' },
         -- ['!'] = { "<CMD> %s/'.expand('<cword>').'//gn<CR>`` <CR", "ss"},
 		q = { '<CMD> q          <CR>', 'quit' },
@@ -758,7 +764,9 @@ require('which-key').register({
 			-- j = { function() require('telescope.builtin').live_grep({ cwd = require('telescope.utils').buffer_dir() }) end, 'live grep in %:p:h', },
 
 			p = { '<CMD> Telescope file_browser            <CR>', 'File Browser' },
-			['.'] = { '<CMD> Telescope file_browser cwd=%:p:h  <CR>', 'File Browser' },
+
+			[','] = { '<CMD> Telescope file_browser cwd=%:p:h <CR>', 'File Browser' },
+			['.'] = { '<CMD> Telescope file_browser <CR>', 'File Browser' },
 
 			u = { '<CMD> Telescope find_files              <CR>', 'find files' },
 			e = { '<CMD> Telescope find_files   cwd=%:p:h  <CR>', 'find files in %:p:h' },

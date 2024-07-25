@@ -14,6 +14,12 @@ require('lspconfig').pyright.setup({
 	on_attach = function(client, _)
 		client.server_capabilities = require('viktor.lsp.capabilities.pyright')
 
+		-- vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
+		-- 	callback = function()
+		-- 		require('lint').try_lint()
+		-- 	end,
+		-- })
+
 		-- local handlers = require('viktor.lsp.handlers.pyright')
 		-- vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(handlers.textDocument.publishDiagnostics, {})
 	end,

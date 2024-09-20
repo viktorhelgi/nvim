@@ -1,5 +1,7 @@
 vim.o.pumblend = 0
 vim.o.winblend = 0
+
+-- vim.g.python_host_prog='/home/viktorhg/.local/share/hatch/env/virtual/hefringdata/UHrmTeWw/migrate/bin/python3'
 require('viktor')
 
 require('fidget').setup({})

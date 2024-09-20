@@ -343,6 +343,8 @@ return require('packer').startup(function(use)
 		end,
 	})
 
+    use({"benlubas/molten-nvim" })
+
 	-- use({ 'niuiic/core' })
 	-- use({ 'niuiic/quickfix.nvim' })
 

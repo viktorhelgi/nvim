@@ -33,10 +33,12 @@ RegisterFTKeymaps.Python = function()
 
 	-- require('viktor.config.plugin.neotest').on_attach('python', 0)
 	require('lsp_signature').on_attach(require('viktor.config.plugin.lsp_signature_configs'), bufnr)
-	vim.cmd('set colorcolumn=88')
+	vim.cmd('set colorcolumn=89')
 
 	require('which-key').register({
         K = { vim.lsp.buf.hover, "hover"},
+
+
 		['<leader>'] = {
             l = {
                 name = "lsp",
@@ -45,6 +47,12 @@ RegisterFTKeymaps.Python = function()
                     "code-action"
                 }
             },
+            -- m = {
+            --     name = "molten",
+            --     r = {
+            --         "<CMD> Molten"
+            --     }
+            -- },
 			r = {
 				name = 'ft:Run',
 				a = {

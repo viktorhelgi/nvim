@@ -26,36 +26,36 @@ rust_tools.setup({
 	server = {
 		capabilities = _get_capabilites(),
 		on_attach = my_on_attach,
-		settings = {
-			['rust-analyzer'] = {
-				cargo = {
-					autoReload = true,
-					features = {
-						'dev',
-					},
-				},
-				procMacro = {
-					enable = false,
-				},
-				diagnostics = {
-					enable = false,
-					disabled = { 'unresolved-proc-macro' },
-				},
-				check = {
-					command = 'clippy',
-					-- extraArgs = { },
-				},
-				checkOnSave = {
-					command = 'clippy',
-				},
-			},
-		},
+		-- settings = {
+		-- 	['rust-analyzer'] = {
+		-- 		cargo = {
+		-- 			autoReload = true,
+		-- 			features = {
+		-- 				'dev',
+		-- 			},
+		-- 		},
+		-- 		procMacro = {
+		-- 			enable = false,
+		-- 		},
+		-- 		diagnostics = {
+		-- 			enable = false,
+		-- 			disabled = { 'unresolved-proc-macro' },
+		-- 		},
+		-- 		check = {
+		-- 			command = 'clippy',
+		-- 			-- extraArgs = { },
+		-- 		},
+		-- 		checkOnSave = {
+		-- 			command = 'clippy',
+		-- 		},
+		-- 	},
+		-- },
 		filetypes = { 'rust', 'rs' },
 		checkOnSave = {
 			enable = true,
 		},
-		cmd = { '/home/viktorhg/git-repos/ra-multiplex/target/release/ra-multiplex', 'client' },
-		-- cmd = {"rust-analyzer"},
+		-- cmd = { '/home/viktorhg/git-repos/ra-multiplex/target/release/ra-multiplex', 'client' },
+		cmd = {"rust-analyzer"},
 		handlers = {
 			-- vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' })
 			-- vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })

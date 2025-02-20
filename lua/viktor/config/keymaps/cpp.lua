@@ -93,6 +93,10 @@ RegisterFTKeymaps.Cpp = function()
 					'build',
 				},
 			},
+			l = {
+				name = 'lsp',
+				a = { vim.lsp.buf.code_action, 'code action' },
+			},
 			f = {
 				name = 'fold',
 				i = {
@@ -104,17 +108,21 @@ RegisterFTKeymaps.Cpp = function()
 					"fold 'ifdef'..",
 				},
 			},
-            m = {
-                name = "man",
-                o = {
-                    function() require('cppman').open_cppman_for(vim.fn.expand('<cword>')) end,
-                    "open cppman for word under cursor"
-                },
-                i = {
-                    function() require('cppman').input() end,
-                    "open cppman for input"
-                }
-            },
+			m = {
+				name = 'man',
+				o = {
+					function()
+						require('cppman').open_cppman_for(vim.fn.expand('<cword>'))
+					end,
+					'open cppman for word under cursor',
+				},
+				i = {
+					function()
+						require('cppman').input()
+					end,
+					'open cppman for input',
+				},
+			},
 			p = {
 				function()
 					local file_relpath = vim.fn.expand('%:r')

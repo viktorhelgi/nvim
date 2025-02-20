@@ -212,11 +212,11 @@ return require('packer').startup(function(use)
 		'kosayoda/nvim-lightbulb',
 		requires = 'antoinemadec/FixCursorHold.nvim',
 	})
-	use({
-		'weilbith/nvim-code-action-menu',
-		cmd = 'CodeActionMenu',
-	})
-	vim.cmd([[packadd nvim-code-action-menu]])
+	-- use({
+	-- 	'weilbith/nvim-code-action-menu',
+	-- 	cmd = 'CodeActionMenu',
+	-- })
+	-- vim.cmd([[packadd nvim-code-action-menu]])
 
 	use('jose-elias-alvarez/null-ls.nvim')
 

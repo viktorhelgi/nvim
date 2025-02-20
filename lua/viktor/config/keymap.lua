@@ -573,8 +573,7 @@ require('which-key').register({
 
 		l = {
 			name = 'LSP',
-			-- a = { vim.lsp.buf.code_action, "code action" },
-			a = { require('code_action_menu').open_code_action_menu, 'code action' },
+			a = { vim.lsp.buf.code_action, "code action" },
 			d = {
 				name = 'Document',
 				-- ['c'] = '[cmd] lua vim.lsp.buf.declaration()',
@@ -770,6 +769,10 @@ require('which-key').register({
 
 			u = { '<CMD> Telescope find_files              <CR>', 'find files' },
 			e = { '<CMD> Telescope find_files   cwd=%:p:h  <CR>', 'find files in %:p:h' },
+
+            -- Also show hidden
+			U = { '<CMD> Telescope find_files             hidden=True <CR>', 'find files' },
+			E = { '<CMD> Telescope find_files   cwd=%:p:h hidden=True <CR>', 'find files in %:p:h' },
 
 			k = { '<CMD> Telescope live_grep               <CR>', 'grep' },
 			j = { '<CMD> Telescope live_grep    cwd=%:p:h  <CR>', 'grep in %:p:h' },

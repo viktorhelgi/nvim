@@ -28,7 +28,7 @@ require('lspconfig').pyright.setup({
 		pyright = {
 			disableLanguageServices = false,
 			disableOrganizeImports = false,
-			pythonVersion = '3.12',
+			pythonVersion = '3.11',
 		},
 		python = {
 			analysis = {
@@ -39,7 +39,8 @@ require('lspconfig').pyright.setup({
 				logLevel = 'Error',
 				diagnosticSeverityOverrides = {
 					reportAssertAlwaysTrue = 'warning',
-					reportCallInDefaultInitializer = 'information',
+					-- reportCallInDefaultInitializer = 'information',
+					reportCallInDefaultInitializer = 'none',
 					-- reportConstantRedefinition = 'information',
 					reportConstantRedefinition = 'none',
 					reportDeprecated = 'information',

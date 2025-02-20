@@ -132,7 +132,7 @@ require('packer').startup({
         use { 'stevearc/overseer.nvim', config = function() require('overseer').setup() end }
 
         use 'Shatur/neovim-tasks'
-        use { 'weilbith/nvim-code-action-menu', cmd = 'CodeActionMenu' }
+        -- use { 'weilbith/nvim-code-action-menu', cmd = 'CodeActionMenu' }
 
         use { 'numToStr/Comment.nvim', config = function() require('Comment').setup() end }
 

@@ -11,7 +11,43 @@ local function _get_capabilites()
 	return out
 end
 
-rust_tools.setup({
+vim.g.rustaceanvim = {
+	-- Plugin configuration
+	tools = {},
+	-- LSP configuration
+	server = {
+		on_attach = my_on_attach,
+		default_settings = {
+			-- rust-analyzer language server configuration
+			-- ['rust-analyzer'] = {
+   --              cargo = {
+   --                  features = {'env-file'},
+   --                  -- features = 'all',
+   --                  -- features = {'all'},
+   --              },
+   --              features = {'env-file'},
+   --              autoReload = true,
+			-- },
+		},
+	},
+	-- DAP configuration
+	dap = {},
+}
+
+-- let g:rustaceanvim = {
+-- \  'server': {
+-- \    'settings': {
+-- \      'rust-analyzer': {
+-- \        'cargo': {
+-- \          'features': ['my-feature1', 'my-feature2'],
+-- \        },
+-- \      },
+-- \    },
+-- \  },
+-- \}
+
+-- rust_tools.setup({
+CONFIG = {
 	tools = {
 		-- executor = require("rust-tools.executors").toggleterm,
 		executor = require('rust_funcs').run.rust_tools_executor2,
@@ -54,8 +90,8 @@ rust_tools.setup({
 		checkOnSave = {
 			enable = true,
 		},
-		-- cmd = { '/home/viktorhg/git-repos/ra-multiplex/target/release/ra-multiplex', 'client' },
-		cmd = {"rust-analyzer"},
+		cmd = { '/home/viktorhg/git-repos/ra-multiplex/target/release/ra-multiplex', 'client' },
+		-- cmd = { 'rust-analyzer' },
 		handlers = {
 			-- vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' })
 			-- vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })
@@ -71,12 +107,13 @@ rust_tools.setup({
 			-- ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" }),
 		},
 	},
-})
+}
 
-rust_tools.inlay_hints.set()
-rust_tools.inlay_hints.unset()
-rust_tools.inlay_hints.enable()
-rust_tools.inlay_hints.disable()
+-- rust_tools.inlay_hints.set()
+-- rust_tools.inlay_hints.unset()
+-- rust_tools.inlay_hints.enable()
+-- rust_tools.inlay_hints.disable()
+
 -- /home/viktor/repos/ex/rust_warp_api
 -- vim.keymap.set("n", "<leader>rT", function()
 -- 	vim.cmd("TSTextobjectGotoPreviousStart @function.outer")

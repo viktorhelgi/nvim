@@ -7,12 +7,12 @@ function ColorMyPencils(color)
 	-- color = color or "gruvbox"
     -- color = color or "nightcity-afterlife"
     -- color = color or "kanagawa-dragon"
+    vim.cmd('set background=dark')
     color = color or "nightfox"
     -- color = color or "catppuccin-macchiato"
     -- color = color or "catppuccin"
     -- color = color or "gruvbox-material"
 
-    vim.cmd('set background=dark')
 	vim.cmd("colorscheme "..color)
     -- vim.cmd("hi Normal guibg=none")
 

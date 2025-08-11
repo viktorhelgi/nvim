@@ -5,11 +5,11 @@ return {
 	builder = function()
 		return {
 			-- cwd = require('viktor.lib.find').root(file, { "Cargo.toml" }),
-			cwd = vim.fn.getcwd(),
+			-- cwd = vim.fn.getcwd(),
             -- cwd = vim.fn.expand('%:p:h'),
             -- cwd = "/home/viktor/hm/backend/functions",
-			cmd = "/usr/bin/ruff",
-			args = { "." },
+			cmd = {"ruff"},
+			args = { "check", "--fix" },
 			components = {
 				"default",
             	{"on_output_parse", parser = {

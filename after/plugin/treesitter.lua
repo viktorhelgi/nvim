@@ -45,7 +45,7 @@ ts_config.setup({
 			set_jumps = true,
 			goto_next_start = {
 				[']n'] = '@number.inner',
-				[']a'] = '@assignment.rhs',
+				[']a'] = '@assignment.lhs',
 				-- ["]al"] = "@assignment.rhs",
 				[']r'] = '@return.inner',
 				[']p'] = '@parameter.inner',

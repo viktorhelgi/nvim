@@ -18,6 +18,7 @@ vim.o.splitright = true
 vim.o.smartcase = true
 
 
+
 vim.opt.ignorecase = true
 vim.opt.undofile = true		-- file undo history preserved outside current session
 
@@ -42,3 +43,7 @@ vim.cmd('au TextYankPost * silent! lua vim.highlight.on_yank()')
 
 
 
+M = {
+    virtual_text = true
+}
+return M

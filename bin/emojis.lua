@@ -49,7 +49,7 @@ if vim.g.neovide ~= nil then--{{{
     -- set guifont=FiraCode\ Nerd\ Font\ Mono\ Retina:h11
     -- vim.opt.guifont='JetBrainsMonoNL Nerd Font Mono:h12'
 	vim.g.neovide_transparency=0.9
-    vim.opt.guifont='JetBrainsMonoNL Nerd Font Mono:h10'
+    -- vim.opt.guifont='JetBrainsMonoNL Nerd Font Mono:h10'
     vim.api.nvim_set_keymap('n', '<F11>', ':let g:neovide_transparency-=0.01<CR>', {})
     vim.api.nvim_set_keymap('n', '<F12>', ':let g:neovide_transparency+=0.01<CR>', {})
 end--}}}

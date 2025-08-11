@@ -1,1 +1,1 @@
-require'lspconfig'.bufls.setup{}
+require'lspconfig'.buf_ls.setup{}

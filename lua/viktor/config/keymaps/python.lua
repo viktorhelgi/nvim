@@ -37,7 +37,13 @@ RegisterFTKeymaps.Python = function()
 
 	require('which-key').register({
         K = { vim.lsp.buf.hover, "hover"},
-
+        g = {
+            name = "goto",
+            r = {
+                vim.lsp.buf.references,
+                "references"
+            }
+        },
 
 		['<leader>'] = {
             l = {

@@ -54,7 +54,7 @@ return require('packer').startup(function(use)
 	})
 
 	use('cbochs/grapple.nvim')
-	use('anuvyklack/pretty-fold.nvim')
+	-- use('anuvyklack/pretty-fold.nvim')
 	use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' })
 	use({
 		'nvim-treesitter/nvim-treesitter-textobjects',
@@ -218,7 +218,7 @@ return require('packer').startup(function(use)
 	-- })
 	-- vim.cmd([[packadd nvim-code-action-menu]])
 
-	use('jose-elias-alvarez/null-ls.nvim')
+	-- use('jose-elias-alvarez/null-ls.nvim')
 
 	use({ 'j-hui/fidget.nvim', tag = 'legacy' })
 
@@ -334,7 +334,9 @@ return require('packer').startup(function(use)
 			cppman.setup()
 
 			-- Make a keymap to open the word under cursor in CPPman
-			vim.keymap.set('n', '<leader>cm', function() cppman.open_cppman_for(vim.fn.expand('<cword>')) end)
+			vim.keymap.set('n', '<leader>cm', function()
+				cppman.open_cppman_for(vim.fn.expand('<cword>'))
+			end)
 
 			-- Open search box
 			vim.keymap.set('n', '<leader>cc', function()
@@ -343,7 +345,28 @@ return require('packer').startup(function(use)
 		end,
 	})
 
-    use({"benlubas/molten-nvim" })
+	use({ 'benlubas/molten-nvim' })
+
+	use({
+		'maxmx03/solarized.nvim',
+		-- config = function()
+		-- 	vim.o.background = 'dark'
+		-- 	---@type solarized
+		-- 	local solarized = require('solarized')
+		-- 	vim.o.termguicolors = true
+		-- 	vim.o.background = 'dark'
+		-- 	solarized.setup({})
+		-- 	vim.cmd.colorscheme('solarized')
+		-- end,
+	})
+    use({
+        "mrcjkb/rustaceanvim",
+        tag = "v6.3.3"
+    })
+
+    use({
+        "jakemason/ouroboros.nvim"
+    })
 
 	-- use({ 'niuiic/core' })
 	-- use({ 'niuiic/quickfix.nvim' })

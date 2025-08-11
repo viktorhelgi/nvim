@@ -30,7 +30,7 @@ require('which-key').register({
 		['-'] = { function() require('harpoon.ui').nav_file(5) end, '5th' },
 		m = { function() require('harpoon.term').gotoTerminal(1) end, '1st-term', },
 		w = { function() require('harpoon.term').gotoTerminal(2) end, '2nd-term', },
-		c = { function() vim.cmd('ClangdSwitchSourceHeader') end, 'clang-switch', },
+		c = { function() vim.cmd('Ouroboros') end, 'clang-switch', },
 		q = { function() vim.cmd('Fcarbon %:p:h')            end, 'fcarbon', },
 		b = {     '<CMD> b# <CR>', 'b#' },
 		r = { '<cmd>A<cr>', 'alt file' },
@@ -606,7 +606,27 @@ require('which-key').register({
 				r = { vim.lsp.buf.server_ready, 'server ready' },
 				h = { vim.lsp.buf.signature_help, 'signature help' },
 			},
-			t = { vim.lsp.buf.type_definition, 'type definition' },
+            t = {
+                name = "toggle",
+                i = {
+                    function()
+                        local status = vim.lsp.inlay_hint.is_enabled()
+                        vim.lsp.inlay_hint.enable(not status)
+                        print("Toggle Inlay hints: " .. (status and "off" or "on"))
+                    end,
+                    "Toggle Inlay hints"
+                },
+                v = {
+                    function()
+                        print("start")
+                        local status = require("viktor.config.options").virtual_text
+                        require("viktor.config.options").virtual_text = not status
+                        vim.diagnostic.config({ virtual_text = not status })
+                        print("Toggle diagnostic virtual text: " .. (status and "off" or "on"))
+                    end,
+                    "Toggle Inlay hints"
+                }
+            },
 			w = {
 				name = 'workspace',
 				a = { vim.lsp.buf.add_workspace_folder, 'add workspace folder' },

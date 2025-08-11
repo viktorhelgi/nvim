@@ -3,7 +3,8 @@ vim.cmd([[
 ]])
 
 local rust = {
-	build_settings = '--release --features mk2-prod',
+	-- build_settings = '--release --features mk2-prod',
+	build_settings = '',
 }
 
 RegisterFTKeymaps.RustKeyBindings = function()
@@ -105,7 +106,7 @@ RegisterFTKeymaps.RustKeyBindings = function()
 			name = 'Goto',
             -- stylua: ignore start
 			c = { function() vim.cmd('RustOpenCargo') end, 'Cargo.toml' },
-			h = { function() vim.cmd('RustHoverActions') end, 'hover/actions' },
+			-- h = { function() vim.cmd('RustHoverActions') end, 'hover/actions' },
 			p = { function() vim.cmd('RustParentModule') end, 'Parent module' },
 			-- stylua: ignore end
 		},
@@ -201,7 +202,7 @@ RegisterFTKeymaps.RustKeyBindings = function()
 					'cargo-reload',
 				},
 				t = {
-					require('rust_funcs').run.nearest_test,
+                    function() vim.cmd("RustTest") end,
 					'Test',
 				},
 			},

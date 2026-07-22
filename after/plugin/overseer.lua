@@ -1,30 +1,39 @@
 local overseer = require("overseer")
-overseer.setup({
-	-- component_aliases = {
-	-- 	default = {
-	-- 		-- "on_output_summarize",
-	-- 		-- "on_exit_set_status",
-	-- 		-- "on_complete_notify",
-	-- 		-- "on_complete_dispose",
-	-- 		-- This puts the parsed results into the quickfix
-	-- 		{ "on_result_diagnostics_quickfix", open = true },
-	-- 		-- This puts the parsed results into neovim's diagnostics
-	-- 		"on_result_diagnostics",
-	-- 	},
-	-- },
-	-- -- templates = { "cpp.run_cmake", "cpp.run_make", "cpp.run_make_on_file" }
-})
--- overseer.run_template()
-overseer.load_template("cpp.run_cmake")
-overseer.load_template("cpp.run_make")
-overseer.load_template("cpp.run_make_on_file")
-overseer.load_template("personal.rust-tools-runnables")
--- overseer.add_template_hook
+local overseer_template = require("overseer.template")
+ 
 
-overseer.load_template("rust.test_file")
-overseer.load_template("python.ruff_lint")
-overseer.load_template("npm.start")
+-- NOTE: if you are going to make this work again. Then i guess you gotta extract the builders from the files
+-- ~/.config/nvim/lua/overseer/template/rust/test_file.lua
+-- See docs: https://github.com/stevearc/overseer.nvim/blob/master/doc/reference.md#register_templatedefn
+
+-- overseer.setup({
+-- 	-- component_aliases = {
+-- 	-- 	default = {
+-- 	-- 		-- "on_output_summarize",
+-- 	-- 		-- "on_exit_set_status",
+-- 	-- 		-- "on_complete_notify",
+-- 	-- 		-- "on_complete_dispose",
+-- 	-- 		-- This puts the parsed results into the quickfix
+-- 	-- 		{ "on_result_diagnostics_quickfix", open = true },
+-- 	-- 		-- This puts the parsed results into neovim's diagnostics
+-- 	-- 		"on_result_diagnostics",
+-- 	-- 	},
+-- 	-- },
+-- 	-- -- templates = { "cpp.run_cmake", "cpp.run_make", "cpp.run_make_on_file" }
+-- })
+--
+-- -- overseer.run_template()
+-- overseer.register({name="cpp.run_cmake"})
+-- overseer.register({name="cpp.run_make"})
+-- overseer.register({name="cpp.run_make_on_file"})
+-- overseer.register({name="personal.rust-tools-runnables"})
+-- -- overseer.add_template_hook
+--
+-- overseer.register({name="rust.test_file"})
+-- overseer.register({name="python.ruff_lint"})
+-- overseer.register({name="npm.start"})
 -- overseer.add_template_hook({ module = "^cargo$" }, function(task_defn, util)
+
 -- 	util.add_component(task_defn, { "on_output_quickfix", open = true, set_diagnostics = true })
 -- end)
 

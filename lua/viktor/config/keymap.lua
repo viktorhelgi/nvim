@@ -601,7 +601,7 @@ require('which-key').register({
 			--     e = { vim.lsp.buf.references, "references" },
 			--     n = { vim.lsp.buf.rename, "rename" },
 			-- },
-			R = { vim.lsp.buf.rename, 'rename' },
+			R = { '<CMD> LspRestart <CR>', 'LspRestart' },
 			s = {
 				r = { vim.lsp.buf.server_ready, 'server ready' },
 				h = { vim.lsp.buf.signature_help, 'signature help' },

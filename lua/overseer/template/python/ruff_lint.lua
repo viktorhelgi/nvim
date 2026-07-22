@@ -1,40 +1,48 @@
 local overseer = require("overseer")
+
 return {
-	name = "Ruff Lint",
-	tags = { overseer.TAG.BUILD },
-	builder = function()
-		return {
-			-- cwd = require('viktor.lib.find').root(file, { "Cargo.toml" }),
-			-- cwd = vim.fn.getcwd(),
-            -- cwd = vim.fn.expand('%:p:h'),
-            -- cwd = "/home/viktor/hm/backend/functions",
-			cmd = {"ruff"},
-			args = { "check", "--fix" },
-			components = {
-				"default",
-            	{"on_output_parse", parser = {
-            		-- Put the parser results into the 'diagnostics' field on the task result
-            		diagnostics = {
-            			-- Extract fields using lua patterns
-            			{
-                                "extract_efm",
-                                {
-                                    "%f:%l:c: %n %m"
-                                    -- test = function() end
-                                }
-            			},
-            		}
-            	}},
-				{ "on_result_diagnostics", {
-					remove_on_restart = true,
-				} },
-				{ "on_result_diagnostics_quickfix", {
-					open = true,
-				} },
-			},
-		}
-	end,
-	condition = {
-		filetype = { "py", "python" },
-	},
+  name = "Ruff Lint",
+  tags = { overseer.TAG.BUILD },
+  builder = function()
+    return {
+      cmd = { "ruff" },
+      args = {
+        "check",
+        "--output-format",
+        "concise",
+        -- optional, but nice in repos:
+        -- "--force-exclude",
+      },
+      components = {
+        "default",
+        {
+          "on_output_parse",
+          parser = {
+            diagnostics = {
+              {
+                "extract_efm",
+                {
+                  -- Ruff concise format:
+                  -- path/to/file.py:12:34: D104 Missing docstring in public package
+                  "%f:%l:%c: %m",
+                },
+              },
+            },
+          },
+        },
+        {
+          "on_result_diagnostics",
+          remove_on_restart = true,
+        },
+        {
+          "on_result_diagnostics_quickfix",
+          open = true,
+        },
+      },
+    }
+  end,
+  condition = {
+    filetype = { "py", "python" },
+  },
 }
+

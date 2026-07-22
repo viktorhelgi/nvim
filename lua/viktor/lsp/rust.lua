@@ -3,6 +3,7 @@ local rust_tools = require('rust-tools')
 local my_on_attach = function(_, bufnr)
 	vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 	require('lsp_signature').on_attach(require('viktor.config.plugin.lsp_signature_configs'), bufnr)
+	-- vim.lsp.inlay_hints.enable(false)
 end
 
 local function _get_capabilites()
@@ -13,22 +14,111 @@ end
 
 vim.g.rustaceanvim = {
 	-- Plugin configuration
-	tools = {},
+	tools = {
+		-- executor = require("rust-tools.executors").toggleterm,
+		executor = require('rust_funcs').run.rust_tools_executor2,
+		inlay_hints = {
+			-- automatically set inlay hints (type hints)
+			-- default: true
+			auto = false,
+			only_current_line = true,
+			highlight = 'TelescopePreviewTitle',
+		},
+	},
 	-- LSP configuration
 	server = {
 		on_attach = my_on_attach,
+		-- default_settings = {
 		default_settings = {
-			-- rust-analyzer language server configuration
-			-- ['rust-analyzer'] = {
-   --              cargo = {
-   --                  features = {'env-file'},
-   --                  -- features = 'all',
-   --                  -- features = {'all'},
-   --              },
-   --              features = {'env-file'},
-   --              autoReload = true,
-			-- },
+			['rust-analyzer'] = {
+				-- cargo = {
+				-- 	features = { 'jitter' },
+				-- 	allFeatures = false, -- or true to enable every feature
+				-- 	noDefaultFeatures = false, -- set true if you want to drop default features
+				-- },
+
+				-- Inlay hints
+				inlayHints = {
+					bindingModeHints = { enable = false },
+					chainingHints = { enable = false },
+					closingBraceHints = { enable = false, minLines = 25 },
+					closureCaptureHints = { enable = false },
+					closureReturnTypeHints = { enable = 'never' },
+					closureStyle = 'impl_fn',
+					discriminantHints = { enable = 'never' },
+					expressionAdjustmentHints = {
+						enable = 'never',
+						hideOutsideUnsafe = false,
+						disableReborrows = false,
+						mode = 'prefix',
+					},
+					genericParameterHints = {
+						const = { enable = false },
+						lifetime = { enable = false },
+						type = { enable = false },
+					},
+					implicitDrops = { enable = false },
+					implicitSizedBoundHints = { enable = false },
+					lifetimeElisionHints = { enable = 'never', useParameterNames = false },
+					maxLength = 25,
+					parameterHints = { enable = false },
+					rangeExclusiveHints = { enable = false },
+					reborrowHints = { enable = 'never' },
+					renderColons = false,
+					typeHints = {
+						enable = false,
+						hideClosureInitialization = false,
+						hideClosureParameter = false,
+						hideNamedConstructor = false,
+					},
+				},
+
+				-- -- Semantic highlighting
+				-- semanticHighlighting = {
+				-- 	comments = { enable = true },
+				-- 	['doc.comment.inject'] = { enable = true },
+				-- 	nonStandardTokens = true,
+				-- 	operator = { enable = true, specialization = { enable = false } },
+				-- },
+				--
+				-- -- Runnables
+				-- runnables = {
+				-- 	-- command = nil,
+				-- 	extraArgs = {},
+				-- 	extraTestBinaryArgs = { '--show-output' },
+				-- },
+				--
+				-- -- Formatting
+				-- rustfmt = {
+				-- 	extraArgs = {},
+				-- 	-- overrideCommand = nil,   -- array form if set
+				-- 	rangeFormatting = { enable = false },
+				-- },
+				--
+				-- -- Misc
+				-- notifications = { cargoTomlNotFound = true },
+				-- lru = { -- NOTE: numbers left unset use internal defaults
+				-- 	-- capacity = nil,         -- defaults to 128
+				-- 	['query.capacities'] = {},
+				-- },
+				-- -- numThreads = nil,         -- auto
+				-- cfg = { setTest = true },
+				-- document = { symbol = { search = { excludeLocals = true } } },
+				-- -- rustc = { source = nil },
+			},
 		},
+		--
+		-- 	-- rust-analyzer language server configuration
+		-- 	-- ['rust-analyzer'] = {
+		-- 	--              cargo = {
+		-- 	--                  features = {'env-file'},
+		-- 	--                  -- features = 'all',
+		-- 	--                  -- features = {'all'},
+		-- 	--              },
+		-- 	--              features = {'env-file'},
+		-- 	--              autoReload = true,
+		-- 	-- },
+		-- },
 	},
 	-- DAP configuration
 	dap = {},
@@ -54,7 +144,7 @@ CONFIG = {
 		inlay_hints = {
 			-- automatically set inlay hints (type hints)
 			-- default: true
-			auto = true,
+			auto = false,
 			only_current_line = true,
 			highlight = 'TelescopePreviewTitle',
 		},
@@ -156,3 +246,99 @@ CONFIG = {
 --     log_level = vim.log.levels.INFO
 --   }
 -- })
+--
+--
+-- defaults
+--
+-- Cargo
+-- cargo = {
+-- 	allTargets = true,
+-- 	autoreload = true,
+-- 	buildScripts = {
+-- 		enable = true,
+-- 		invocationStrategy = 'per_workspace',
+-- 		rebuildOnSave = true,
+-- 		useRustcWrapper = true,
+-- 		-- overrideCommand = nil,
+-- 	},
+-- 	cfgs = { 'debug_assertions', 'miri' },
+-- 	extraArgs = {},
+-- 	extraEnv = {},
+-- features = {
+--                    "atomic"
+--                }, -- "all" to enable all features
+-- 	noDefaultFeatures = false,
+-- 	noDeps = false,
+-- 	sysroot = 'discover',
+-- 	-- sysrootSrc = nil,
+-- 	-- target = nil,
+-- 	-- targetDir = nil,          -- true or a path
+-- },
+--
+-- -- Checks / diagnostics-on-save
+-- checkOnSave = true,
+-- check = {
+-- 	-- allTargets = nil,        -- defaults to cargo.allTargets
+-- 	command = 'check',
+-- 	extraArgs = {},
+-- 	extraEnv = {},
+-- 	-- features = nil,          -- defaults to cargo.features ("all" allowed)
+-- 	ignore = {},
+-- 	invocationStrategy = 'per_workspace',
+-- 	-- noDefaultFeatures = nil, -- defaults to cargo.noDefaultFeatures
+-- 	-- overrideCommand = nil,
+-- 	-- targets = nil,
+-- 	workspace = true,
+-- },
+--
+-- -- Diagnostics
+-- diagnostics = {
+-- 	enable = true,
+-- 	disabled = {},
+-- 	experimental = { enable = false },
+-- 	remapPrefix = {},
+-- 	styleLints = { enable = false },
+-- 	warningsAsHint = {},
+-- 	warningsAsInfo = {},
+-- },
+--
+-- -- Proc-macros
+-- procMacro = {
+-- 	enable = true,
+-- 	attributes = { enable = true },
+-- 	ignored = {},
+-- 	-- server = nil,
+-- },
+--
+-- -- Files
+-- files = {
+-- 	exclude = {},
+-- 	watcher = 'client',
+-- },
+--
+-- -- Imports
+-- imports = {
+-- 	prefixExternPrelude = false,
+-- },
+--
+-- -- Completion
+-- completion = {
+-- 	addSemicolonToUnit = true,
+-- 	autoAwait = { enable = true },
+-- 	autoIter = { enable = true },
+-- 	autoimport = {
+-- 		enable = true,
+-- 		exclude = {
+-- 			{ path = 'core::borrow::Borrow', type = 'methods' },
+-- 			{ path = 'core::borrow::BorrowMut', type = 'methods' },
+-- 		},
+-- 	},
+-- 	autoself = { enable = true },
+-- 	callable = { snippets = 'fill_arguments' },
+-- 	excludeTraits = {},
+-- 	fullFunctionSignatures = { enable = false },
+-- 	hideDeprecated = false,
+-- 	-- limit = nil,
+-- 	termSearch = { enable = false, fuel = 1000 },
+-- },
+-- }

@@ -50,3 +50,6 @@ require('fidget').setup({})
 -- src/data_manager/client/uploader/mod.rs
 -- src/server/firestore/client.rs
 -- vim.cmd('colorscheme nightfox')
+--
+--
+vim.lsp.enable('ruff')

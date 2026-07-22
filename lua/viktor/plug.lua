@@ -368,6 +368,8 @@ return require('packer').startup(function(use)
         "jakemason/ouroboros.nvim"
     })
 
+    use({"AlessandroYorba/Alduin"})
+
 	-- use({ 'niuiic/core' })
 	-- use({ 'niuiic/quickfix.nvim' })
 

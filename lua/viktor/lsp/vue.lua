@@ -28,9 +28,7 @@
 -- local mason_registry = require('mason-registry')
 -- local vue_language_server_path = mason_registry.get_package('vue-language-server'):get_install_path() .. '/node_modules/@vue/language-server'
 
-local lspconfig = require('lspconfig')
-
-lspconfig.ts_ls.setup({
+vim.lsp.config('ts_ls', {
 	init_options = {
 		plugins = {
 			{
@@ -50,4 +48,4 @@ lspconfig.ts_ls.setup({
 })
 
 -- -- No need to set `hybridMode` to `true` as it's the default value
--- lspconfig.volar.setup({})
+-- vim.lsp.enable('volar')

@@ -1,4 +1,4 @@
-require('lspconfig').clangd.setup({
+vim.lsp.config('clangd', {
 	on_attach = function(_, bufnr)
 		require('lsp_signature').on_attach(require('viktor.config.plugin.lsp_signature_configs'), bufnr)
 	end,
@@ -29,8 +29,8 @@ require('lspconfig').clangd.setup({
 			path = 'clangd',
 			restartAfterCrash = true,
 			semanticHighlighting = true,
-			serverCompletionRanking = true,
 			-- trace = "some-string",
 		},
 	},
 })
+vim.lsp.enable('clangd')

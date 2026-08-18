@@ -5,10 +5,5 @@ vim.api.nvim_create_autocmd("BufRead", {
         require('cmp').setup.buffer({ sources = { { name = "crates" } } })
     end,
 })
-require('crates').setup {
-    null_ls = {
-        enabled = true,
-        name = "crates.nvim",
-    },
-}
+require('crates').setup({})
 

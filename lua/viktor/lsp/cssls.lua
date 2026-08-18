@@ -3,7 +3,8 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-require('lspconfig').cssls.setup({
+vim.lsp.config('cssls', {
 	capabilities = capabilities,
-    cmd={ "vscode-css-language-server", "--stdio" }
+	cmd = { 'vscode-css-language-server', '--stdio' },
 })
+vim.lsp.enable('cssls')

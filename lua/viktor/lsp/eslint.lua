@@ -1,25 +1,26 @@
-require("lspconfig").eslint.setup({
-	bin = "eslint_d",
+vim.lsp.config('eslint', {
+	bin = 'eslint_d',
 	on_attach = function(client, bufnr)
-		vim.api.nvim_create_autocmd("BufWritePre", {
+		vim.api.nvim_create_autocmd('BufWritePre', {
 			buffer = bufnr,
-			command = "EslintFixAll",
+			command = 'EslintFixAll',
 		})
 	end,
 	code_actions = {
 		enable = true,
 		apply_on_save = {
 			enable = true,
-			types = { "directive", "problem", "suggestion", "layout" },
+			types = { 'directive', 'problem', 'suggestion', 'layout' },
 		},
 		disable_rule_comment = {
 			enable = true,
-			location = "separate_line", -- or `same_line`
+			location = 'separate_line', -- or `same_line`
 		},
 	},
 	diagnostics = {
 		enable = true,
 		report_unused_disable_directives = false,
-		run_on = "type", -- or `save`
+		run_on = 'type', -- or `save`
 	},
 })
+vim.lsp.enable('eslint')

@@ -5,7 +5,7 @@ local on_attach = function(_, bufnr)
 	vim.keymap.set('n', '<leader>rn', require('lua_funcs').test_file, { silent = true, buffer = bufnr })
 end
 
-require('lspconfig').lua_ls.setup({
+vim.lsp.config('lua_ls', {
 	on_attach = on_attach,
 	capabilities = require('cmp_nvim_lsp').default_capabilities(),
 	settings = {
@@ -34,3 +34,4 @@ require('lspconfig').lua_ls.setup({
 		},
 	},
 })
+vim.lsp.enable('lua_ls')

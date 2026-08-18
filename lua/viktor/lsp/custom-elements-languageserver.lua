@@ -1,5 +1,5 @@
-require('lspconfig').custom_elements_ls.setup({
-	filetypes = { "javascript", "typescript", "typescriptreact", "typescript.tsx" },
+vim.lsp.config('custom_elements_ls', {
+	filetypes = { 'javascript', 'typescript', 'typescriptreact', 'typescript.tsx' },
 	on_attach = function(client, _)
 		client.server_capabilities = {
 			codeActionProvider = true,
@@ -25,3 +25,4 @@ require('lspconfig').custom_elements_ls.setup({
 		}
 	end,
 })
+vim.lsp.enable('custom_elements_ls')
